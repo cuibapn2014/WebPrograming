@@ -85,35 +85,35 @@ const Header = () => {
       {/* header2 */}
       {/* header3 */}
       <div className="bg-[#f1f0f1]">
-        <div className="container mx-auto flex items-center justify-between  uppercase text-[12px]  py-3">
-          <div className="flex items-center py-2 px-4 border border-[#333] rounded-md bg-[#505050] text-[#fff]">
+        <div className="container mx-auto flex items-center uppercase text-[12px]  py-3">
+          <div className="flex items-center py-2 px-4 border border-[#333] rounded-md bg-[#505050] text-[#fff] mr-3">
             <AiOutlineMenu size={"18px"} className="mr-2" /> Danh mục sản phẩm
           </div>
           <Link to="/huong-dan-thanh-toan">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md">
+            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               thanh toán
             </div>
           </Link>
           <Link to="/huong-dan-tra-gop">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md">
+            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               trả góp
             </div>
           </Link>
           <Link to="/chinh-sach-bao-hanh">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md">
+            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
               <GrHostMaintenance size={"18px"} className="mr-2" /> Chính sách
               bảo hành
             </div>
           </Link>
           <Link to="/chinh-sach-van-chuyen">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md ">
+            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
               <MdLocalShipping size={"18px"} className="mr-2" /> Chính sách vận
               chuyển
             </div>
           </Link>
-          <div className="flex items-center py-2 px-4 border border-[#333] rounded-md ">
+          <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3 ">
             <BiRightArrowCircle size={"18px"} className="mr-2" /> Đổi trả trong
             15 ngày
           </div>

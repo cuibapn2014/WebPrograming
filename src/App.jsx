@@ -1,13 +1,14 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
-import Pc from "./components/Pc";
-import Mobile from "./components/Mobile";
+
 import { Provider, useSelector } from "react-redux";
 import store from "./redux/store";
-import Login from "./components/Login";
 import Header from "./components/common/Header";
 import HeaderMobile from "./components/common/HeaderMobile";
+import Menu from "./components/common/Menu";
+import Banner from "./components/Banner";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -22,8 +23,8 @@ function App() {
   return (
     <Provider store={store}>
       <div className="App ">
-        {/* <HeaderMobile /> */}
         {width > 1280 ? <Header /> : <HeaderMobile />}
+        <Outlet />
       </div>
     </Provider>
   );

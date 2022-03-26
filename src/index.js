@@ -4,12 +4,27 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ShowRoom from "./components/page/ShowRoom";
+import Home from "./components/page/Home";
+import Payment from "./components/page/Payment";
+import Installment from "./components/page/Installment";
+import Maintain from "./components/page/Maintain";
+import Delivery from "./components/page/Delivery";
+import Login from "./components/page/Login";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}></Route>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+          <Route path="contact" element={<ShowRoom />} />
+          <Route path="huong-dan-thanh-toan" element={<Payment />} />
+          <Route path="huong-dan-tra-gop" element={<Installment />} />
+          <Route path="chinh-sach-bao-hanh" element={<Maintain />} />
+          <Route path="chinh-sach-van-chuyen" element={<Delivery />} />
+          <Route path="sign-in" element={<Login />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
