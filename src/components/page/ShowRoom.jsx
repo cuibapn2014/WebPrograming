@@ -54,7 +54,7 @@ const ShowRoom = () => {
                       className="rounded-lg mx-auto"
                     />
 
-                    <div className=" text-[white] rounded-lg absolute  inset-0  bg-[#0e0d0d] cursor-pointer opacity-70 invisible group-hover:visible transition-all">
+                    <div className=" text-[white] rounded-lg absolute  inset-0  bg-[#0e0d0d] cursor-pointer opacity-70 invisible w-0 group-hover:visible group-hover:w-full  transition-all">
                       <span className="absolute top-[50%] transform translate-x-[-50%]">
                         Click để xem chi tiết bản đồ
                       </span>
