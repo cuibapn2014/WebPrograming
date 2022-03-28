@@ -75,13 +75,15 @@ export const list = [
 
 const Menu = () => {
   return (
-    <div>
+    <div className="xl:shadow-2xl shadow-none">
       <div className="xl:w-[186px] w-full bg-white rounded-md overflow-y-auto">
         {list.map((item, index) => {
           const Icon = list[index].icon;
-          console.log("check icon", Icon);
+          {
+            /* console.log("check icon", Icon); */
+          }
           return (
-            <Link to={item.slug}>
+            <Link to={item.slug} key={index}>
               <div
                 key={index}
                 className="flex items-center px-3 py-2 text-[14px] mb-[10px] capitalize transition-all hover:bg-[#f3f5fc]

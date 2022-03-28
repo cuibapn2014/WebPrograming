@@ -55,6 +55,26 @@ code {
   transition: all 0.25s ease;
 }
 
+.clip-path-right0 {
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  transition: all 0.25s ease;
+}
+
+.clip-path-right100 {
+  clip-path: polygon(100% 0, 0 0, 0 100%, 100% 100%);
+  transition: all 0.25s ease;
+}
+
+.clip-path-top0 {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  transition: all 0.25s ease;
+}
+
+.clip-path-top100 {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: all 0.25s ease;
+}
+
 //custon button swiper
 
 #slider {
@@ -83,14 +103,6 @@ code {
   }
 }
 
-// .swiper-button-next::after,
-// .swiper-button-prev::after {
-//   font-size: 10px;
-// }
-
-// .swiper-button-next:hover,
-// .swiper-button-prev:hover {
-//   background-color: black;
-//   color: white;
-//   transition: all 0.25s ease;
-// }
+#listPC .swiper {
+  padding-bottom: 10px;
+}

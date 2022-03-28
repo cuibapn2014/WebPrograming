@@ -49,6 +49,16 @@ const HeaderMobile = () => {
         </div>
       </div>
 
+      {/* background opacity 0.2 */}
+      <div
+        onClick={() => setIsMenu(!isMenu)}
+        className={`fixed z-50 top-0 right-0 w-[20%] h-[100vh] bg-black opacity-25 ${
+          isMenu ? "clip-path-right100 " : "clip-path-right0 cursor-pointer"
+        }`}
+      ></div>
+      {/* background opacity 0.2 */}
+
+      {/* Toogle menu */}
       <div
         className={`fixed top-0 z-50 w-[80%] h-[100vh] bg-white overflow-y-scroll ${
           isMenu ? "clip-path-left100" : "clip-path-left0"
@@ -112,6 +122,7 @@ const HeaderMobile = () => {
           <GrClose />
         </div>
       </div>
+      {/* Toogle menu */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BiBuildingHouse, BiRightArrowCircle } from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
@@ -8,8 +8,10 @@ import { AiOutlineShoppingCart, AiOutlineMenu } from "react-icons/ai";
 import { MdLocalShipping } from "react-icons/md";
 import { GrHostMaintenance } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import Menu from "./Menu";
 
 const Header = () => {
+  const [isMenuPc, setIsMenuPc] = useState(true);
   return (
     <div>
       {/* header1 */}
@@ -39,7 +41,10 @@ const Header = () => {
       </div>
       {/* header1 */}
       {/* header2 */}
-      <div className="flex items-center px-10 justify-around w-full">
+      <div
+        className="flex items-center px-10 justify-around w-full"
+        onClick={() => setIsMenuPc(true)}
+      >
         <Link to="/">
           <div>
             <img
@@ -86,29 +91,54 @@ const Header = () => {
       {/* header3 */}
       <div className="bg-[#f1f0f1]">
         <div className="container mx-auto flex items-center uppercase text-[12px]  py-3">
-          <div className="flex items-center py-2 px-4 border border-[#333] rounded-md bg-[#505050] text-[#fff] mr-3">
-            <AiOutlineMenu size={"18px"} className="mr-2" /> Danh mục sản phẩm
+          <div
+            className="relative cursor-pointer"
+            onClick={() => setIsMenuPc(!isMenuPc)}
+          >
+            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md bg-[#505050] text-[#fff] mr-3">
+              <AiOutlineMenu size={"18px"} className="mr-2" />{" "}
+              <span>Danh mục sản phẩm</span>
+            </div>
+            <div
+              className={`absolute top-14  z-10 transition-all  ${
+                isMenuPc ? "left-0" : "left-[-150%]"
+              }`}
+            >
+              <Menu />
+            </div>
           </div>
           <Link to="/huong-dan-thanh-toan">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
+            <div
+              className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
+              onClick={() => setIsMenuPc(false)}
+            >
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               thanh toán
             </div>
           </Link>
           <Link to="/huong-dan-tra-gop">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
+            <div
+              className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
+              onClick={() => setIsMenuPc(false)}
+            >
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               trả góp
             </div>
           </Link>
           <Link to="/chinh-sach-bao-hanh">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
+            <div
+              className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
+              onClick={() => setIsMenuPc(false)}
+            >
               <GrHostMaintenance size={"18px"} className="mr-2" /> Chính sách
               bảo hành
             </div>
           </Link>
           <Link to="/chinh-sach-van-chuyen">
-            <div className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3">
+            <div
+              className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
+              onClick={() => setIsMenuPc(false)}
+            >
               <MdLocalShipping size={"18px"} className="mr-2" /> Chính sách vận
               chuyển
             </div>
