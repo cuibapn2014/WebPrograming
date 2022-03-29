@@ -121,15 +121,15 @@ const ListPc = () => {
             },
             768: {
               slidesPerView: 3,
-              spaceBetween: 20,
+              spaceBetween: 10,
             },
             1024: {
               slidesPerView: 4,
-              spaceBetween: 20,
+              spaceBetween: 10,
             },
             1280: {
               slidesPerView: 5,
-              spaceBetween: 20,
+              spaceBetween: 5,
             },
           }}
           // modules={[Pagination]}
@@ -137,7 +137,7 @@ const ListPc = () => {
         >
           {listCollectionPC.map((item, index) => {
             return (
-              <SwiperSlide>
+              <SwiperSlide key={index}>
                 <CardProduct
                   name={item.name}
                   price={item.price}

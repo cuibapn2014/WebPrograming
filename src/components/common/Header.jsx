@@ -41,12 +41,9 @@ const Header = () => {
       </div>
       {/* header1 */}
       {/* header2 */}
-      <div
-        className="flex items-center px-10 justify-around w-full"
-        onClick={() => setIsMenuPc(true)}
-      >
+      <div className="flex items-center px-10 justify-around w-full">
         <Link to="/">
-          <div>
+          <div onClick={() => setIsMenuPc(true)}>
             <img
               width="200px"
               height="50px"

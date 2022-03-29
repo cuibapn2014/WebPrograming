@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 
 import { Autoplay, Pagination, Navigation } from "swiper";
 import Menu from "./common/Menu";
+import { Link } from "react-router-dom";
 
 const slider = [
   "https://lh3.googleusercontent.com/RhNNGMK6jozMT1uG33aeAGn1liUPF0631PvFz0zhEpiK-ETKm74uICu1bcOPpeO5TPscRfNj2GGDLnuvI9JXX5snb1ZkSg7JxQ=rw-w1920",
@@ -43,15 +44,15 @@ const Banner = () => {
       if (sc1 < 10) {
         sc1 = `0${sc1}`;
       }
-
-      hourRef.current.innerHTML = hr1;
-      minRef.current.innerHTML = mn1;
-      secRef.current.innerHTML = sc1;
-
-      // document.getElementById(
-      //   "sale"
-      // ).innerHTML = `Flash-Sale: ${hr1}:${mn1}:${sc1}`;
-      console.log("time down", `${hr1}:${mn1}:${sc1}`);
+      if (hr1) {
+        hourRef.current.innerHTML = hr1;
+      }
+      if (mn1) {
+        minRef.current.innerHTML = mn1;
+      }
+      if (sc1) {
+        secRef.current.innerHTML = sc1;
+      }
     }, 1000);
   }, []);
   return (
@@ -87,24 +88,25 @@ const Banner = () => {
           <Menu />
         </div> */}
         <div className="absolute top-[3%] right-10 z-10 xl:block hidden">
-          <a
-            href="https://phongvu.vn/cong-nghe/?pv_source=homepage&pv_medium=de-sub-banner-right"
-            target="_blank"
-          >
-            <img
-              src="https://lh3.googleusercontent.com/DkNx7tujFxE_u_HXMtnJnpiaLmSy8ldt9qpsvMtnNUh6P1t7bO2ONobgmPG-sh0F-udGPDPIbVfAjY_dcIjF6VPeLy1b7WoYzg=rw-w300"
-              className="hover:scale-105 transition-all w-full overflow-hidden"
-            />
-          </a>
-          <a
-            href="https://phongvu.vn/cong-nghe/?pv_source=homepage&pv_medium=de-sub-banner-right"
-            target="_blank"
-          >
-            <img
-              src="https://lh3.googleusercontent.com/0eQBvi3PCBbp4yVoK8gReFaxWSNjWh0dlj-RAKrOmcE0dxVZxJXwvOiZsoMK_fFQDDwb_A3hRBMsiFB_qp7_r4MKhuqZp4UI=rw-w400"
-              className="hover:scale-105 transition-all w-full overflow-hidden mt-4"
-            />
-          </a>
+          <div className="w-[200px] h-[200px] overflow-hidden rounded-md">
+            <a
+              href="https://phongvu.vn/cong-nghe/?pv_source=homepage&pv_medium=de-sub-banner-right"
+              target="_blank"
+            >
+              <img
+                src="https://lh3.googleusercontent.com/DkNx7tujFxE_u_HXMtnJnpiaLmSy8ldt9qpsvMtnNUh6P1t7bO2ONobgmPG-sh0F-udGPDPIbVfAjY_dcIjF6VPeLy1b7WoYzg=rw-w300"
+                className="w-full h-full object-cover hover:scale-105 transition-all w-full "
+              />
+            </a>
+          </div>
+          <div className="w-[200px] h-[200px]  mt-4 overflow-hidden rounded-md">
+            <Link to="/huong-dan-thanh-toan">
+              <img
+                src="https://vinacheck.vn/media/2019/05/ma-qr-code_vinacheck.vm_001.jpg"
+                className="w-full h-full object-cover hover:scale-105 transition-all w-full "
+              />
+            </Link>
+          </div>
         </div>
       </Swiper>
       <div className="py-1 bg-slate-50 relative">
@@ -119,19 +121,19 @@ const Banner = () => {
                 ref={hourRef}
                 className="lg:min-w-[40px] w-[20px] lg:py-2  px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md flex justify-center items-center"
               >
-                09
+                00
               </h4>
               <h4
                 ref={minRef}
                 className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md"
               >
-                09
+                00
               </h4>
               <h4
                 ref={secRef}
                 className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md"
               >
-                09
+                00
               </h4>
             </div>
           </div>
