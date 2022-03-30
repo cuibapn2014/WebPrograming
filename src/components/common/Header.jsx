@@ -9,15 +9,23 @@ import { MdLocalShipping } from "react-icons/md";
 import { GrHostMaintenance } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
+import { useDispatch, useSelector } from "react-redux";
+import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
 
 const Header = () => {
-  const [isMenuPc, setIsMenuPc] = useState(true);
+  const stateMenu = useSelector((state) => state.stateMenu.isMenu);
+  const dispatch = useDispatch();
+  console.log("Header", stateMenu);
+  // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
   return (
     <div>
       {/* header1 */}
       <div className="bg-[#1435c3] flex items-center justify-end p-3 text-[#fff] text-sm px-10">
         <Link to="/contact">
-          <div className="flex items-center ml-10">
+          <div
+            className="flex items-center ml-10"
+            onClick={() => dispatch(isFalseMenu())}
+          >
             <BiBuildingHouse size={"18px"} className="mr-2" />
             Hệ thống Showroom
           </div>
@@ -43,7 +51,7 @@ const Header = () => {
       {/* header2 */}
       <div className="flex items-center px-10 justify-around w-full">
         <Link to="/">
-          <div onClick={() => setIsMenuPc(true)}>
+          <div onClick={() => dispatch(isTrueMenu())}>
             <img
               width="200px"
               height="50px"
@@ -90,7 +98,7 @@ const Header = () => {
         <div className="container mx-auto flex items-center uppercase text-[12px]  py-3">
           <div
             className="relative cursor-pointer"
-            onClick={() => setIsMenuPc(!isMenuPc)}
+            onClick={() => dispatch(toogleIsMenu())}
           >
             <div className="flex items-center py-2 px-4 border border-[#333] rounded-md bg-[#505050] text-[#fff] mr-3">
               <AiOutlineMenu size={"18px"} className="mr-2" />{" "}
@@ -98,7 +106,7 @@ const Header = () => {
             </div>
             <div
               className={`absolute top-14  z-10 transition-all  ${
-                isMenuPc ? "left-0" : "left-[-150%]"
+                stateMenu ? "left-0" : "left-[-150%]"
               }`}
             >
               <Menu />
@@ -107,7 +115,7 @@ const Header = () => {
           <Link to="/huong-dan-thanh-toan">
             <div
               className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
-              onClick={() => setIsMenuPc(false)}
+              onClick={() => dispatch(isFalseMenu())}
             >
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               thanh toán
@@ -116,7 +124,7 @@ const Header = () => {
           <Link to="/huong-dan-tra-gop">
             <div
               className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
-              onClick={() => setIsMenuPc(false)}
+              onClick={() => dispatch(isFalseMenu())}
             >
               <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng dẫn
               trả góp
@@ -125,7 +133,7 @@ const Header = () => {
           <Link to="/chinh-sach-bao-hanh">
             <div
               className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
-              onClick={() => setIsMenuPc(false)}
+              onClick={() => dispatch(isFalseMenu())}
             >
               <GrHostMaintenance size={"18px"} className="mr-2" /> Chính sách
               bảo hành
@@ -134,7 +142,7 @@ const Header = () => {
           <Link to="/chinh-sach-van-chuyen">
             <div
               className="flex items-center py-2 px-4 border border-[#333] rounded-md mr-3"
-              onClick={() => setIsMenuPc(false)}
+              onClick={() => dispatch(isFalseMenu())}
             >
               <MdLocalShipping size={"18px"} className="mr-2" /> Chính sách vận
               chuyển

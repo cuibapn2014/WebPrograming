@@ -10,6 +10,8 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper";
 import Menu from "./common/Menu";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toogleIsMenu, isFalseMenu } from "../redux/actions";
 
 const slider = [
   "https://lh3.googleusercontent.com/RhNNGMK6jozMT1uG33aeAGn1liUPF0631PvFz0zhEpiK-ETKm74uICu1bcOPpeO5TPscRfNj2GGDLnuvI9JXX5snb1ZkSg7JxQ=rw-w1920",
@@ -22,9 +24,13 @@ const Banner = () => {
   const hourRef = useRef(null);
   const minRef = useRef(null);
   const secRef = useRef(null);
+  const timeRef = useRef(null);
+  const stateMenu = useSelector((state) => state.stateMenu.isMenu);
+  console.log("banner ", stateMenu);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setInterval(() => {
+    const timeRef = setInterval(() => {
       var date = new Date();
       let hr = date.getHours();
       let mn = date.getMinutes();
@@ -45,15 +51,24 @@ const Banner = () => {
         sc1 = `0${sc1}`;
       }
       if (hr1) {
-        hourRef.current.innerHTML = hr1;
+        hourRef.current.innerText = hr1;
+      } else {
+        hourRef.current.innerText = "00";
       }
       if (mn1) {
-        minRef.current.innerHTML = mn1;
+        minRef.current.innerText = mn1;
+      } else {
+        minRef.current.innerText = "00";
       }
       if (sc1) {
-        secRef.current.innerHTML = sc1;
+        secRef.current.innerText = sc1;
+      } else {
+        secRef.current.innerText = "00";
       }
     }, 1000);
+    return () => {
+      clearInterval(timeRef);
+    };
   }, []);
   return (
     <>
@@ -99,7 +114,10 @@ const Banner = () => {
               />
             </a>
           </div>
-          <div className="w-[200px] h-[200px]  mt-4 overflow-hidden rounded-md">
+          <div
+            className="w-[200px] h-[200px]  mt-4 overflow-hidden rounded-md"
+            onClick={() => dispatch(isFalseMenu())}
+          >
             <Link to="/huong-dan-thanh-toan">
               <img
                 src="https://vinacheck.vn/media/2019/05/ma-qr-code_vinacheck.vm_001.jpg"
@@ -125,13 +143,13 @@ const Banner = () => {
               </h4>
               <h4
                 ref={minRef}
-                className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md"
+                className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md flex justify-center items-center"
               >
                 00
               </h4>
               <h4
                 ref={secRef}
-                className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md"
+                className="lg:min-w-[40px] w-[20px] lg:py-2 px-1 py-1 bg-white mr-2 tracking-[0.1rem] text-[10px] lg:text-lg font-semibold rounded-md flex justify-center items-center"
               >
                 00
               </h4>

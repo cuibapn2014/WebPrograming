@@ -4,7 +4,17 @@ import { HiOutlineMail } from "react-icons/hi";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { BsFillTelephoneFill, BsFacebook } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { isFalseMenu } from "../../redux/actions";
 const Footer = () => {
+  const dispatch = useDispatch();
+  const handleOntop = (e) => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="mt-5">
       {/* footer block 1 */}
@@ -94,20 +104,40 @@ const Footer = () => {
             <h3 className="text-base font-semibold uppercase mb-3">
               thông tin chính sách
             </h3>
-            <p className="text-[12px] mb-1">
-              <Link to="/chinh-sach-bao-hanh">Chính sách bảo hành</Link>
+            <p className="text-[12px] mb-1" onClick={handleOntop}>
+              <Link
+                to="/chinh-sach-bao-hanh"
+                onClick={() => dispatch(isFalseMenu())}
+              >
+                Chính sách bảo hành
+              </Link>
             </p>
-            <p className="text-[12px] mb-1">
+            <p className="text-[12px] mb-1" onClick={handleOntop}>
               {" "}
-              <Link to="/chinh-sach-van-chuyen">Chính sách vận chuyển</Link>
+              <Link
+                to="/chinh-sach-van-chuyen"
+                onClick={() => dispatch(isFalseMenu())}
+              >
+                Chính sách vận chuyển
+              </Link>
             </p>
-            <p className="text-[12px] mb-1">
+            <p className="text-[12px] mb-1" onClick={handleOntop}>
               {" "}
-              <Link to="/huong-dan-tra-gop">Hướng dẫn trả góp</Link>
+              <Link
+                to="/huong-dan-tra-gop"
+                onClick={() => dispatch(isFalseMenu())}
+              >
+                Hướng dẫn trả góp
+              </Link>
             </p>
-            <p className="text-[12px] mb-1">
+            <p className="text-[12px] mb-1" onClick={handleOntop}>
               {" "}
-              <Link to="/huong-dan-thanh-toan">Hướng dẫn thanh toán</Link>
+              <Link
+                to="/huong-dan-thanh-toan"
+                onClick={() => dispatch(isFalseMenu())}
+              >
+                Hướng dẫn thanh toán
+              </Link>
             </p>
           </div>
           {/* block3 */}

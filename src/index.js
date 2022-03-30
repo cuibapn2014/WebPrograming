@@ -11,6 +11,7 @@ import Installment from "./components/page/Installment";
 import Maintain from "./components/page/Maintain";
 import Delivery from "./components/page/Delivery";
 import Login from "./components/page/Login";
+import ProductView from "./components/page/ProductView";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.render(
           <Route path="chinh-sach-bao-hanh" element={<Maintain />} />
           <Route path="chinh-sach-van-chuyen" element={<Delivery />} />
           <Route path="sign-in" element={<Login />} />
+          <Route path="product" element={<ProductView />} />
         </Route>
       </Routes>
     </BrowserRouter>
