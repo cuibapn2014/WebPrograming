@@ -13,6 +13,16 @@ import Menu from "./Menu";
 import { list } from "../common/Menu";
 const HeaderMobile = () => {
   const [isMenu, setIsMenu] = useState(false);
+
+  const handleIsMenu = () => {
+    setIsMenu(false);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <div className="container mx-auto ">
@@ -81,7 +91,7 @@ const HeaderMobile = () => {
                 <Menu className="text-left" />
               </div>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/huong-dan-thanh-toan">
                 <div className="flex items-center py-2">
                   <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng
@@ -89,7 +99,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/huong-dan-tra-gop">
                 <div className="flex items-center py-2">
                   <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng
@@ -97,7 +107,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/chinh-sach-bao-hanh">
                 <div className="flex items-center py-2">
                   <GrHostMaintenance size={"18px"} className="mr-2" />
@@ -105,7 +115,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/chinh-sach-van-chuyen">
                 <div className="flex items-center py-2">
                   <MdLocalShipping size={"18px"} className="mr-2" />

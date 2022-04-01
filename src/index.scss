@@ -115,3 +115,11 @@ code {
   border: 1px solid #1435c3;
   transition: 0.25s all;
 }
+
+//Product View
+
+@media screen and (max-width: 768px) and (min-width: 400px) {
+  .swiper.swiper-initialized.swiper-horizontal.swiper-free-mode.mySwiper.swiper-thumbs.swiper-backface-hidden {
+    width: 50%;
+  }
+}

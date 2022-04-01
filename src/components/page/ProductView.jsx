@@ -26,11 +26,11 @@ const ProductView = () => {
 
   return (
     <div className="bg-slate-50">
-      <div className="flex justify-between p-4">
+      <div className="flex lg:flex-row flex-col justify-between p-4">
         {/* block1 */}
-        <div className="w-[74%] flex justify-between  bg-white rounded-md p-5">
+        <div className="lg:w-[74%] w-full flex flex-col md:flex-row justify-between  bg-white rounded-md p-5">
           {/* block1.1 */}
-          <div id="thumbs" className="w-[35%] ">
+          <div id="thumbs" className="md:w-[35%] w-full ">
             <Swiper
               style={{
                 "--swiper-navigation-color": "#fff",
@@ -136,7 +136,7 @@ const ProductView = () => {
           </div>
           {/* block1.1 */}
           {/* block 1.2 */}
-          <div className="w-[60%] ">
+          <div className="md:w-[60%] w-full ">
             <div className="pb-4">
               <h2 className="text-[22px] font-medium">
                 Laptop MSI GF63 Thin 11SC 662VN ( 15.6" Full HD/ 144Hz/Intel
@@ -170,10 +170,10 @@ const ProductView = () => {
               </div>
             </div>
             <div className="flex justify-between mt-4">
-              <div className="w-[48%] bg-[#1435c3] hover:bg-white text-white hover:text-[#1435c3] transition-all uppercase text-center rounded-md py-2 cursor-pointer hover:border hover:border-[#1435c3]">
+              <div className="w-[48%] bg-[#1435c3] hover:bg-white text-white hover:text-[#1435c3] transition-all uppercase text-center rounded-md py-2 cursor-pointer hover:border hover:border-[#1435c3] text-[10px] md:text-base">
                 mua ngay
               </div>
-              <div className="w-[48%] bg-white hover:bg-[#1435c3] text-[#1435c3] hover:text-white transition-all border border-[#1435c3] uppercase text-center rounded-md py-2 cursor-pointer">
+              <div className="w-[48%] bg-white hover:bg-[#1435c3] text-[#1435c3] hover:text-white transition-all border border-[#1435c3] uppercase text-center rounded-md py-2 cursor-pointer text-[10px] md:text-base">
                 thêm vào giỏ hàng
               </div>
             </div>
@@ -183,7 +183,7 @@ const ProductView = () => {
         {/* block1 */}
 
         {/* block2 */}
-        <div className="w-[25%] bg-white rounded-md p-4">
+        <div className="lg:w-[25%] w-full lg:mt-0 mt-1 bg-white rounded-md p-4 h-fit">
           <div className="flex items-center text-sm text-[#53c305] mb-5">
             <MdOutlineLocalShipping size={"24px"} className="mr-2" />
             <p>Sản phẩm được miễn phí giao hàng</p>
@@ -224,6 +224,106 @@ const ProductView = () => {
         </div>
         {/* block2 */}
       </div>
+
+      {/* DESCRIPTION */}
+      <div className="flex justify-between  flex-wrap p-4">
+        {/* descrition */}
+        <div className="w-[69%] bg-white p-4 rounded-md">
+          <h3 className="text-lg font-semibold">Mô tả sản phẩm</h3>
+          <div className="mb-3">
+            <h4 className="text-base font-medium">
+              Laptop ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) là sản phẩm máy
+              tính xách tay được hướng tới người làm đồ họa hoặc chơi game.
+              Thuộc phân khúc cao cấp, chiếc máy tính này có thiết kế hiện đại,
+              sang trọng cùng cấu hình mạnh mẽ thỏa mãn được nhu cầu của người
+              dùng.
+            </h4>
+            <div className="my-2">
+              <img
+                src="https://lh5.googleusercontent.com/j_m7OgDqv7eSu3hk1jPbCAfsvX-Y3XtvFRp_GSh0NSqqVo69rCnUSiFk-Nv-EKL-4Yj6qTssjUa0vMr6zjRS5MbTWyMGP4Tu0gGDIAYWFMQgfXlxv3fxz-Onl233UR4HEA"
+                className="w-[90%] object-cover"
+              />
+            </div>
+            <p className="text-sm font-normal ">
+              Máy có kích thước các chiều lần lượt là 36.34 x 25.5 x 2.39cm.
+              ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) có tông màu đỏ-đen nổi
+              bật, tông màu này cũng khá đặc trưng ở các dòng máy tính gaming.
+            </p>
+          </div>
+
+          <div className="mb-3">
+            <h4 className="text-base font-medium">
+              Màn hình rộng 15.6 inch Full HD, tần số quét 144Hz cho chất lượng
+              hình ảnh tuyệt vời khi chơi game
+            </h4>
+            <div className="my-2">
+              <img
+                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_01d_d01709aeaa754ee69544cc111f71babd_1024x1024.jpg"
+                className="w-[90%] object-cover"
+              />
+            </div>
+            <p className="text-sm font-normal ">
+              Màn hình này còn được trang bị tấm nền IPS chống lóa hiệu quả khi
+              máy hoạt động trong môi trường nhiều ánh sáng. Tần số quét 144Hz
+              tích hợp trên màn hình của máy tính xách tay này đảm bảo mọi hình
+              ảnh chuyển động trên màn hình được hiển thị một cách mượt mà, trơn
+              tru.
+            </p>
+          </div>
+
+          <div className="mb-3">
+            <h4 className="text-base font-medium">
+              Cấu hình đáp ứng được nhu cầu chơi game: CPU Intel Core i5-11300H,
+              RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
+            </h4>
+            <div className="my-2">
+              <img
+                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_05_4b8bfe220e2745bfa982bf8d5bb9877a_1024x1024.jpg"
+                className="w-[90%] object-cover"
+              />
+            </div>
+            <p className="text-sm font-normal ">
+              Màn hình này còn được trang bị tấm nền IPS chống lóa hiệu quả khi
+              máy hoạt động trong môi trường nhiều ánh sáng. Tần số quét 144Hz
+              tích hợp trên màn hình của máy tính xách tay này đảm bảo mọi hình
+              ảnh chuyển động trên màn hình được hiển thị một cách mượt mà, trơn
+              tru.
+            </p>
+          </div>
+
+          <div className="mb-3">
+            <h4 className="text-base font-medium">
+              Cấu hình đáp ứng được nhu cầu chơi game: CPU Intel Core i5-11300H,
+              RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
+            </h4>
+            <div className="my-2">
+              <img
+                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_04d_854ebf0a283042479d91f70ceb2a8d33_1024x1024.jpg"
+                className="w-[90%] object-cover"
+              />
+            </div>
+            <p className="text-sm font-normal ">
+              Với sự tích hợp của bộ vi xử lý Intel Core i5-11300H, xung nhịp
+              4.4 GHz,4 nhân 8 luồng và card đồ họa NVIDIA GeForce GTX 1650 4GB
+              GDDR6, laptop ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) có khả
+              năng xử lý tốt các công việc đồ họa đơn giản trên các phần mềm
+              chuyên dụng, tốc độ xử lý thông tin cũng tương đối nhanh và mượt.
+            </p>
+          </div>
+        </div>
+        {/* descrition */}
+
+        {/* information product */}
+        <div className="w-[30%] bg-white h-fit rounded-md">
+          - CPU: Intel Core i5-11300H - Màn hình: 15.6" IPS (1920 x 1080), 144Hz
+          - RAM: 1 x 8GB DDR4 3200MHz - Đồ họa: NVIDIA GeForce GTX 1650 4GB
+          GDDR6 / Intel Iris Xe Graphics - Lưu trữ: 512GB SSD M.2 NVMe / - Hệ
+          điều hành: Windows 10 Home 64-bit - 57 Wh Pin liền - Khối lượng: 2.2
+          kg
+        </div>
+        {/* information product */}
+      </div>
+      {/* DESCRIPTION */}
     </div>
   );
 };

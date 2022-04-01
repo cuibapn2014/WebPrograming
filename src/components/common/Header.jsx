@@ -15,7 +15,7 @@ import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
 const Header = () => {
   const stateMenu = useSelector((state) => state.stateMenu.isMenu);
   const dispatch = useDispatch();
-  console.log("Header", stateMenu);
+  // console.log("Header", stateMenu);
   // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
   return (
     <div>
@@ -160,3 +160,21 @@ const Header = () => {
 };
 
 export default Header;
+
+// const des = [
+//   {
+//     img: "https://placehold",
+//     descrition:
+//       "Laptop ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) là sản phẩm máy tính xách tay được hướng tới người làm đồ họa hoặc chơi game. Thuộc phân khúc cao cấp, chiếc máy tính này có thiết kế hiện đại, sang trọng cùng cấu hình mạnh mẽ thỏa mãn được nhu cầu của người dùng.",
+//   },
+//   {
+//     img: "https://placehold",
+//     descrition:
+//       "Laptop ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) là sản phẩm máy tính xách tay được hướng tới người làm đồ họa hoặc chơi game. Thuộc phân khúc cao cấp, chiếc máy tính này có thiết kế hiện đại, sang trọng cùng cấu hình mạnh mẽ thỏa mãn được nhu cầu của người dùng.",
+//   },
+//   {
+//     img: "https://placehold",
+//     descrition:
+//       "Laptop ACER Nitro 5 AN515-56-51N4 (NH.QBZSV.002) là sản phẩm máy tính xách tay được hướng tới người làm đồ họa hoặc chơi game. Thuộc phân khúc cao cấp, chiếc máy tính này có thiết kế hiện đại, sang trọng cùng cấu hình mạnh mẽ thỏa mãn được nhu cầu của người dùng.",
+//   },
+// ];
