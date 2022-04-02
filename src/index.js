@@ -12,6 +12,7 @@ import Maintain from "./components/page/Maintain";
 import Delivery from "./components/page/Delivery";
 import Login from "./components/page/Login";
 import ProductView from "./components/page/ProductView";
+import Paypal from "./components/page/Paypal";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.render(
           <Route path="chinh-sach-van-chuyen" element={<Delivery />} />
           <Route path="sign-in" element={<Login />} />
           <Route path="product" element={<ProductView />} />
+          <Route path="paypal" element={<Paypal />} />
         </Route>
       </Routes>
     </BrowserRouter>
