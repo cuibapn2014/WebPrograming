@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../../assets/logo.png";
 import {
   AiOutlineMenu,
   AiOutlineShoppingCart,
@@ -31,12 +32,14 @@ const HeaderMobile = () => {
             <AiOutlineMenu />
           </div>
           <Link to="/">
-            <div>
+            <div className="w-full">
               {" "}
               <img
-                width="200px"
+                width="150px"
                 height="50px"
-                src="https://phongvu.vn/phongvu/logo-full.svg"
+                // className="w-4/5 h-full object-cover"
+                // src="https://phongvu.vn/phongvu/logo-full.svg"
+                src={logo}
               />
             </div>
           </Link>

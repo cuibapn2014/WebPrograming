@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../../assets/logo.png";
 import { BiBuildingHouse, BiRightArrowCircle } from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
@@ -49,13 +50,14 @@ const Header = () => {
       </div>
       {/* header1 */}
       {/* header2 */}
-      <div className="flex items-center px-10 justify-around w-full">
+      <div className="flex items-center px-10 justify-around w-full my-4">
         <Link to="/">
           <div onClick={() => dispatch(isTrueMenu())}>
             <img
               width="200px"
               height="50px"
-              src="https://haycafe.vn/wp-content/uploads/2021/12/mau-logo-ki-niem-10-nam-angry-birds-dep-la.png"
+              // src="https://haycafe.vn/wp-content/uploads/2021/12/mau-logo-ki-niem-10-nam-angry-birds-dep-la.png"
+              src={logo}
             />
           </div>
         </Link>
@@ -75,7 +77,7 @@ const Header = () => {
             Khuyến mãi
           </div>
         </Link>
-        <Link to="/sign-in">
+        <Link to="/sign-in" onClick={() => dispatch(isFalseMenu())}>
           <div className="icon--header">
             <RiAccountCircleLine size={"27px"} className="mb-2" />
             Đăng nhập

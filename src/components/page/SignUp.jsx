@@ -1,27 +1,32 @@
 import { FastField, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
+
 import React, { useState } from "react";
 import { BiHide } from "react-icons/bi";
 import { GrFormViewHide } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../common/Input";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
-const Login = () => {
+// import { toast } from "react-toastify";
+
+const SignUp = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [ispassword, setIsPassword] = useState(true);
 
   const formik = useFormik({
     initialValues: {
+      userName: "",
       email: "",
       passWord: "",
+      confirmPassword: "",
     },
 
     validationSchema: Yup.object({
-      // lastName: Yup.string()
-      //   .required("Required")
-      //   .min(4, "Must be 4 characters or more"),
+      userName: Yup.string()
+        .required("Required")
+        .min(4, "Must be 4 characters or more"),
       email: Yup.string()
         .required("Required")
         .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please Enter Email"),
@@ -31,15 +36,19 @@ const Login = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/,
           "Password must be from  8-10 characters and contain at least one letter, one number, and one special characters"
         ),
-      // confirmPassword: Yup.string()
-      //   .required("Required")
-      //   .oneOf([Yup.ref("password"), null], "Password must match"),
+      confirmPassword: Yup.string()
+        .required("Required")
+        .oneOf([Yup.ref("passWord"), null], "Password must match"),
     }),
 
     onSubmit: (values) => {
-      console.log(values);
-      // window.alert("Success Form");
-      toast.success("Login success");
+      const res = {
+        value: values,
+        id: 1,
+      };
+      console.log(res);
+      //   window.alert("success ");
+      toast.success("Create account success");
     },
   });
 
@@ -57,19 +66,44 @@ const Login = () => {
 
         {/* block 2 */}
         <div className="lg:w-[40%] w-full  rounded-r-lg">
-          <div className="p-10">
-            <div className="text-xl font-semibold text-[#1435c3]">
-              <h4>You're</h4>
-              <h5>Welcome</h5>
+          <div className="px-10">
+            <div className="text-base">
+              <h4>Sign up with your email</h4>
+              <h5>
+                Already have an account?
+                <Link to="/sign-in" className="text-[#1435c3]">
+                  {" "}
+                  Sign in
+                </Link>
+              </h5>
             </div>
 
             <form
               className="px-1 py-5 pb-9 lg:w-full  w-[100%] sm:w-4/5 mx-auto"
               onSubmit={formik.handleSubmit}
             >
-              <h2 className="text-center font-medium text-lg my-5">
+              {/* <h2 className="text-center font-medium text-lg my-5">
                 Login your account
-              </h2>
+              </h2> */}
+              <div className="mb-10">
+                <div className="form-field">
+                  <input
+                    id="userName"
+                    name="userName"
+                    onChange={formik.handleChange}
+                    value={formik.values.userName}
+                    type="text"
+                    placeholder=" "
+                    className="form-input"
+                  />
+                  <label className="form-label" htmlFor="userName">
+                    Username
+                  </label>
+                </div>
+                <span className="block mt-1 text-[red]">
+                  {formik.errors.userName}
+                </span>
+              </div>
               <div className="mb-10">
                 <div className="form-field">
                   <input
@@ -90,7 +124,7 @@ const Login = () => {
                 </span>
               </div>
               <div>
-                <div className="mb-5">
+                <div className="mb-10">
                   <div className="form-field">
                     <input
                       id="passWord"
@@ -115,9 +149,34 @@ const Login = () => {
                     {formik.errors.passWord}
                   </span>
                 </div>
+                <div className="mb-5">
+                  <div className="form-field">
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      onChange={formik.handleChange}
+                      value={formik.values.confirmPassword}
+                      type={ispassword ? "password" : "text"}
+                      placeholder=" "
+                      className="form-input"
+                    />
+                    <label className="form-label" htmlFor="confirmPassword">
+                      Password
+                    </label>
+                    <div
+                      className="absolute top-[50%] right-5 transform translate-y-[-50%] cursor-pointer"
+                      onClick={() => setIsPassword(!ispassword)}
+                    >
+                      {ispassword ? <GrFormViewHide /> : <BiHide />}
+                    </div>
+                  </div>
+                  <span className="block mt-1 text-[red]">
+                    {formik.errors.confirmPassword}
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center my-4">
+              {/* <div className="flex items-center my-4">
                 <input
                   id="remember"
                   type="checkbox"
@@ -132,23 +191,32 @@ const Login = () => {
                 >
                   remember me
                 </label>
-              </div>
+              </div> */}
               <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
-                <button type="submit">Sign in</button>
+                <button type="submit">Create Account</button>
               </div>
-              <div className="mt-4 text-center">
+              {/* <div className="mt-4 text-center">
                 Don't have an account ?{" "}
-                <span className="text-[#1435c3] cursor-pointer">
-                  <Link to="/sign-up">Sign up</Link>
-                </span>{" "}
-              </div>
+                <span className="text-[#1435c3] cursor-pointer">Sign up</span>{" "}
+              </div> */}
             </form>
           </div>
         </div>
         {/* block 2 */}
       </div>
+      {/* <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      /> */}
     </div>
   );
 };
 
-export default Login;
+export default SignUp;
