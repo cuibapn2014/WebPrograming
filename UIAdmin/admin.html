@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Admin</title>
+    <meta name="author" content="Quốc An">
+    <meta name="description" content="">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+        .font-family-roboto { font-family: roboto; }
+        .bg-sidebar { background: #1435c3; }
+        .cta-btn { color: #3d68ff; }
+        .upgrade-btn { background: #1947ee; }
+        .upgrade-btn:hover { background: #0038fd; }
+        .active-nav-link { background: #1947ee; }
+        .nav-item:hover { background: #1947ee; }
+        .account-link:hover { background: #3d68ff; }
+    </style>
+</head>
+<body class="bg-gray-100 flex">
+
+    <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+        <div class="p-6">
+            <a href="admin.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Trang Quản Lí</a>
+            <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                <i class="fas fa-plus mr-3"></i> Báo cáo mới
+            </button>
+        </div>
+        <nav class="text-white text-base font-semibold pt-3">
+            <a href="admin.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                <i class="fas fa-table mr-3"></i>
+                QL Sản Phẩm
+            </a>
+            <a href="qlnhanvien.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fa fa-user-circle mr-3"></i>
+                QL Nhân Viên
+            </a>
+            <a href="qlkhachhang.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                QL Khách Hàng
+            </a>
+            <a href="qldanhmucsanpham.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-align-left mr-3"></i>
+                QL Danh Mục
+            </a>
+            <a href="qlthuonghieu.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-tablet-alt mr-3"></i>
+                QL Thương Hiệu
+            </a>
+            <a href="qlhoadon.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-sticky-note mr-3"></i>
+                QL Hóa Đơn
+            </a>
+         
+            
+            
+           
+        </nav>
+      
+    </aside>
+
+    <div class="w-full flex flex-col h-screen overflow-y-hidden">
+        <!-- Desktop Header -->
+        <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <div class="w-1/2"></div>
+            <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
+                <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                    <img src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.6435-9/166314538_970652070138231_8558537778400875287_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=8NMHbeJ_gLMAX-sknjL&_nc_ht=scontent.fsgn2-4.fna&oh=00_AT8io7R2WE4Wfd_KKCn8KO30MZ0smKRSvHpZyzbURUW3vQ&oe=626719AB">
+                </button>
+                <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+                <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Tài Khoản</a>
+                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Hỗ Trợ</a>
+                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Đăng Xuất</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Header & Nav -->
+        <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
+            <div class="flex items-center justify-between">
+                <a href="admin.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Trang Quản Lí</a>
+                <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
+                    <i x-show="!isOpen" class="fas fa-bars"></i>
+                    <i x-show="isOpen" class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Dropdown Nav -->
+            <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+                <a href="admin.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    QL Sản Phẩm
+                </a>
+                <a href="qlnhanvien.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-sticky-note mr-3"></i>
+                    QL Nhân Viên
+                </a>
+                <a href="qlkhachhang.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-table mr-3"></i>
+                    QL Khách Hàng
+                </a>
+                <a href="qldanhmucsanpham.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-align-left mr-3"></i>
+                    QL Danh Mục
+                </a>
+                <a href="qlthuonghieu.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-tablet-alt mr-3"></i>
+                    QL Thương Hiệu
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-cogs mr-3"></i>
+                    Hỗ Trợ
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-user mr-3"></i>
+                    Tài Khoản
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    Đăng Xuất
+                </a>
+               
+            </nav>
+          
+        </header>
+        <div class="w-full mt-12">
+            <p class="text-xl pb-3 flex items-center">
+                <i class="fas fa-list mr-3"></i> Danh Sách Sản Phẩm
+            </p>
+            <div class="bg-white overflow-auto ">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-800 text-white ">
+                        <tr>
+                            <th class="w-24 text-left py-3 px-4 uppercase font-semibold text-sm text-center ">ID</th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Tên</th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Mô Tả</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm text-center">Thương Hiệu</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm text-center">Giá</th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Màu Sắc</th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700">
+                        <tr>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">1</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop msi-2019-leopad-plus-8gb-4</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg> 
+                        </div>
+                    </button></td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">2</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop msi-2019-leopad-plus-8gb-4</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg> 
+                        </div>
+                    </button></td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">3</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop msi-2019-leopad-plus-8gb-4</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg> 
+                        </div>
+                    </button></td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">4</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop msi-2019-leopad-plus-8gb-4</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg> 
+                        </div>
+                    </button></td>
+                            
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+        
+    
+      
+
+    <!-- AlpineJS -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <!-- ChartJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+
+    <script>
+        var chartOne = document.getElementById('chartOne');
+        var myChart = new Chart(chartOne, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var chartTwo = document.getElementById('chartTwo');
+        var myLineChart = new Chart(chartTwo, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
