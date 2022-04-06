@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../../assets/logo.png";
 import {
   AiOutlineMenu,
   AiOutlineShoppingCart,
@@ -13,6 +14,16 @@ import Menu from "./Menu";
 import { list } from "../common/Menu";
 const HeaderMobile = () => {
   const [isMenu, setIsMenu] = useState(false);
+
+  const handleIsMenu = () => {
+    setIsMenu(false);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <div className="container mx-auto ">
@@ -21,12 +32,14 @@ const HeaderMobile = () => {
             <AiOutlineMenu />
           </div>
           <Link to="/">
-            <div>
+            <div className="w-full">
               {" "}
               <img
-                width="200px"
+                width="150px"
                 height="50px"
-                src="https://phongvu.vn/phongvu/logo-full.svg"
+                // className="w-4/5 h-full object-cover"
+                // src="https://phongvu.vn/phongvu/logo-full.svg"
+                src={logo}
               />
             </div>
           </Link>
@@ -49,6 +62,16 @@ const HeaderMobile = () => {
         </div>
       </div>
 
+      {/* background opacity 0.2 */}
+      <div
+        onClick={() => setIsMenu(!isMenu)}
+        className={`fixed z-50 top-0 right-0 w-[20%] h-[100vh] bg-black opacity-25 ${
+          isMenu ? "clip-path-right100 " : "clip-path-right0 cursor-pointer"
+        }`}
+      ></div>
+      {/* background opacity 0.2 */}
+
+      {/* Toogle menu */}
       <div
         className={`fixed top-0 z-50 w-[80%] h-[100vh] bg-white overflow-y-scroll ${
           isMenu ? "clip-path-left100" : "clip-path-left0"
@@ -71,7 +94,7 @@ const HeaderMobile = () => {
                 <Menu className="text-left" />
               </div>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/huong-dan-thanh-toan">
                 <div className="flex items-center py-2">
                   <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng
@@ -79,7 +102,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/huong-dan-tra-gop">
                 <div className="flex items-center py-2">
                   <RiSecurePaymentFill size={"18px"} className="mr-2" /> Hướng
@@ -87,7 +110,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/chinh-sach-bao-hanh">
                 <div className="flex items-center py-2">
                   <GrHostMaintenance size={"18px"} className="mr-2" />
@@ -95,7 +118,7 @@ const HeaderMobile = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div onClick={handleIsMenu}>
               <Link to="/chinh-sach-van-chuyen">
                 <div className="flex items-center py-2">
                   <MdLocalShipping size={"18px"} className="mr-2" />
@@ -112,6 +135,7 @@ const HeaderMobile = () => {
           <GrClose />
         </div>
       </div>
+      {/* Toogle menu */}
     </>
   );
 };
