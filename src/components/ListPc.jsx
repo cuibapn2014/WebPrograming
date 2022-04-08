@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -11,6 +11,7 @@ import { Scrollbar } from "swiper";
 // import { GrFormNextLink } from "react-icons/gr";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import CardProduct from "./common/CardProduct";
+import axios from "axios";
 
 const listCollectionPC = [
   {
@@ -50,43 +51,77 @@ const listCollectionPC = [
   },
   //copy
   {
-    name: "PC GAMING CHEAP PENTIUM G6405 / RAM 8GB / SSD 120GB",
-    price: "5,940,000₫",
+    name: "PC GAMING EXPENSIVE PENTIUM G6405 / RAM 8GB / SSD 120GB",
+    price: "6,940,000₫",
     discount: "-10%",
     priceBeforeDiscount: "6,600,000₫",
-    img: "https://product.hstatic.net/1000026716/product/axe_d6711491eeb74f39ac169e49e9ccd982_large.jpg",
+    img: "https://product.hstatic.net/1000026716/product/garen_e1c63b8aef6f45eaa7e0ed0446a8f961_large.jpg",
   },
   {
     name: "PC GAMING SC I3 10100F / Ram 8GB / GTX 1030 / SSD 120GB",
-    price: "8,920,000₫",
+    price: "9,920,000₫",
     discount: "-23%",
     priceBeforeDiscount: "11,615,000₫",
-    img: "https://product.hstatic.net/1000026716/product/ventus_6412aad1ff0949a59c376f7ae739a69b_large.jpg",
+    img: "https://product.hstatic.net/1000026716/product/volibear_651242d5cb774a42a8fd6629c3d57ef2_large.jpg",
   },
   {
     name: "PC GAMING ES2 I3 10105F / RAM 8GB / GTX 1030 / SSD 120GB",
     price: "10,390,000₫",
     discount: "-21%",
     priceBeforeDiscount: "13,070,000₫",
-    img: "https://product.hstatic.net/1000026716/product/mystic_f3c70f3ef0dc4e86b932d53b4932b70e_large.jpg",
+    img: "https://product.hstatic.net/1000026716/product/neon_91c0996086374bab98d8bd3a16162cf9_large.jpg",
   },
   {
     name: "PC GAMING ZUMY 1 I5 10400F / RAM 8GB / GTX 1030 / SSD 120GB",
     price: "10,830,000₫",
     discount: "-17%",
     priceBeforeDiscount: "13,000,000₫",
-    img: "https://product.hstatic.net/1000026716/product/ratchet_c6d03b5dee39455bbcb66144b29bcbfe_large.jpg",
+    img: "https://product.hstatic.net/1000026716/product/phantom_5f48a8738fee4767af130fb977ac4792_large.jpg",
   },
   {
     name: "PC GAMING MIKTA 1 I3 10105F / RAM 8GB / GTX 1050TI / SSD 120GB",
     price: "11,790,000₫",
     discount: "-18%",
     priceBeforeDiscount: "14,300,000₫",
-    img: "https://product.hstatic.net/1000026716/product/athen_29da8eeae7cd47fbb48f3c9d84df5b42_large.jpg",
+    img: "https://product.hstatic.net/1000026716/product/ghost_3dedb620811c4c25935ffb5df0dbec71_large.jpg",
   },
 ];
 
 const ListPc = () => {
+  const [list, setList] = useState([]);
+  useEffect(async () => {
+    try {
+      const config = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      };
+      const res = await axios.get(
+        "http://localhost:8085/api/v1/product/get-all"
+        // {
+        //   headers: {
+        //     "Access-Control-Allow-Origin": true,
+        //   },
+        // },
+        // { crossDomain: true }
+      );
+
+      // const res = await fetch("")
+      // let res = await axios({
+      //   method: "get",
+      //   url: "http://localhost:8085/api/v1/product/get-all",
+      //   responseType: "stream",
+      // });
+      console.log("check data", res.data.data);
+      if (res && res.data && res.data.data) {
+        setList(res.data.data);
+      }
+    } catch (e) {
+      console.log("fail error : >>", e.message);
+    }
+  }, []);
+
   return (
     <div className="container mx-auto">
       <div className="px-5 py-2  flex items-center justify-between bg-[#1435c3] text-white">
@@ -135,19 +170,22 @@ const ListPc = () => {
           // modules={[Pagination]}
           className="mySwiper"
         >
-          {listCollectionPC.map((item, index) => {
-            return (
-              <SwiperSlide key={index}>
-                <CardProduct
-                  name={item.name}
-                  price={item.price}
-                  discount={item.discount}
-                  priceBeforeDiscount={item.priceBeforeDiscount}
-                  img={item.img}
-                />
-              </SwiperSlide>
-            );
-          })}
+          {list &&
+            list.map((item, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <CardProduct
+                    id={item.id}
+                    name={item.title}
+                    price={item.price}
+                    discount={item.discount}
+                    priceBeforeDiscount={"10.000.000"}
+                    img={item.image[0].urlImage}
+                    slug={item.slug}
+                  />
+                </SwiperSlide>
+              );
+            })}
         </Swiper>
       </div>
     </div>

@@ -134,7 +134,9 @@ const Login = () => {
                 </label>
               </div>
               <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
-                <button type="submit">Sign in</button>
+                <button type="submit" className="block w-full">
+                  Sign in
+                </button>
               </div>
               <div className="mt-4 text-center">
                 Don't have an account ?{" "}

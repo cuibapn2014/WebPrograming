@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineGift, AiOutlineSetting } from "react-icons/ai";
 import { MdOutlineLocalShipping, MdLaptopWindows } from "react-icons/md";
 import { FaShippingFast } from "react-icons/fa";
@@ -15,15 +15,76 @@ import "swiper/css/thumbs";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
-
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addCart } from "../../redux/actions";
+import { toast } from "react-toastify";
 const ProductView = () => {
+  const { slug, id } = useParams();
+  const navigation = useNavigate();
+  // console.log("id :", id);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [data, setData] = useState({});
+  const dispatch = useDispatch();
+  const listImg = data.image;
+
   const [img1, setImg1] = useState(true);
   const [img2, setImg2] = useState(false);
   const [img3, setImg3] = useState(false);
   const [img4, setImg4] = useState(false);
   const [img5, setImg5] = useState(false);
 
+  const buyNow = (e) => {
+    window.scrollTo({
+      top: 262,
+      left: 0,
+      behavior: "smooth",
+    });
+    navigation("/cart");
+  };
+
+  const addItem = () => {
+    dispatch(
+      addCart({
+        id: data.id,
+        img: data.image[0].urlImage,
+        name: data.title,
+        price: data.price,
+        qty: 1,
+      })
+    );
+    toast.success("add product success");
+  };
+
+  // const imgSlider = [
+  //   "https://lh3.googleusercontent.com/c7VuA4P8sHHJCilfzRVp50AQmgZEkJOyOCuh4vvkcT9jxfqTzZVd2gepUFSSqzXVSEljnYlAN319sJD-H1IztNcxPT3UypA=w1000-rw",
+  //   "https://lh3.googleusercontent.com/VpJgldxtdddsmBwMTP0iqPG4-W0WAKCTFE3iYe7XUaXUhvFvePH514GCSoH2TDLHiMOYxKSzRh7hCsmdM1429r-tk_8haRUr3Q=w1000-rw",
+  //   "https://lh3.googleusercontent.com/kpxJEY3p1mLKsaiQdUuL8gK_JPyrawmy_oxRXlU9b_p9TrrPo3hQOBhlXXutOyDABYTmxgnuuDkutPg0VgbUls42ctkH5WXY=w1000-rw",
+  //   "https://lh3.googleusercontent.com/_8W1EMpxpcb_lDJ-nhGMxsqP-ja6GW8iZHwREklHxrkkHcZxEKJTEyaRq817_McgSwXR0e0dQpvl2DxrjumLjU8-3L6u4xpI=w1000-rw",
+  //   "https://lh3.googleusercontent.com/eOT1uNpQy6j-EBoWZTZfelVhvIppYxHOUv27da3RWHyZAj89Wtf1p-qxmVNZnrnkyE8-k9mXQB_r3f19Z1dA5Oy2fgM3lOws=w1000-rw",
+  // ];
+  const imgSlider = [
+    "https://product.hstatic.net/1000026716/product/ratchet_c6d03b5dee39455bbcb66144b29bcbfe.jpg",
+    "https://product.hstatic.net/1000026716/product/01_1c33ffcd7b4a446aafbe5c0fd3fb1985_grande.jpg",
+    "https://product.hstatic.net/1000026716/product/10400f_71634928fe5b44f1a956f0e652e65d59_grande.jpg",
+    "https://product.hstatic.net/1000026716/product/gearvn.com-products-8gb-ddr4-1x8g-3200-ram-pny-xlr8-gaming-1_ebc7adc549654b31927d8cb2f51b8917_grande.jpg",
+    "https://product.hstatic.net/1000026716/product/1_340d4299b5fe46b29c19f3c97274a946_grande.jpg",
+  ];
+
+  useEffect(async () => {
+    let res = await axios.get(`http://localhost:8085/api/v1/product/${id}`);
+    if (res && res.data && res.data.data) {
+      setData(res.data.data);
+      // setListImg(res.data.data.image);
+    }
+  }, []);
+  console.log("check state", data);
+
+  const priceSplitter = (number) =>
+    number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  // const price1 = data / -discount + price;
   return (
     <div className="bg-slate-50">
       <div className="flex lg:flex-row flex-col justify-between p-4">
@@ -44,21 +105,15 @@ const ProductView = () => {
               modules={[FreeMode, Navigation, Thumbs]}
               className="mySwiper2"
             >
-              <SwiperSlide>
-                <img src="https://lh3.googleusercontent.com/c7VuA4P8sHHJCilfzRVp50AQmgZEkJOyOCuh4vvkcT9jxfqTzZVd2gepUFSSqzXVSEljnYlAN319sJD-H1IztNcxPT3UypA=w1000-rw" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="https://lh3.googleusercontent.com/VpJgldxtdddsmBwMTP0iqPG4-W0WAKCTFE3iYe7XUaXUhvFvePH514GCSoH2TDLHiMOYxKSzRh7hCsmdM1429r-tk_8haRUr3Q=w1000-rw" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="https://lh3.googleusercontent.com/kpxJEY3p1mLKsaiQdUuL8gK_JPyrawmy_oxRXlU9b_p9TrrPo3hQOBhlXXutOyDABYTmxgnuuDkutPg0VgbUls42ctkH5WXY=w1000-rw" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="https://lh3.googleusercontent.com/_8W1EMpxpcb_lDJ-nhGMxsqP-ja6GW8iZHwREklHxrkkHcZxEKJTEyaRq817_McgSwXR0e0dQpvl2DxrjumLjU8-3L6u4xpI=w1000-rw" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src="https://lh3.googleusercontent.com/eOT1uNpQy6j-EBoWZTZfelVhvIppYxHOUv27da3RWHyZAj89Wtf1p-qxmVNZnrnkyE8-k9mXQB_r3f19Z1dA5Oy2fgM3lOws=w1000-rw" />
-              </SwiperSlide>
+              {listImg &&
+                listImg.length > 0 &&
+                listImg.map((item, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <img src={item.urlImage} />
+                    </SwiperSlide>
+                  );
+                })}
             </Swiper>
 
             {/* thumbs */}
@@ -82,7 +137,7 @@ const ProductView = () => {
                   setImg5(false);
                 }}
               >
-                <img src="https://lh3.googleusercontent.com/c7VuA4P8sHHJCilfzRVp50AQmgZEkJOyOCuh4vvkcT9jxfqTzZVd2gepUFSSqzXVSEljnYlAN319sJD-H1IztNcxPT3UypA=w1000-rw" />
+                {listImg && <img src={listImg[0].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img2 ? "active-border" : ""} cursor-pointer`}
@@ -94,7 +149,7 @@ const ProductView = () => {
                   setImg5(false);
                 }}
               >
-                <img src="https://lh3.googleusercontent.com/VpJgldxtdddsmBwMTP0iqPG4-W0WAKCTFE3iYe7XUaXUhvFvePH514GCSoH2TDLHiMOYxKSzRh7hCsmdM1429r-tk_8haRUr3Q=w1000-rw" />
+                {listImg && <img src={listImg[1].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img3 ? "active-border" : ""} cursor-pointer`}
@@ -106,7 +161,7 @@ const ProductView = () => {
                   setImg5(false);
                 }}
               >
-                <img src="https://lh3.googleusercontent.com/kpxJEY3p1mLKsaiQdUuL8gK_JPyrawmy_oxRXlU9b_p9TrrPo3hQOBhlXXutOyDABYTmxgnuuDkutPg0VgbUls42ctkH5WXY=w1000-rw" />
+                {listImg && <img src={listImg[2].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img4 ? "active-border" : ""} cursor-pointer`}
@@ -118,7 +173,7 @@ const ProductView = () => {
                   setImg5(false);
                 }}
               >
-                <img src="https://lh3.googleusercontent.com/_8W1EMpxpcb_lDJ-nhGMxsqP-ja6GW8iZHwREklHxrkkHcZxEKJTEyaRq817_McgSwXR0e0dQpvl2DxrjumLjU8-3L6u4xpI=w1000-rw" />
+                {listImg && <img src={listImg[3].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img5 ? "active-border" : ""} cursor-pointer`}
@@ -130,7 +185,7 @@ const ProductView = () => {
                   setImg5(true);
                 }}
               >
-                <img src="https://lh3.googleusercontent.com/eOT1uNpQy6j-EBoWZTZfelVhvIppYxHOUv27da3RWHyZAj89Wtf1p-qxmVNZnrnkyE8-k9mXQB_r3f19Z1dA5Oy2fgM3lOws=w1000-rw" />
+                {listImg && <img src={listImg[4].urlImage} />}
               </SwiperSlide>
             </Swiper>
           </div>
@@ -138,23 +193,27 @@ const ProductView = () => {
           {/* block 1.2 */}
           <div className="md:w-[60%] w-full ">
             <div className="pb-4">
-              <h2 className="text-[22px] font-medium">
-                Laptop MSI GF63 Thin 11SC 662VN ( 15.6" Full HD/ 144Hz/Intel
-                Core i7-11800H/8GB/512GB SSD/NVIDIA GeForce GTX 1650/Windows 11
-                Home/1.9kg)
-              </h2>
+              <h2 className="text-[22px] font-medium">{data.title}</h2>
               <div className="flex items-center text-sm text-[#82869E] mt-2">
                 <p className="mr-5">
-                  Thương hiệu : <span className="text-[#1435c3]">MSI</span>
+                  Thương hiệu :{" "}
+                  {data.brand && (
+                    <span className="text-[#1435c3]">
+                      {data.brand.brandName}
+                    </span>
+                  )}
                 </p>
                 <span className="uppercase">SKU: 220303310</span>
               </div>
               <div className="mt-4">
                 <div className="text-xl text-[#1435c3] font-semibold mb-1">
-                  22.490.000
+                  {priceSplitter(data.price)}đ
                 </div>
                 <div className="text-xs text-[#82869E] line-through">
-                  23.990.000
+                  {priceSplitter(
+                    Number(data.price / -data.discount + data.price).toFixed()
+                  )}
+                  đ
                 </div>
               </div>
             </div>
@@ -170,10 +229,16 @@ const ProductView = () => {
               </div>
             </div>
             <div className="flex justify-between mt-4">
-              <div className="w-[48%] bg-[#1435c3] hover:bg-white text-white hover:text-[#1435c3] transition-all uppercase text-center rounded-md py-2 cursor-pointer hover:border hover:border-[#1435c3] text-[10px] md:text-base">
+              <div
+                className="w-[48%] bg-[#1435c3] hover:bg-white text-white hover:text-[#1435c3] transition-all uppercase text-center rounded-md py-2 cursor-pointer hover:border hover:border-[#1435c3] text-[10px] md:text-base"
+                onClick={buyNow}
+              >
                 mua ngay
               </div>
-              <div className="w-[48%] bg-white hover:bg-[#1435c3] text-[#1435c3] hover:text-white transition-all border border-[#1435c3] uppercase text-center rounded-md py-2 cursor-pointer text-[10px] md:text-base">
+              <div
+                className="w-[48%] bg-white hover:bg-[#1435c3] text-[#1435c3] hover:text-white transition-all border border-[#1435c3] uppercase text-center rounded-md py-2 cursor-pointer text-[10px] md:text-base"
+                onClick={addItem}
+              >
                 thêm vào giỏ hàng
               </div>
             </div>
@@ -239,10 +304,12 @@ const ProductView = () => {
               dùng.
             </h4>
             <div className="my-2">
-              <img
-                src="https://lh5.googleusercontent.com/j_m7OgDqv7eSu3hk1jPbCAfsvX-Y3XtvFRp_GSh0NSqqVo69rCnUSiFk-Nv-EKL-4Yj6qTssjUa0vMr6zjRS5MbTWyMGP4Tu0gGDIAYWFMQgfXlxv3fxz-Onl233UR4HEA"
-                className="w-[90%] object-cover"
-              />
+              {listImg && (
+                <img
+                  src={listImg[0].urlImage}
+                  className="w-[90%] object-cover"
+                />
+              )}
             </div>
             <p className="text-sm font-normal ">
               Máy có kích thước các chiều lần lượt là 36.34 x 25.5 x 2.39cm.
@@ -257,10 +324,12 @@ const ProductView = () => {
               hình ảnh tuyệt vời khi chơi game
             </h4>
             <div className="my-2">
-              <img
-                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_01d_d01709aeaa754ee69544cc111f71babd_1024x1024.jpg"
-                className="w-[90%] object-cover"
-              />
+              {listImg && (
+                <img
+                  src={listImg[1].urlImage}
+                  className="w-[90%] object-cover"
+                />
+              )}
             </div>
             <p className="text-sm font-normal ">
               Màn hình này còn được trang bị tấm nền IPS chống lóa hiệu quả khi
@@ -277,10 +346,12 @@ const ProductView = () => {
               RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
             </h4>
             <div className="my-2">
-              <img
-                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_05_4b8bfe220e2745bfa982bf8d5bb9877a_1024x1024.jpg"
-                className="w-[90%] object-cover"
-              />
+              {listImg && (
+                <img
+                  src={listImg[2].urlImage}
+                  className="w-[90%] object-cover"
+                />
+              )}
             </div>
             <p className="text-sm font-normal ">
               Màn hình này còn được trang bị tấm nền IPS chống lóa hiệu quả khi
@@ -297,10 +368,12 @@ const ProductView = () => {
               RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
             </h4>
             <div className="my-2">
-              <img
-                src="https://file.hstatic.net/1000026716/file/nitro5_an515-57_bl_bk_04d_854ebf0a283042479d91f70ceb2a8d33_1024x1024.jpg"
-                className="w-[90%] object-cover"
-              />
+              {listImg && (
+                <img
+                  src={listImg[3].urlImage}
+                  className="w-[90%] object-cover"
+                />
+              )}
             </div>
             <p className="text-sm font-normal ">
               Với sự tích hợp của bộ vi xử lý Intel Core i5-11300H, xung nhịp

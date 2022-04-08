@@ -18,6 +18,15 @@ const Header = () => {
   const dispatch = useDispatch();
   // console.log("Header", stateMenu);
   // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
+
+  const handleOntop = (e) => {
+    window.scrollTo({
+      top: 262,
+      left: 0,
+      behavior: "smooth",
+    });
+    dispatch(isFalseMenu());
+  };
   return (
     <div>
       {/* header1 */}
@@ -77,7 +86,7 @@ const Header = () => {
             Khuyến mãi
           </div>
         </Link>
-        <Link to="/sign-in" onClick={() => dispatch(isFalseMenu())}>
+        <Link to="/sign-in" onClick={handleOntop}>
           <div className="icon--header">
             <RiAccountCircleLine size={"27px"} className="mb-2" />
             Đăng nhập
@@ -87,7 +96,7 @@ const Header = () => {
           <BsBell size={"27px"} className="mb-2" />
           Thông báo
         </div>
-        <Link to="/cart">
+        <Link to="/cart" onClick={handleOntop}>
           <div className="icon--header">
             <AiOutlineShoppingCart size={"27px"} className="mb-2" />
             Giỏ hàng

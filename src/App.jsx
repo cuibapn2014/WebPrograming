@@ -44,6 +44,7 @@ function App() {
 
   return (
     <>
+      {/* {console.log("check top", isTop)} */}
       <Provider store={store}>
         <div>
           {width > 1280 ? <Header /> : <HeaderMobile />}

@@ -193,7 +193,9 @@ const SignUp = () => {
                 </label>
               </div> */}
               <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
-                <button type="submit">Create Account</button>
+                <button type="submit" className="block w-full">
+                  Create Account
+                </button>
               </div>
               {/* <div className="mt-4 text-center">
                 Don't have an account ?{" "}
