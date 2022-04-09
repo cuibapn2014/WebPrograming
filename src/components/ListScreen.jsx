@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import CardProduct from "./common/CardProduct";
 const listCollectionScreen = [
@@ -75,6 +76,33 @@ const listCollectionScreen = [
   },
 ];
 const ListScreen = () => {
+  const [list, setList] = useState([]);
+  // console.log("check data vie", list);
+  useEffect(async () => {
+    try {
+      const config = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      };
+      const res = await axios.get(
+        "http://localhost:8085/api/v1/category/12"
+        // {
+        //   headers: {
+        //     "Access-Control-Allow-Origin": true,
+        //   },
+        // },
+        // { crossDomain: true }
+      );
+
+      if (res && res.data && res.data.data) {
+        setList(res.data.data.product);
+      }
+    } catch (e) {
+      console.log("fail error : >>", e.message);
+    }
+  }, []);
   return (
     <div className="container mx-auto mt-2 ">
       {" "}
@@ -91,22 +119,26 @@ const ListScreen = () => {
       </div>
       {/* map data */}
       <div className="flex flex-wrap ">
-        {listCollectionScreen.map((item, index) => {
-          return (
-            <div
-              key={index}
-              className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
-            >
-              <CardProduct
-                name={item.name}
-                price={item.price}
-                discount={item.discount}
-                priceBeforeDiscount={item.priceBeforeDiscount}
-                img={item.img}
-              />
-            </div>
-          );
-        })}
+        {list &&
+          list.length > 0 &&
+          list.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
+              >
+                <CardProduct
+                  id={item.id}
+                  name={item.title}
+                  price={item.price}
+                  discount={item.discount}
+                  priceBeforeDiscount={"10.000.000"}
+                  img={item.image[0].urlImage}
+                  slug={item.slug}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

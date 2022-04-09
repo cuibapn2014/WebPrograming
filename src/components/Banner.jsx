@@ -26,7 +26,7 @@ const Banner = () => {
   const secRef = useRef(null);
   const timeRef = useRef(null);
   const stateMenu = useSelector((state) => state.stateMenu.isMenu);
-  console.log("banner ", stateMenu);
+  // console.log("banner ", stateMenu);
   const dispatch = useDispatch();
 
   useEffect(() => {

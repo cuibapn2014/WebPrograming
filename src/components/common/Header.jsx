@@ -15,6 +15,8 @@ import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
 
 const Header = () => {
   const stateMenu = useSelector((state) => state.stateMenu.isMenu);
+  const qtyCart = useSelector((state) => state.cart);
+  // console.log("qtyCart", qtyCart);
   const dispatch = useDispatch();
   // console.log("Header", stateMenu);
   // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
@@ -97,9 +99,12 @@ const Header = () => {
           Thông báo
         </div>
         <Link to="/cart" onClick={handleOntop}>
-          <div className="icon--header">
+          <div className="icon--header relative">
             <AiOutlineShoppingCart size={"27px"} className="mb-2" />
             Giỏ hàng
+            <div className="absolute top-[-16px] right-0 px-2 py-[2px] rounded-full bg-[#ff0000] text-white text-[11px]">
+              {qtyCart.length}
+            </div>
           </div>
         </Link>
       </div>

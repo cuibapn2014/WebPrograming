@@ -44,14 +44,14 @@ const ItemCart = ({ id, name, img, price, quantity }) => {
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   return (
     <div className="flex items-center my-10">
-      <div>
+      <div className="w-[80px] h-[80px] aspect-square">
         <img
           src={img}
-          className="w-[80px] h-[80px] object-cover border border-[#ddd]"
+          className="w-full h-full object-cover border border-[#ddd]"
         />
       </div>
       <div>
-        <div className="text-sm ml-4 line-clamp-1">{name}</div>
+        <div className="text-sm ml-4 line-clamp-1 w-[305px]">{name}</div>
       </div>
       <div className="ml-[80px] ">
         <div className="flex items-center rounded-md border border-[#8f9091] overflow-hidden">

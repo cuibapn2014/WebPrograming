@@ -89,6 +89,7 @@ const listCollectionPC = [
 
 const ListPc = () => {
   const [list, setList] = useState([]);
+
   useEffect(async () => {
     try {
       const config = {
@@ -98,7 +99,7 @@ const ListPc = () => {
         },
       };
       const res = await axios.get(
-        "http://localhost:8085/api/v1/product/get-all"
+        "http://localhost:8085/api/v1/category/2"
         // {
         //   headers: {
         //     "Access-Control-Allow-Origin": true,
@@ -107,15 +108,8 @@ const ListPc = () => {
         // { crossDomain: true }
       );
 
-      // const res = await fetch("")
-      // let res = await axios({
-      //   method: "get",
-      //   url: "http://localhost:8085/api/v1/product/get-all",
-      //   responseType: "stream",
-      // });
-      console.log("check data", res.data.data);
       if (res && res.data && res.data.data) {
-        setList(res.data.data);
+        setList(res.data.data.product);
       }
     } catch (e) {
       console.log("fail error : >>", e.message);
@@ -171,6 +165,7 @@ const ListPc = () => {
           className="mySwiper"
         >
           {list &&
+            list.length > 0 &&
             list.map((item, index) => {
               return (
                 <SwiperSlide key={index}>

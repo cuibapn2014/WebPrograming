@@ -74,10 +74,10 @@ const Cart = () => {
               <div className="text-sm text-[#848788]">Thành tiền</div>
               <div className="text-lg text-[#eb2101] font-semibold relative">
                 {priceSplitter(total)} đ
-                <div className="absolute top-[100%] text-[#848788] font-normal text-xs">
-                  (Đã bao gồm VAT)
-                </div>
               </div>
+            </div>
+            <div className="text-right text-[#848788] font-normal text-xs">
+              (Đã bao gồm VAT)
             </div>
             <div className="uppercase text-base bg-[#1435c3] py-2 text-white rounded-md text-center mt-10 cursor-pointer">
               thanh toán

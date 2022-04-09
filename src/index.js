@@ -15,6 +15,7 @@ import ProductView from "./components/page/ProductView";
 import Paypal from "./components/page/Paypal";
 import SignUp from "./components/page/SignUp";
 import Cart from "./components/page/Cart";
+import Collections from "./components/page/Collections";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,6 +31,7 @@ ReactDOM.render(
           <Route path="sign-in" element={<Login />} />
           <Route path="sign-up" element={<SignUp />} />
           <Route path="product/:slug/:id" element={<ProductView />} />
+          <Route path="collections/:slug/:id" element={<Collections />} />
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
         </Route>

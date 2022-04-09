@@ -79,12 +79,66 @@ const ProductView = () => {
       // setListImg(res.data.data.image);
     }
   }, []);
-  console.log("check state", data);
+  // console.log("check state", data);
 
   const priceSplitter = (number) =>
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-  // const price1 = data / -discount + price;
+  const handleClickItem = (index) => {
+    if (index === 1) {
+      setImg1(true);
+      setImg2(false);
+      setImg3(false);
+      setImg4(false);
+      setImg5(false);
+    }
+    if (index === 2) {
+      setImg1(false);
+      setImg2(true);
+      setImg3(false);
+      setImg4(false);
+      setImg5(false);
+    }
+    if (index === 3) {
+      setImg1(false);
+      setImg2(false);
+      setImg3(true);
+      setImg4(false);
+      setImg5(false);
+    }
+    if (index === 4) {
+      setImg1(false);
+      setImg2(false);
+      setImg3(false);
+      setImg4(true);
+      setImg5(false);
+    }
+    if (index === 5) {
+      setImg1(false);
+      setImg2(false);
+      setImg3(false);
+      setImg4(false);
+      setImg5(true);
+    }
+  };
+
+  const activeState = (index) => {
+    if (index === 1) {
+      return img1 ? "active-border" : "";
+    }
+    if (index === 2) {
+      return img2 ? "active-border" : "";
+    }
+    if (index === 3) {
+      return img3 ? "active-border" : "";
+    }
+    if (index === 4) {
+      return img4 ? "active-border" : "";
+    }
+    if (index === 5) {
+      return img5 ? "active-border" : "";
+    }
+  };
   return (
     <div className="bg-slate-50">
       <div className="flex lg:flex-row flex-col justify-between p-4">
@@ -127,66 +181,49 @@ const ProductView = () => {
               modules={[FreeMode, Navigation, Thumbs]}
               className="mySwiper"
             >
-              <SwiperSlide
+              {listImg &&
+                listImg.length > 0 &&
+                listImg.map((item, index) => {
+                  return (
+                    <SwiperSlide
+                      key={index}
+                      className={activeState(index + 1)}
+                      onClick={() => handleClickItem(index + 1)}
+                    >
+                      <img src={item.urlImage} className="cursor-pointer" />
+                    </SwiperSlide>
+                  );
+                })}
+              {/* <SwiperSlide
                 className={`${img1 ? "active-border" : ""} cursor-pointer`}
-                onClick={() => {
-                  setImg1(true);
-                  setImg2(false);
-                  setImg3(false);
-                  setImg4(false);
-                  setImg5(false);
-                }}
+                onClick={handleClickItem1}
               >
                 {listImg && <img src={listImg[0].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img2 ? "active-border" : ""} cursor-pointer`}
-                onClick={() => {
-                  setImg1(false);
-                  setImg2(true);
-                  setImg3(false);
-                  setImg4(false);
-                  setImg5(false);
-                }}
+                onClick={handleClickItem2}
               >
                 {listImg && <img src={listImg[1].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img3 ? "active-border" : ""} cursor-pointer`}
-                onClick={() => {
-                  setImg1(false);
-                  setImg2(false);
-                  setImg3(true);
-                  setImg4(false);
-                  setImg5(false);
-                }}
+                onClick={handleClickItem3}
               >
                 {listImg && <img src={listImg[2].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img4 ? "active-border" : ""} cursor-pointer`}
-                onClick={() => {
-                  setImg1(false);
-                  setImg2(false);
-                  setImg3(false);
-                  setImg4(true);
-                  setImg5(false);
-                }}
+                onClick={handleClickItem4}
               >
                 {listImg && <img src={listImg[3].urlImage} />}
               </SwiperSlide>
               <SwiperSlide
                 className={`${img5 ? "active-border" : ""} cursor-pointer`}
-                onClick={() => {
-                  setImg1(false);
-                  setImg2(false);
-                  setImg3(false);
-                  setImg4(false);
-                  setImg5(true);
-                }}
+                onClick={handleClickItem5}
               >
                 {listImg && <img src={listImg[4].urlImage} />}
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </div>
           {/* block1.1 */}
@@ -324,7 +361,7 @@ const ProductView = () => {
               hình ảnh tuyệt vời khi chơi game
             </h4>
             <div className="my-2">
-              {listImg && (
+              {listImg && listImg[1] && (
                 <img
                   src={listImg[1].urlImage}
                   className="w-[90%] object-cover"
@@ -346,7 +383,7 @@ const ProductView = () => {
               RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
             </h4>
             <div className="my-2">
-              {listImg && (
+              {listImg && listImg[2] && (
                 <img
                   src={listImg[2].urlImage}
                   className="w-[90%] object-cover"
@@ -368,7 +405,7 @@ const ProductView = () => {
               RAM 8GB, ổ cứng 512GB SSD M.2 NVMe
             </h4>
             <div className="my-2">
-              {listImg && (
+              {listImg && listImg[3] && (
                 <img
                   src={listImg[3].urlImage}
                   className="w-[90%] object-cover"
