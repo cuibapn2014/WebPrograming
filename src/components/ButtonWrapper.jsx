@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { useSelector } from "react-redux";
 
 // This values are the props in the UI
-const amount = "5";
+// const amount = total;
 // const currency = "USD";
 const style = { layout: "vertical" };
 
@@ -10,6 +11,15 @@ const ButtonWrapper = ({ currency, showSpinner }) => {
   // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
   // This is the main reason to wrap the PayPalButtons in a new component
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
+  const listCart = useSelector((state) => state.cart);
+  const [total, setTotal] = useState(0);
+  const amount = (total / 23000).toFixed().toString();
+  // console.log("total", amount);
+  useEffect(() => {
+    let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+    setTotal(total);
+  }, [listCart]);
 
   useEffect(() => {
     dispatch({

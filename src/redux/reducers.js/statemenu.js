@@ -14,7 +14,7 @@ const stateMenu = (state = initialState, action) => {
         isMenu: true,
       };
     case "false-menu":
-      localStorage.setItem("stateMenu", false);
+      // localStorage.setItem("stateMenu", false);
       return {
         isMenu: false,
       };

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ItemCart from "../common/ItemCart";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart);
   const [total, setTotal] = useState(0);
+  const navigation = useNavigate();
   // const [listCart, setListCart] = useState(listReducer || []);
   // console.log("check cart", listCart);
   // console.log(Array.isArray(listCart));
@@ -79,8 +80,14 @@ const Cart = () => {
             <div className="text-right text-[#848788] font-normal text-xs">
               (Đã bao gồm VAT)
             </div>
-            <div className="uppercase text-base bg-[#1435c3] py-2 text-white rounded-md text-center mt-10 cursor-pointer">
-              thanh toán
+            <div className=" text-base bg-[#1435c3] py-2 text-white rounded-md text-center mt-10 ">
+              <button
+                className="uppercase block mx-auto w-full"
+                disabled={listCart.length > 0 ? false : true}
+                onClick={() => navigation("/paypal")}
+              >
+                thanh toán
+              </button>
             </div>
           </div>
           {/* block2 */}

@@ -49,7 +49,7 @@ const CardProduct = ({
         to={`/product/${slug}/${id}`}
         onClick={() => dispatch(isFalseMenu())}
       >
-        <div>
+        <div className="bg-white aspect-square">
           <img src={img} alt={name} />
         </div>
         <div className="text-left bg-white">

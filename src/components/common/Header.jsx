@@ -23,7 +23,7 @@ const Header = () => {
 
   const handleOntop = (e) => {
     window.scrollTo({
-      top: 262,
+      top: 242,
       left: 0,
       behavior: "smooth",
     });

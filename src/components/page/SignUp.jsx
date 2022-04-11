@@ -197,26 +197,11 @@ const SignUp = () => {
                   Create Account
                 </button>
               </div>
-              {/* <div className="mt-4 text-center">
-                Don't have an account ?{" "}
-                <span className="text-[#1435c3] cursor-pointer">Sign up</span>{" "}
-              </div> */}
             </form>
           </div>
         </div>
         {/* block 2 */}
       </div>
-      {/* <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      /> */}
     </div>
   );
 };
