@@ -6,13 +6,15 @@ import com.fasterxml.jackson.annotation.*;
 import com.group4.project.helper.Slug;
 import net.bytebuddy.build.ToStringPlugin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "product")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Product {
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -23,15 +25,15 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @ToStringPlugin.Exclude
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
     private Category category;
 
     @Column
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToStringPlugin.Exclude
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
     private Brand brand;
 
     @Column
@@ -53,10 +55,6 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private List<Image> image = new ArrayList<Image>();
-
-    @OneToOne(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Item item;
 
     public Product() {
         super();
@@ -167,14 +165,6 @@ public class Product {
         this.image.addAll(image);
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -189,7 +179,6 @@ public class Product {
                 ", slug='" + slug + '\'' +
                 ", attribute=" + attribute +
                 ", image=" + image +
-                ", item=" + item +
                 '}';
     }
 }

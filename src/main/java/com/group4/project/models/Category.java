@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "category")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,7 @@ public class Category {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("category")
     private List<Product> product;
 
     public Category(){}

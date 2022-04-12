@@ -1,17 +1,19 @@
 package com.group4.project.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
+import com.fasterxml.jackson.annotation.*;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "customer")
-public class Customer extends Person{
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+public class Customer extends Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", orphanRemoval = true)
+    @JsonIgnoreProperties({"customer", "hibernateLazyInitializer", "handler"})
     private List<Bill> bill;
+
     public Customer() {
     }
 

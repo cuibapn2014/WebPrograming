@@ -3,10 +3,13 @@ package com.group4.project.models;
 import net.bytebuddy.build.ToStringPlugin;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "item")
-public class Item {
+public class Item implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -15,9 +18,9 @@ public class Item {
     private int quantity;
 
     @ManyToOne
-    @ToStringPlugin.Exclude
+    @JoinColumn(name = "product_id")
     private Product product;
-
+    
     private String attribute;
 
     public Item() {
