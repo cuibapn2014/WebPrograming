@@ -42,7 +42,7 @@ const CardProduct = ({
   // console.log(Number(price1).toFixed());
   return (
     <div
-      className="hover:shadow-xl p-2 transition-all relative"
+      className="hover:shadow-xl p-2 transition-all relative min-w-[237px]"
       onClick={handleOntop}
     >
       <Link

@@ -91,7 +91,7 @@ const HeaderMobile = () => {
                 danh mục sản phẩm
               </div>
               <div>
-                <Menu className="text-left" />
+                <Menu className="text-left" handleIsMenu={handleIsMenu} />
               </div>
             </div>
             <div onClick={handleIsMenu}>

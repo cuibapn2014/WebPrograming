@@ -17,6 +17,7 @@ function App() {
   const [width, setWidth] = useState(window.innerWidth);
   const [isTop, setIsTop] = useState(0);
   // console.log("check isTop", isTop);
+  // console.log(width);
   useEffect(() => {
     const handleResize = (e) => {
       setWidth(window.innerWidth);

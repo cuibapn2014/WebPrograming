@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ItemCart from "../common/ItemCart";
+import { isTrueMenu } from "../../redux/actions";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart);
   const [total, setTotal] = useState(0);
   const navigation = useNavigate();
+  const dispatch = useDispatch();
   // const [listCart, setListCart] = useState(listReducer || []);
   // console.log("check cart", listCart);
   // console.log(Array.isArray(listCart));
@@ -24,6 +26,15 @@ const Cart = () => {
 
   const priceSplitter = (number) =>
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  const handleOntop = (e) => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+    dispatch(isTrueMenu());
+  };
 
   return (
     <div className="w-full bg-slate-50 py-5">
@@ -43,8 +54,7 @@ const Cart = () => {
         <div className="flex justify-between">
           {/* block1 */}
           <div className="w-[65%] px-5 rounded-xl bg-white ">
-            {listCart &&
-              listCart.length > 0 &&
+            {listCart && listCart.length > 0 ? (
               listCart.map((item, index) => {
                 return (
                   <ItemCart
@@ -56,7 +66,20 @@ const Cart = () => {
                     quantity={item.qty}
                   />
                 );
-              })}
+              })
+            ) : (
+              <div className="flex items-center justify-center flex-col pb-5">
+                <div>
+                  <img src="https://i.imgur.com/Drj57qu.png" />
+                </div>
+                <div className="mt-5">Giỏ hàng chưa có sản phẩm nào</div>
+                <Link to="/" className="mt-6" onClick={handleOntop}>
+                  <button className="px-8 py-2 bg-[#1435c3] rounded-md text-white">
+                    Mua sắm ngay
+                  </button>
+                </Link>
+              </div>
+            )}
             {/* <ItemCart />
             <ItemCart />
             <ItemCart /> */}

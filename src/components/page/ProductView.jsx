@@ -41,6 +41,16 @@ const ProductView = () => {
       left: 0,
       behavior: "smooth",
     });
+    dispatch(
+      addCart({
+        id: data.id,
+        img: data.image[0].urlImage,
+        name: data.title,
+        price: data.price,
+        qty: 1,
+      })
+    );
+    toast.success("add product success");
     navigation("/cart");
   };
 

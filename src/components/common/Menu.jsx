@@ -84,8 +84,17 @@ export const list = [
   },
 ];
 
-const Menu = () => {
+const Menu = ({ handleIsMenu }) => {
   const [listMenu, setListMenu] = useState([]);
+  // const handleIsMenu = () => {
+  //   setIsMenu(false);
+  //   window.scrollTo({
+  //     top: 0,
+  //     left: 0,
+  //     behavior: "smooth",
+  //   });
+  // };
+
   // console.log("check menu", listMenu);
   useEffect(async () => {
     let res = await axios.get("http://localhost:8085/api/v1/category/get-all");
@@ -108,7 +117,11 @@ const Menu = () => {
               /* console.log("check icon", Icon); */
             }
             return (
-              <Link to={`/collections/${item.name}/${item.id}`} key={index}>
+              <Link
+                to={`/collections/${item.name}/${item.id}`}
+                key={index}
+                onClick={handleIsMenu}
+              >
                 <div
                   key={index}
                   className="flex items-center px-3 py-2 text-[14px] mb-[10px] capitalize transition-all hover:bg-[#f3f5fc]

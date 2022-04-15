@@ -58,7 +58,7 @@ const SignUp = () => {
         {/* block 1 */}
         <div className="w-[60%] hidden lg:block">
           <img
-            src="https://cdn.dribbble.com/users/9741/screenshots/17064507/media/18fb3545a45772f7579841dec9ee34f5.png?compress=1&resize=1000x750&vertical=top"
+            src="https://cdn.dribbble.com/users/9741/screenshots/17082373/media/6ace78ce32fcb1254079fad72b5255ce.png?compress=1&resize=1000x750&vertical=top"
             className="rounded-l-lg"
           />
         </div>

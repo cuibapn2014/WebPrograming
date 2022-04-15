@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ButtonWrapper from "../ButtonWrapper";
 import { useFormik } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import Select from "react-select";
 
 // This values are the props in the UI
 // const amount = "5";
@@ -14,7 +16,25 @@ const currency = "USD";
 
 export default function Paypal() {
   const [payment, setPayment] = useState(false);
+  const [data, setData] = useState([]);
+  const [citys, setCitys] = useState([]);
+
+  // console.log("check data: >>", data);
+  // console.log("check city: >>", citys);
+  // console.log("check district: >>", districts);
+
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+
   // console.log("payment", payment);
+
+  const options = [
+    // { value: "", label: "Select chooose" },
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
   const handleHome = () => {
     setPayment(false);
   };
@@ -22,6 +42,23 @@ export default function Paypal() {
   const handlePayment = () => {
     setPayment(true);
   };
+
+  useEffect(async () => {
+    let res = await axios.get("https://provinces.open-api.vn/api/?depth=3");
+    // console.log("check res district", res.data);
+    if (res && res.data) {
+      setData(res.data);
+      const city = res.data.map((item) => {
+        return {
+          value: item.codename,
+          label: item.name,
+          code: item.code,
+        };
+      });
+      setCitys(city);
+      localStorage.setItem("select", JSON.stringify(res.data));
+    }
+  }, []);
 
   useEffect(() => {
     window.scrollTo({
@@ -37,6 +74,9 @@ export default function Paypal() {
       lastName: "",
       phone: "",
       address: "",
+      city: "",
+      district: "",
+      ward: "",
     },
 
     validationSchema: Yup.object({
@@ -57,6 +97,9 @@ export default function Paypal() {
       address: Yup.string()
         .required("Required")
         .min(10, "Must be at least 10 characters"),
+      city: Yup.string().required("Required"),
+      district: Yup.string().required("Required"),
+      ward: Yup.string().required("Required"),
     }),
 
     onSubmit: (values) => {
@@ -69,6 +112,81 @@ export default function Paypal() {
       toast.success("Create account success");
     },
   });
+
+  const handleChangeCity = (e) => {
+    const { code } = e;
+    // console.log("check code", code);
+    const district = data.find((item) => item.code === code);
+    if (district.districts.length > 0) {
+      const customDistrict = district.districts.map((item) => {
+        return {
+          value: item.codename,
+          label: item.name,
+          code: item.code,
+          wards: item.wards,
+        };
+      });
+      console.log("check district", customDistrict);
+      setDistricts(customDistrict);
+    }
+
+    return formik.setFieldValue("city", e.label);
+  };
+  const handleChangeDistrict = (e) => {
+    const { code } = e;
+    console.log("check code", code);
+
+    const ward = districts.find((item) => item.code === code);
+    console.log("check ward ", ward);
+
+    if (ward.wards.length > 0) {
+      const customWard = ward.wards.map((item) => {
+        return {
+          value: item.codename,
+          label: item.name,
+          code: item.code,
+        };
+      });
+      console.log("check customWard", customWard);
+      setWards(customWard);
+    }
+
+    return formik.setFieldValue("district", e.label);
+  };
+
+  const handleChangeWard = (e) => {
+    const { code } = e;
+    console.log("check code", code);
+
+    // const ward = districts.find((item) => (item.code = code));
+    // console.log("check ward ", ward);
+
+    // if (ward.wards.length > 0) {
+    //   const customWard = ward.wards.map((item) => {
+    //     return {
+    //       value: item.codename,
+    //       label: item.name,
+    //       code: item.code,
+    //     };
+    //   });
+    //   console.log("check customWard", customWard);
+    //   setWards(customWard);
+    // }
+
+    return formik.setFieldValue("ward", e.label);
+  };
+
+  const defaultValueCity = (options, value) => {
+    return options ? options.find((option) => option.codename === value) : "";
+  };
+  const defaultValueDistrict = (options, value) => {
+    return options ? options.find((option) => option.codename === value) : "";
+  };
+
+  const defaultValueWard = (options, value) => {
+    return options ? options.find((option) => option.codename === value) : "";
+  };
+
   return (
     <>
       <div className="bg-slate-50  lg:p-10 p-5 ">
@@ -175,6 +293,53 @@ export default function Paypal() {
                     </span>
                   </div>
                 </div>
+                {/* option address */}
+                <div>
+                  {/* options city */}
+                  <div className="mb-10 relative z-50">
+                    <Select
+                      options={citys || []}
+                      value={defaultValueCity(citys || [], formik.values.city)}
+                      placeholder="choose select city"
+                      onChange={(e) => handleChangeCity(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.city}
+                    </span>
+                  </div>
+                  {/* options city */}
+                  {/* options district */}
+                  <div className="mb-10">
+                    <Select
+                      options={districts || []}
+                      value={defaultValueDistrict(
+                        districts || [],
+                        formik.values.district
+                      )}
+                      placeholder="choose select district"
+                      onChange={(e) => handleChangeDistrict(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.district}
+                    </span>
+                  </div>
+                  {/* options district */}
+                  {/* options ward */}
+                  <div className="mb-10 z-[999]">
+                    <Select
+                      options={wards || []}
+                      value={defaultValueWard(wards || [], formik.values.ward)}
+                      placeholder="choose select ward"
+                      onChange={(e) => handleChangeWard(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.ward}
+                    </span>
+                  </div>
+                  {/* options ward */}
+                </div>
+                {/* option address */}
+
                 {/* option choose paymnet */}
                 <div>
                   <h4>Lựa chọn phương thức thanh toán</h4>
@@ -209,7 +374,13 @@ export default function Paypal() {
                 </div>
               </form>
               {payment && (
-                <div style={{ maxWidth: "750px", minHeight: "200px" }}>
+                <div
+                  style={{
+                    maxWidth: "750px",
+                    minHeight: "200px",
+                    zIndex: "100",
+                  }}
+                >
                   <PayPalScriptProvider
                     options={{
                       "client-id":
@@ -223,6 +394,13 @@ export default function Paypal() {
                 </div>
               )}
             </div>
+            {/* <Select
+              options={options}
+              value={defaultValue(options, formik.values.city)}
+              placeholder="choose select city"
+              onChange={(e) => handleChange(e)}
+              // onChange={(value) => formik.setFieldValue("city", value.value)}
+            /> */}
           </div>
           {/* block 2 */}
         </div>

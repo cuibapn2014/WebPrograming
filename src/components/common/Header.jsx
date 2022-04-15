@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
+import logo1 from "../../assets/G4PC.png";
 import { BiBuildingHouse, BiRightArrowCircle } from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
@@ -68,7 +69,7 @@ const Header = () => {
               width="200px"
               height="50px"
               // src="https://haycafe.vn/wp-content/uploads/2021/12/mau-logo-ki-niem-10-nam-angry-birds-dep-la.png"
-              src={logo}
+              src={logo1}
             />
           </div>
         </Link>
