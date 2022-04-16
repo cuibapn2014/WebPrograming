@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import Input from "../common/Input";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [isCheck, setIsCheck] = useState(false);
@@ -44,7 +45,15 @@ const Login = () => {
   });
 
   return (
-    <div className="bg-slate-50  lg:p-10 p-5 ">
+    <motion.div
+      className="bg-slate-50  lg:p-10 p-5 "
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <div className="flex items-center bg-white">
         {/* block 1 */}
         <div className="w-[60%] hidden lg:block">
@@ -149,7 +158,7 @@ const Login = () => {
         </div>
         {/* block 2 */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

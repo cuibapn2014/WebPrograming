@@ -106,7 +106,7 @@ const Menu = ({ handleIsMenu }) => {
     <div className="xl:shadow-2xl shadow-none">
       <div
         id="menu"
-        className="xl:w-[186px] w-full h-[470px] bg-white rounded-md overflow-y-auto"
+        className="xl:w-[186px] w-full xl:h-[470px] h-auto bg-white rounded-md xl:overflow-y-auto "
       >
         {listMenu &&
           listMenu.map((item, index) => {

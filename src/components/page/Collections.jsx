@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import CardProduct from "../common/CardProduct";
 import { isTrueMenu } from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import { motion } from "framer-motion";
+
 const Collections = () => {
   const { id } = useParams();
 
@@ -75,7 +77,16 @@ const Collections = () => {
   };
 
   return (
-    <div className="w-full bg-slate-50 py-5">
+    <motion.div
+      className="w-full bg-slate-50 py-5"
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{
+        opacity: 0,
+        x: -100,
+      }}
+      transition={{ duration: 0.25 }}
+    >
       <div className="flex items-center  mb-5 ml-5">
         <Link to="/" onClick={() => dispatch(isTrueMenu())}>
           <div className="p-2 rounded-full border border-[#ddd]">
@@ -137,7 +148,7 @@ const Collections = () => {
         </div>
         {/* item cart */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

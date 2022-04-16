@@ -1,8 +1,16 @@
 import React from "react";
-
+import { motion } from "framer-motion";
 const Maintain = () => {
   return (
-    <div className="container mx-auto">
+    <motion.div
+      className="container mx-auto"
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <h1 className="text-left text-2xl font-medium my-7">
         Chính sách bảo hành
       </h1>
@@ -292,7 +300,7 @@ const Maintain = () => {
       <h2 className="text-center uppercase text-[#1435c3] font-medium text-lg mt-8">
         ~ cám ơn quý khách ~
       </h2>
-    </div>
+    </motion.div>
   );
 };
 

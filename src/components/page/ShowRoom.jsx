@@ -1,5 +1,5 @@
 import React from "react";
-
+import { motion } from "framer-motion";
 const listShowRoom = [
   {
     name: "Showroom Phong Vũ Nguyễn Thị Minh Khai, Quận 3",
@@ -34,7 +34,15 @@ const listShowRoom = [
 ];
 const ShowRoom = () => {
   return (
-    <div className="bg-slate-50 px-14">
+    <motion.div
+      className="bg-slate-50 px-14"
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <div className="">
         <h1 className="uppercase text-center py-8 text-xl font-medium">
           hệ thống showroom
@@ -75,7 +83,7 @@ const ShowRoom = () => {
           })}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

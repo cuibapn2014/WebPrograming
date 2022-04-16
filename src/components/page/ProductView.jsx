@@ -4,6 +4,7 @@ import { MdOutlineLocalShipping, MdLaptopWindows } from "react-icons/md";
 import { FaShippingFast } from "react-icons/fa";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiExchangeLine } from "react-icons/ri";
+import { motion } from "framer-motion";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -150,7 +151,16 @@ const ProductView = () => {
     }
   };
   return (
-    <div className="bg-slate-50">
+    <motion.div
+      className="bg-slate-50"
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{
+        opacity: 0,
+        x: -100,
+      }}
+      transition={{ duration: 0.25 }}
+    >
       <div className="flex lg:flex-row flex-col justify-between p-4">
         {/* block1 */}
         <div className="lg:w-[74%] w-full flex flex-col md:flex-row justify-between  bg-white rounded-md p-5">
@@ -444,7 +454,7 @@ const ProductView = () => {
         {/* information product */}
       </div>
       {/* DESCRIPTION */}
-    </div>
+    </motion.div>
   );
 };
 

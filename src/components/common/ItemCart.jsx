@@ -43,49 +43,49 @@ const ItemCart = ({ id, name, img, price, quantity }) => {
   const priceSplitter = (number) =>
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   return (
-    <div className="flex items-center my-10">
+    <div className="flex md:items-center my-10 ">
       <div className="w-[80px] h-[80px] aspect-square">
         <img
           src={img}
           className="w-full h-full object-cover border border-[#ddd]"
         />
       </div>
-      <div>
-        <div className="text-sm ml-4 line-clamp-1 w-[305px]">{name}</div>
-      </div>
-      <div className="ml-[80px] ">
-        <div className="flex items-center rounded-md border border-[#8f9091] overflow-hidden">
-          <div
-            className="px-3 py-1 bg-slate-50  cursor-pointer text-[#848788]"
-            onClick={handleDecrease}
-          >
-            -
+      {/* responsive md */}
+      <div className="md:flex ml-10  md:ml-0 md:items-center  flex-wrap w-full lg:flex-col xl:flex-row  lg:items-start xl:items-center xl:justify-between">
+        <div className="mb-2 md:mb-0 md:ml-4 xl:ml-4 lg:mb-2 xl:mb-0 md:max-w-[305px]  w-full lg:w-full  xl:max-w-[305px]">
+          <div className="text-sm line-clamp-1">{name}</div>
+        </div>
+        <div className="md:ml-[60px] xl:ml-[60px] lg:ml-4 md:mb-0 mb-2 flex items-center md:flex-col lg:mb-2 xl:mb-0 ">
+          <div className="flex items-center rounded-md  border max-w-[110px] border-[#8f9091] overflow-hidden">
+            <div
+              className="px-3 py-1 bg-slate-50  cursor-pointer text-[#848788]"
+              onClick={handleDecrease}
+            >
+              -
+            </div>
+            <div className="px-3 py-1 bg-slate-50 w-[40px] flex items-center justify-center">
+              {qty}
+            </div>
+
+            <div
+              className="px-3 py-1 bg-slate-50 cursor-pointer text-[#848788]"
+              onClick={handleIncrease}
+            >
+              +
+            </div>
           </div>
-          <div className="px-3 py-1 bg-slate-50 w-[40px] flex items-center justify-center">
-            {qty}
-          </div>
-          {/* <input
-            type="number"
-            value={qty}
-            min="1"
-            max="5"
-            className="w-[40px]  flex items-center justify-center border-none outline-none text-center"
-          /> */}
           <div
-            className="px-3 py-1 bg-slate-50 cursor-pointer text-[#848788]"
-            onClick={handleIncrease}
+            className="md:mt-3 ml-5 md:ml-0 text-[#19aeff] text-center text-sm hover:text-[red] cursor-pointer transition-all"
+            onClick={handleRemove}
           >
-            +
+            Xóa
           </div>
         </div>
-        <div
-          className="mt-3 text-[#19aeff] text-center text-sm hover:text-[red] cursor-pointer transition-all"
-          onClick={handleRemove}
-        >
-          Xóa
+        <div className="md:ml-14 lg:ml-4 xl:ml-14 text-sm font-medium">
+          {priceSplitter(price)}đ
         </div>
       </div>
-      <div className="ml-14 text-sm font-medium">{priceSplitter(price)}đ</div>
+      {/* responsive md */}
     </div>
   );
 };

@@ -3,9 +3,18 @@ import Banner from "../Banner";
 import ListPc from "../../components/ListPc";
 import ListLaptop from "../ListLaptop";
 import ListScreen from "../ListScreen";
+import { motion } from "framer-motion";
 const Home = () => {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{
+        opacity: 0,
+        x: -100,
+      }}
+      transition={{ duration: 0.25 }}
+    >
       <Banner />
       <ListPc />
       <ListLaptop />
@@ -16,7 +25,7 @@ const Home = () => {
         />
       </div>
       <ListScreen />
-    </div>
+    </motion.div>
   );
 };
 

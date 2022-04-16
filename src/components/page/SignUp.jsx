@@ -2,6 +2,8 @@ import { FastField, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 
+import { motion } from "framer-motion";
+
 import React, { useState } from "react";
 import { BiHide } from "react-icons/bi";
 import { GrFormViewHide } from "react-icons/gr";
@@ -53,7 +55,15 @@ const SignUp = () => {
   });
 
   return (
-    <div className="bg-slate-50  lg:p-10 p-5 ">
+    <motion.div
+      className="bg-slate-50  lg:p-10 p-5 "
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <div className="flex items-center bg-white">
         {/* block 1 */}
         <div className="w-[60%] hidden lg:block">
@@ -202,7 +212,7 @@ const SignUp = () => {
         </div>
         {/* block 2 */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

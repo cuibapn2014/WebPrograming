@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ItemCart from "../common/ItemCart";
 import { isTrueMenu } from "../../redux/actions";
+import { motion } from "framer-motion";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart);
   const [total, setTotal] = useState(0);
@@ -37,7 +38,12 @@ const Cart = () => {
   };
 
   return (
-    <div className="w-full bg-slate-50 py-5">
+    <motion.div
+      className="w-full bg-slate-50 py-5"
+      initial={{ width: 0 }}
+      animate={{ width: "100%" }}
+      exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+    >
       <div className="flex items-center  mb-5 ml-5">
         <Link to="/">
           <div className="p-2 rounded-full border border-[#ddd]">
@@ -51,9 +57,9 @@ const Cart = () => {
       </div>
       <div className="container mx-auto bg-slate-50">
         {/* item cart */}
-        <div className="flex justify-between">
+        <div className="flex flex-wrap lg:justify-between ">
           {/* block1 */}
-          <div className="w-[65%] px-5 rounded-xl bg-white ">
+          <div className="lg:w-[65%] w-full  px-5 rounded-xl bg-white ">
             {listCart && listCart.length > 0 ? (
               listCart.map((item, index) => {
                 return (
@@ -86,7 +92,7 @@ const Cart = () => {
           </div>
           {/* block1 */}
           {/* block2 */}
-          <div className="w-[33%] bg-white rounded-xl p-5 h-fit">
+          <div className="lg:w-[33%] w-full bg-white rounded-xl p-5 h-fit mt-5 lg:mt-0">
             <h5 className="text-xl font-medium text-[#333]">Thanh toán</h5>
             <div className="flex justify-between items-center mt-2">
               <div className="text-sm text-[#848788]">Tạm tính</div>
@@ -117,7 +123,7 @@ const Cart = () => {
         </div>
         {/* item cart */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

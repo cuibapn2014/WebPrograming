@@ -1,9 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const Payment = () => {
   return (
-    <div className="container mx-auto">
+    <motion.div
+      className="container mx-auto"
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <h1 className="text-left text-2xl font-medium my-7">
         Hướng dẫn thanh toán
       </h1>
@@ -138,7 +146,7 @@ const Payment = () => {
       <h2 className="text-center uppercase text-[#1435c3] font-medium text-lg mt-8">
         ~ cám ơn quý khách ~
       </h2>
-    </div>
+    </motion.div>
   );
 };
 

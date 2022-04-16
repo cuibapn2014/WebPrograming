@@ -16,11 +16,12 @@ import Paypal from "./components/page/Paypal";
 import SignUp from "./components/page/SignUp";
 import Cart from "./components/page/Cart";
 import Collections from "./components/page/Collections";
+import AnimatedRoute from "./components/AnimatedRoute";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="contact" element={<ShowRoom />} />
@@ -35,7 +36,8 @@ ReactDOM.render(
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
         </Route>
-      </Routes>
+      </Routes> */}
+      <AnimatedRoute />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

@@ -9,6 +9,8 @@ import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 
 // This values are the props in the UI
 // const amount = "5";
@@ -16,9 +18,11 @@ const currency = "USD";
 
 export default function Paypal() {
   const [payment, setPayment] = useState(false);
+  const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
   const [citys, setCitys] = useState([]);
-
+  const listCart = useSelector((state) => state.cart);
+  console.log("check cart", listCart);
   // console.log("check data: >>", data);
   // console.log("check city: >>", citys);
   // console.log("check district: >>", districts);
@@ -28,12 +32,14 @@ export default function Paypal() {
 
   // console.log("payment", payment);
 
-  const options = [
-    // { value: "", label: "Select chooose" },
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  useEffect(() => {
+    let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+    setTotal(total);
+  }, [listCart]);
+
+  const priceSplitter = (number) =>
+    number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   const handleHome = () => {
     setPayment(false);
@@ -103,9 +109,26 @@ export default function Paypal() {
     }),
 
     onSubmit: (values) => {
+      const { firstName, lastName, phone, city, district, ward, address } =
+        values;
+      const customAddress = `${address} ${city} ${district} ${ward}`;
+      const customCart = listCart.map((item) => {
+        return {
+          quantity: item.qty,
+          product: {
+            id: item.id,
+          },
+        };
+      });
       const res = {
-        value: values,
+        customer: {
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phone,
+          address: customAddress,
+        },
         payment: payment,
+        item: customCart,
       };
       console.log(res);
 
@@ -158,21 +181,6 @@ export default function Paypal() {
     const { code } = e;
     console.log("check code", code);
 
-    // const ward = districts.find((item) => (item.code = code));
-    // console.log("check ward ", ward);
-
-    // if (ward.wards.length > 0) {
-    //   const customWard = ward.wards.map((item) => {
-    //     return {
-    //       value: item.codename,
-    //       label: item.name,
-    //       code: item.code,
-    //     };
-    //   });
-    //   console.log("check customWard", customWard);
-    //   setWards(customWard);
-    // }
-
     return formik.setFieldValue("ward", e.label);
   };
 
@@ -188,27 +196,40 @@ export default function Paypal() {
   };
 
   return (
-    <>
+    <motion.div
+      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+      exit={{
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+        transition: { duration: 0.1 },
+      }}
+    >
       <div className="bg-slate-50  lg:p-10 p-5 ">
         <div className="flex items-center bg-white">
           {/* block 1 */}
           <div className="w-[40%] hidden lg:block">
             <img
               src="https://www.pngall.com/wp-content/uploads/5/Online-Payment-PNG-HD-Image.png"
-              className="rounded-l-lg"
+              className="rounded-l-lg transform scale-90"
             />
           </div>
           {/* block 1 */}
 
           {/* block 2 */}
           <div className="lg:w-[60%] w-full  rounded-r-lg">
-            <div className="px-10">
-              <div className="text-base mb-5 mt-3">
+            <div className="lg:px-10 px-3">
+              <div className="text-base mb-5 mt-3 flex justify-between">
                 <h4>Thông tin đặt hàng</h4>
+                <div className="flex items-center">
+                  <h5 className="text-base">Thành tiền : </h5>
+                  <span className="text-[#1435c3] text-sm ml-1 font-medium">
+                    {priceSplitter(total)}đ
+                  </span>
+                </div>
               </div>
 
               <form
-                className="px-1 py-5 pb-9 lg:w-full  w-[100%] sm:w-4/5 mx-auto"
+                className="px-1 py-5 pb-9  w-[90%] md:w-full mx-auto"
                 onSubmit={formik.handleSubmit}
               >
                 {/* <h2 className="text-center font-medium text-lg my-5">
@@ -273,6 +294,53 @@ export default function Paypal() {
                     {formik.errors.phone}
                   </span>
                 </div>
+
+                {/* option address */}
+                <div>
+                  {/* options city */}
+                  <div className="mb-10">
+                    <Select
+                      options={citys || []}
+                      value={defaultValueCity(citys || [], formik.values.city)}
+                      placeholder="--Choose select city--"
+                      onChange={(e) => handleChangeCity(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.city}
+                    </span>
+                  </div>
+                  {/* options city */}
+                  {/* options district */}
+                  <div className="mb-10">
+                    <Select
+                      options={districts || []}
+                      value={defaultValueDistrict(
+                        districts || [],
+                        formik.values.district
+                      )}
+                      placeholder="--Choose select district--"
+                      onChange={(e) => handleChangeDistrict(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.district}
+                    </span>
+                  </div>
+                  {/* options district */}
+                  {/* options ward */}
+                  <div className="mb-10 z-[999]">
+                    <Select
+                      options={wards || []}
+                      value={defaultValueWard(wards || [], formik.values.ward)}
+                      placeholder="--Choose select ward--"
+                      onChange={(e) => handleChangeWard(e)}
+                    />
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.ward}
+                    </span>
+                  </div>
+                  {/* options ward */}
+                </div>
+                {/* option address */}
                 <div>
                   <div className="mb-10">
                     <div className="form-field">
@@ -293,52 +361,6 @@ export default function Paypal() {
                     </span>
                   </div>
                 </div>
-                {/* option address */}
-                <div>
-                  {/* options city */}
-                  <div className="mb-10 relative z-50">
-                    <Select
-                      options={citys || []}
-                      value={defaultValueCity(citys || [], formik.values.city)}
-                      placeholder="choose select city"
-                      onChange={(e) => handleChangeCity(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.city}
-                    </span>
-                  </div>
-                  {/* options city */}
-                  {/* options district */}
-                  <div className="mb-10">
-                    <Select
-                      options={districts || []}
-                      value={defaultValueDistrict(
-                        districts || [],
-                        formik.values.district
-                      )}
-                      placeholder="choose select district"
-                      onChange={(e) => handleChangeDistrict(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.district}
-                    </span>
-                  </div>
-                  {/* options district */}
-                  {/* options ward */}
-                  <div className="mb-10 z-[999]">
-                    <Select
-                      options={wards || []}
-                      value={defaultValueWard(wards || [], formik.values.ward)}
-                      placeholder="choose select ward"
-                      onChange={(e) => handleChangeWard(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.ward}
-                    </span>
-                  </div>
-                  {/* options ward */}
-                </div>
-                {/* option address */}
 
                 {/* option choose paymnet */}
                 <div>
@@ -376,9 +398,10 @@ export default function Paypal() {
               {payment && (
                 <div
                   style={{
-                    maxWidth: "750px",
+                    width: "100%",
                     minHeight: "200px",
                     zIndex: "100",
+                    textAlign: "center",
                   }}
                 >
                   <PayPalScriptProvider
@@ -405,6 +428,6 @@ export default function Paypal() {
           {/* block 2 */}
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }
