@@ -16,19 +16,23 @@ public class Category {
     @Column(nullable = false, unique = false)
     private String name;
 
+    @Column
+    private String iconUrl;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("category")
     private List<Product> product;
 
     public Category(){}
 
-    public Integer getId() {
-        return id;
+    public Category(String name, String iconUrl, List<Product> product) {
+        this.name = name;
+        this.iconUrl = iconUrl;
+        this.product = product;
     }
 
-    public Category(String name, List<Product> product) {
-        this.name = name;
-        this.product = product;
+    public Integer getId() {
+        return id;
     }
 
     public void setId(Integer id) {
@@ -41,6 +45,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 
     public List<Product> getProduct() {
@@ -56,6 +68,7 @@ public class Category {
         return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
                 ", product=" + product +
                 '}';
     }

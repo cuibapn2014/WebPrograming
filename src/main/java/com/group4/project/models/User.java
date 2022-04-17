@@ -1,6 +1,13 @@
 package com.group4.project.models;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.persistence.*;
+
+import com.group4.project.helper.Encryption;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 
 @Entity
 @Table(name = "user")
@@ -18,8 +25,13 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column
     private String token;
-    private int role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private UserRole role;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "up_id", referencedColumnName = "id")
@@ -27,7 +39,7 @@ public class User {
 
     public User(){}
 
-    public User(String name, String username, String email, String password, String token, int role, UserProfile userProfile) {
+    public User(String name, String username, String email, String password, String token, UserRole role, UserProfile userProfile) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -81,16 +93,8 @@ public class User {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
+    public void setToken() {
+        this.token = Encryption.generateToken(this.username);
     }
 
     public UserProfile getUserProfile() {
@@ -99,6 +103,14 @@ public class User {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override

@@ -1,12 +1,17 @@
 package com.group4.project.api;
 
+import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
+import com.group4.project.models.UserRole;
 import com.group4.project.repositories.user.UserRepository;
 import com.group4.project.models.User;
+import com.group4.project.repositories.user.UserRoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,24 +19,30 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepo;
+    @Autowired private UserRepository userRepo;
+    @Autowired private UserRoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAllUser(){
         List<User> foundUser = userRepo.findAll();
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("successfully", 200, foundUser)
-            );
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("successfully", ResponseCode.HTTP_OK, foundUser)
+                    , HttpStatus.OK);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<ResponseObject> insertUser(@RequestBody User newUser){
-        newUser.setPassword(BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt(12)));
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Insert successfully", 200, userRepo.save(newUser))
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        UserRole foundRole = roleRepository.findByName(newUser.getRole().getName());
+        newUser.setToken();
+        if(foundRole != null) newUser.setRole(foundRole);
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Insert successfully", 200, userRepo.save(newUser)),
+                HttpStatus.OK
         );
     }
 
@@ -44,25 +55,27 @@ public class UserController {
 
         boolean isLogin = matchUser != null ? BCrypt.checkpw(user.getPassword(),matchUser.getPassword()) : false;
         if(!isLogin){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("Bad request", 400, null)
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("Bad request", 400, null),
+                    HttpStatus.BAD_REQUEST
             );
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Login successfully", 200, matchUser)
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Login successfully", 200, matchUser),
+                HttpStatus.OK
         );
     }
 
     @PutMapping("/update-role/{id}")
-    public ResponseEntity<ResponseObject> updateRole(@RequestParam("role") int role ,@PathVariable Integer id){
+    public ResponseEntity<ResponseObject> updateRole(@RequestParam("role") String userRole ,@PathVariable Integer id){
         Optional<User> foundUser = userRepo.findById(id);
-        if(foundUser.isPresent() && role >= 0 && role <= 4){
-            foundUser.get().setRole(role);
+        if(foundUser.isPresent() && userRole != null){
             userRepo.save(foundUser.get());
         }
-        return ResponseEntity.ok().body(
-                new ResponseObject("Updated successfully", 200, foundUser.get())
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Updated successfully", 200, foundUser.get()),
+                HttpStatus.OK
         );
     }
 }

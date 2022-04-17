@@ -26,8 +26,9 @@ public class BillController {
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAll(){
-        return ResponseEntity.ok().body(
-                new ResponseObject("successfully", 200, billRepository.findAll())
+        return new ResponseEntity<>(
+                new ResponseObject("successfully", 200, billRepository.findAll()),
+                HttpStatus.OK
         );
     }
 
@@ -35,12 +36,14 @@ public class BillController {
     public ResponseEntity<ResponseObject> getById(@PathVariable Integer id){
         Optional<Bill> foundBill = billRepository.findById(id);
         if(foundBill.isPresent()){
-            return ResponseEntity.ok().body(
-                    new ResponseObject("successfully", 200, foundBill)
+            return new ResponseEntity<>(
+                    new ResponseObject("successfully", 200, foundBill),
+                    HttpStatus.OK
             );
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("Not found bill", 404, null)
+        return new ResponseEntity<>(
+                new ResponseObject("Not found bill", 404, null),
+                HttpStatus.NOT_FOUND
         );
     }
 
@@ -51,8 +54,9 @@ public class BillController {
 
         boolean isCode = code.isPresent() ? true : false;
         if(newBill == null){
-            return ResponseEntity.badRequest().body(
-                    new ResponseObject("Bad request", 401, newBill)
+            return new ResponseEntity<>(
+                    new ResponseObject("Bad request", 401, newBill),
+                    HttpStatus.BAD_REQUEST
             );
         }
 
@@ -73,8 +77,9 @@ public class BillController {
         }
         else newBill.setCode(null);
 
-        return ResponseEntity.ok().body(
-                new ResponseObject("Insert successfully", 200, billRepository.save(newBill))
+        return new ResponseEntity<>(
+                new ResponseObject("Insert successfully", 200, billRepository.save(newBill)),
+                HttpStatus.OK
         );
     }
 
@@ -85,8 +90,9 @@ public class BillController {
             foundBill.get().setStatus();
             billRepository.save(foundBill.get());
         }
-        return ResponseEntity.ok().body(
-                new ResponseObject("Update successfully", 200, foundBill)
+        return new ResponseEntity<>(
+                new ResponseObject("Update successfully", 200, foundBill),
+                HttpStatus.OK
         );
     }
 
@@ -96,14 +102,16 @@ public class BillController {
         if(foundbill.isPresent()){
             billRepository.deleteById(id);
         }
-        return ResponseEntity.ok().body(
-                new ResponseObject("Delete successfully", 200, null)
+        return new ResponseEntity<>(
+                new ResponseObject("Delete successfully", 200, null),
+                HttpStatus.OK
         );
     }
 
     private List<Item> getListItem(List<Item> listItem){
         listItem.forEach(item -> {
             Optional<Product> foundProduct = productRepository.findById(item.getProduct().getId());
+            if(foundProduct.isPresent())
             item.setProduct(foundProduct.get());
         });
         return listItem;

@@ -15,7 +15,7 @@ public class MainController {
     @Autowired
     private ProductRepository productRepo;
 
-    @RequestMapping(path = "/*")
+    @RequestMapping("/*")
     public String index() {
         return "index";
     }
