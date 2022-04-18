@@ -1,5 +1,8 @@
 package com.group4.project;
 
+import com.group4.project.models.UserRole;
+import com.group4.project.repositories.user.UserRoleRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -30,5 +33,12 @@ public class Application implements WebMvcConfigurer {
 	@Bean
 	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
+	}
+
+	CommandLineRunner run(UserRoleRepository roleRepository){
+		return args -> {
+			roleRepository.save(new UserRole("USER"));
+			roleRepository.save(new UserRole("ADMIN"));
+		};
 	}
 }
