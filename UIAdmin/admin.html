@@ -20,14 +20,11 @@
         .account-link:hover { background: #3d68ff; }
     </style>
 </head>
-<body class="bg-gray-100 flex">
-
-    <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+<body class="bg-gray-100">
+    <aside class="fixed w-48 top-0 left-0 bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="admin.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Trang Quản Lí</a>
-            <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
-                <i class="fas fa-plus mr-3"></i> Báo cáo mới
-            </button>
+            <a href="admin.html" class="text-center text-white text-3xl font-semibold uppercase hover:text-gray-300">Trang Quản Lí</a>
+           
         </div>
         <nav class="text-white text-base font-semibold pt-3">
             <a href="admin.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
@@ -35,7 +32,7 @@
                 QL Sản Phẩm
             </a>
             <a href="qlnhanvien.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fa fa-user-circle mr-3"></i>
+                <i class="fas fa-sticky-note mr-3"></i>
                 QL Nhân Viên
             </a>
             <a href="qlkhachhang.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
@@ -44,7 +41,7 @@
             </a>
             <a href="qldanhmucsanpham.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-align-left mr-3"></i>
-                QL Danh Mục
+                QL Danh Mục 
             </a>
             <a href="qlthuonghieu.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-tablet-alt mr-3"></i>
@@ -54,31 +51,66 @@
                 <i class="fas fa-sticky-note mr-3"></i>
                 QL Hóa Đơn
             </a>
-         
-            
-            
+            <a href="quangcao.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <ion-icon class="mr-3" name="planet-outline"></ion-icon>
+                Quảng Cáo
+            </a>
            
         </nav>
       
     </aside>
-
-    <div class="w-full flex flex-col h-screen overflow-y-hidden">
+    <div class="w-4/5 float-right flex flex-col">
         <!-- Desktop Header -->
         <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex">
-            <div class="w-1/2"></div>
+            <div class="w-1/2 text-right text-xl font-bold text-blue-700">QUẢN LÍ SẢN PHẨM</div>
             <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
                 <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                     <img src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.6435-9/166314538_970652070138231_8558537778400875287_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=8NMHbeJ_gLMAX-sknjL&_nc_ht=scontent.fsgn2-4.fna&oh=00_AT8io7R2WE4Wfd_KKCn8KO30MZ0smKRSvHpZyzbURUW3vQ&oe=626719AB">
                 </button>
                 <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
                 <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Tài Khoản</a>
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Hỗ Trợ</a>
-                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Đăng Xuất</a>
+                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Account</a>
+               
+                    <a href="#" class="block px-4 py-2 account-link hover:text-white">Sign Out</a>
                 </div>
             </div>
         </header>
-
+        <div class="w-full mt-12">
+            <p class="text-xl pb-3 flex items-center">
+                <i class="fas fa-list mr-3"></i>THÊM SẢN PHẨM
+            </p>
+            <div class="  w-9/12 ml-8">
+                  <div class="mb-4 realtive">
+                      
+                    <input class="input border border-gray-400 appearance-none rounded w-full  px-3 py-3 pt-3 pb-2 focus focus:border-indigo-600 focus:outline-none active:outline-none active:border-indigo-600" >
+                    <label for="email" class=" ml-8 label absolute mb-0 -mt-2 pt-4 pl-3 leading-tighter text-black font-bold text-base mt-2 cursor-text">TÊN SẢN PHẨM</label>
+                
+                </div>
+                <div class="mb-4 realtive">
+                    <input class="input border border-gray-400 appearance-none rounded w-full  px-3 py-3 pt-3 pb-2 focus focus:border-indigo-600 focus:outline-none active:outline-none active:border-indigo-600" >
+                    <label for="email" class=" ml-8 label absolute mb-0 -mt-2 pt-4 pl-3 leading-tighter text-black font-bold text-base mt-2 cursor-text">MÔ TẢ </label>
+                </div>
+                <div class="mb-4 realtive">
+                    <input class="input border border-gray-400 appearance-none rounded w-full  px-3 py-3 pt-3 pb-2 focus focus:border-indigo-600 focus:outline-none active:outline-none active:border-indigo-600" >
+                    <label for="email" class=" ml-8 label absolute mb-0 -mt-2 pt-4 pl-3 leading-tighter text-black font-bold text-base mt-2 cursor-text">THƯƠNG HIỆU </label>
+                </div>
+                <div class="mb-4 realtive">
+                    <input class="input border border-gray-400 appearance-none rounded w-full  px-3 py-3 pt-3 pb-2 focus focus:border-indigo-600 focus:outline-none active:outline-none active:border-indigo-600" >
+                    <label for="email" class=" ml-8 label absolute mb-0 -mt-2 pt-4 pl-3 leading-tighter text-black font-bold text-base mt-2 cursor-text">GIÁ </label>
+                </div>
+                <div class="mb-4 realtive">
+                    <input class="input border border-gray-400 appearance-none rounded w-full  px-3 py-3 pt-3 pb-2 focus focus:border-indigo-600 focus:outline-none active:outline-none active:border-indigo-600" >
+                    <label for="email" class=" ml-8 label absolute mb-0 -mt-2 pt-4 pl-3 leading-tighter text-black font-bold text-base mt-2 cursor-text">DANH MỤC </label>
+                </div>
+                
+                
+            </div>
+            
+                <button class="bg-sidebar w-20 text-white px-4   font-semibold py-2 ml-8 rounded-br-lg rounded   hover:bg-gray-300 flex items-center justify-center">
+                    <i class="fas fa-plus mr-3"></i> THÊM
+                </button>
+            
+        </div>
         <!-- Mobile Header & Nav -->
         <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
             <div class="flex items-center justify-between">
@@ -91,11 +123,10 @@
 
             <!-- Dropdown Nav -->
             <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
-                <a href="admin.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
-                    <i class="fas fa-tachometer-alt mr-3"></i>
+                <a href="admin.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                     QL Sản Phẩm
                 </a>
-                <a href="qlnhanvien.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                <a href="qlnhanvien.html"  class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                     <i class="fas fa-sticky-note mr-3"></i>
                     QL Nhân Viên
                 </a>
@@ -140,7 +171,7 @@
                             <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Mô Tả</th>
                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm text-center">Thương Hiệu</th>
                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm text-center">Giá</th>
-                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Màu Sắc</th>
+                            <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">Danh Mục</th>
                             <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
                             <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
                         </tr>
@@ -152,13 +183,36 @@
                             <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
-                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg> 
                         </div>
                     </button></td>
+                    <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="20px" height="24px" viewBox="0 0 420.827 420.827" style="enable-background:new 0 0 420.827 420.827;"
+                                xml:space="preserve">
+                           <g>
+                               <g>
+                                   <path d="M210.29,0C156,0,104.43,20.693,65.077,58.269C25.859,95.715,2.794,146.022,0.134,199.921
+                                       c-0.135,2.734,0.857,5.404,2.744,7.388c1.889,1.983,4.507,3.105,7.244,3.105h45.211c5.275,0,9.644-4.098,9.979-9.362
+                                       c4.871-76.214,68.553-135.914,144.979-135.914c80.105,0,145.275,65.171,145.275,145.276c0,80.105-65.17,145.276-145.275,145.276
+                                       c-18.109,0-35.772-3.287-52.501-9.771l17.366-15.425c2.686-2.354,3.912-5.964,3.217-9.468c-0.696-3.506-3.209-6.371-6.592-7.521
+                                       l-113-32.552c-3.387-1.149-7.122-0.407-9.81,1.948c-2.686,2.354-3.913,5.963-3.218,9.467L69.71,403.157
+                                       c0.696,3.505,3.209,6.372,6.591,7.521c3.383,1.147,7.122,0.408,9.81-1.946l18.599-16.298
+                                       c31.946,18.574,68.456,28.394,105.581,28.394c116.021,0,210.414-94.392,210.414-210.414C420.705,94.391,326.312,0,210.29,0z"/>
+                                   <path d="M195.112,237.9h118.5c2.757,0,5-2.242,5-5v-30c0-2.757-2.243-5-5-5h-83.5v-91c0-2.757-2.243-5-5-5h-30
+                                       c-2.757,0-5,2.243-5,5v126C190.112,235.658,192.355,237.9,195.112,237.9z"/>
+                               </g>
+                           </g>
+                          
+                          
+                           
+                           </svg>
+                </div>
+            </button></td>
                             
                         </tr>
                         <tr>
@@ -167,13 +221,36 @@
                             <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
-                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg> 
                         </div>
                     </button></td>
+                    <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="20px" height="24px" viewBox="0 0 420.827 420.827" style="enable-background:new 0 0 420.827 420.827;"
+                                xml:space="preserve">
+                           <g>
+                               <g>
+                                   <path d="M210.29,0C156,0,104.43,20.693,65.077,58.269C25.859,95.715,2.794,146.022,0.134,199.921
+                                       c-0.135,2.734,0.857,5.404,2.744,7.388c1.889,1.983,4.507,3.105,7.244,3.105h45.211c5.275,0,9.644-4.098,9.979-9.362
+                                       c4.871-76.214,68.553-135.914,144.979-135.914c80.105,0,145.275,65.171,145.275,145.276c0,80.105-65.17,145.276-145.275,145.276
+                                       c-18.109,0-35.772-3.287-52.501-9.771l17.366-15.425c2.686-2.354,3.912-5.964,3.217-9.468c-0.696-3.506-3.209-6.371-6.592-7.521
+                                       l-113-32.552c-3.387-1.149-7.122-0.407-9.81,1.948c-2.686,2.354-3.913,5.963-3.218,9.467L69.71,403.157
+                                       c0.696,3.505,3.209,6.372,6.591,7.521c3.383,1.147,7.122,0.408,9.81-1.946l18.599-16.298
+                                       c31.946,18.574,68.456,28.394,105.581,28.394c116.021,0,210.414-94.392,210.414-210.414C420.705,94.391,326.312,0,210.29,0z"/>
+                                   <path d="M195.112,237.9h118.5c2.757,0,5-2.242,5-5v-30c0-2.757-2.243-5-5-5h-83.5v-91c0-2.757-2.243-5-5-5h-30
+                                       c-2.757,0-5,2.243-5,5v126C190.112,235.658,192.355,237.9,195.112,237.9z"/>
+                               </g>
+                           </g>
+                          
+                          
+                           
+                           </svg>
+                </div>
+            </button></td>
                             
                         </tr>
                         <tr>
@@ -182,13 +259,36 @@
                             <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
-                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg> 
                         </div>
                     </button></td>
+                    <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="20px" height="24px" viewBox="0 0 420.827 420.827" style="enable-background:new 0 0 420.827 420.827;"
+                                xml:space="preserve">
+                           <g>
+                               <g>
+                                   <path d="M210.29,0C156,0,104.43,20.693,65.077,58.269C25.859,95.715,2.794,146.022,0.134,199.921
+                                       c-0.135,2.734,0.857,5.404,2.744,7.388c1.889,1.983,4.507,3.105,7.244,3.105h45.211c5.275,0,9.644-4.098,9.979-9.362
+                                       c4.871-76.214,68.553-135.914,144.979-135.914c80.105,0,145.275,65.171,145.275,145.276c0,80.105-65.17,145.276-145.275,145.276
+                                       c-18.109,0-35.772-3.287-52.501-9.771l17.366-15.425c2.686-2.354,3.912-5.964,3.217-9.468c-0.696-3.506-3.209-6.371-6.592-7.521
+                                       l-113-32.552c-3.387-1.149-7.122-0.407-9.81,1.948c-2.686,2.354-3.913,5.963-3.218,9.467L69.71,403.157
+                                       c0.696,3.505,3.209,6.372,6.591,7.521c3.383,1.147,7.122,0.408,9.81-1.946l18.599-16.298
+                                       c31.946,18.574,68.456,28.394,105.581,28.394c116.021,0,210.414-94.392,210.414-210.414C420.705,94.391,326.312,0,210.29,0z"/>
+                                   <path d="M195.112,237.9h118.5c2.757,0,5-2.242,5-5v-30c0-2.757-2.243-5-5-5h-83.5v-91c0-2.757-2.243-5-5-5h-30
+                                       c-2.757,0-5,2.243-5,5v126C190.112,235.658,192.355,237.9,195.112,237.9z"/>
+                               </g>
+                           </g>
+                          
+                          
+                           
+                           </svg>
+                </div>
+            </button></td>
                             
                         </tr>
                         <tr>
@@ -197,13 +297,36 @@
                             <td class="w-1/6 text-left py-3 px-4 text-center">Máy tính xịn</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">ASUS</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center">15000000</td>
-                            <td class="w-1/6 text-left py-3 px-4 text-center">Vàng</td>
+                            <td class="w-1/6 text-left py-3 px-4 text-center">LapTop</td>
                             <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-16 flex items-center text-red-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg> 
                         </div>
                     </button></td>
+                    <td class="w-1/6 text-left py-3 px-4 text-center"><button> 
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="20px" height="24px" viewBox="0 0 420.827 420.827" style="enable-background:new 0 0 420.827 420.827;"
+                                xml:space="preserve">
+                           <g>
+                               <g>
+                                   <path d="M210.29,0C156,0,104.43,20.693,65.077,58.269C25.859,95.715,2.794,146.022,0.134,199.921
+                                       c-0.135,2.734,0.857,5.404,2.744,7.388c1.889,1.983,4.507,3.105,7.244,3.105h45.211c5.275,0,9.644-4.098,9.979-9.362
+                                       c4.871-76.214,68.553-135.914,144.979-135.914c80.105,0,145.275,65.171,145.275,145.276c0,80.105-65.17,145.276-145.275,145.276
+                                       c-18.109,0-35.772-3.287-52.501-9.771l17.366-15.425c2.686-2.354,3.912-5.964,3.217-9.468c-0.696-3.506-3.209-6.371-6.592-7.521
+                                       l-113-32.552c-3.387-1.149-7.122-0.407-9.81,1.948c-2.686,2.354-3.913,5.963-3.218,9.467L69.71,403.157
+                                       c0.696,3.505,3.209,6.372,6.591,7.521c3.383,1.147,7.122,0.408,9.81-1.946l18.599-16.298
+                                       c31.946,18.574,68.456,28.394,105.581,28.394c116.021,0,210.414-94.392,210.414-210.414C420.705,94.391,326.312,0,210.29,0z"/>
+                                   <path d="M195.112,237.9h118.5c2.757,0,5-2.242,5-5v-30c0-2.757-2.243-5-5-5h-83.5v-91c0-2.757-2.243-5-5-5h-30
+                                       c-2.757,0-5,2.243-5,5v126C190.112,235.658,192.355,237.9,195.112,237.9z"/>
+                               </g>
+                           </g>
+                          
+                          
+                           
+                           </svg>
+                </div>
+            </button></td>
                             
                         </tr>
                         
@@ -215,7 +338,8 @@
         
     
       
-
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <!-- Font Awesome -->
