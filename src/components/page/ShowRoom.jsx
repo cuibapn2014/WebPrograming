@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { CKEditor } from "ckeditor4-react";
 const listShowRoom = [
   {
     name: "Showroom Phong Vũ Nguyễn Thị Minh Khai, Quận 3",
@@ -33,6 +34,11 @@ const listShowRoom = [
   },
 ];
 const ShowRoom = () => {
+  const [data, setData] = useState("");
+  const handleChange = (e) => {
+    setData(e.editor.getData());
+    console.log(e.editor.getData());
+  };
   return (
     <motion.div
       className="bg-slate-50 px-14"
@@ -82,6 +88,14 @@ const ShowRoom = () => {
             );
           })}
         </div>
+        <CKEditor
+          initData={<p>Please fill in descrition of product view </p>}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          value={data}
+        />
+        <div>{data}</div>
       </div>
     </motion.div>
   );

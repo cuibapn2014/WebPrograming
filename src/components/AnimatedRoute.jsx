@@ -13,12 +13,13 @@ import Paypal from "./page/Paypal";
 import ProductView from "./page/ProductView";
 import ShowRoom from "./page/ShowRoom";
 import SignUp from "./page/SignUp";
+// import Admin from "./";
 import { AnimatePresence } from "framer-motion";
 
 const AnimatedRoute = () => {
   const location = useLocation();
   return (
-    <AnimatePresence>
+    <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
@@ -34,6 +35,7 @@ const AnimatedRoute = () => {
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
         </Route>
+        {/* <Route path="/admin" element={<Admin />} /> */}
       </Routes>
     </AnimatePresence>
   );

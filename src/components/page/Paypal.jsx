@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import logo from "../../assets/payment.png";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ButtonWrapper from "../ButtonWrapper";
 import { useFormik } from "formik";
@@ -7,7 +8,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
@@ -22,7 +23,9 @@ export default function Paypal() {
   const [data, setData] = useState([]);
   const [citys, setCitys] = useState([]);
   const listCart = useSelector((state) => state.cart);
-  console.log("check cart", listCart);
+  const token = useSelector((state) => state.token.tokenDefault);
+  const navigation = useNavigate();
+  // console.log("check cart", listCart);
   // console.log("check data: >>", data);
   // console.log("check city: >>", citys);
   // console.log("check district: >>", districts);
@@ -108,7 +111,7 @@ export default function Paypal() {
       ward: Yup.string().required("Required"),
     }),
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const { firstName, lastName, phone, city, district, ward, address } =
         values;
       const customAddress = `${address} ${city} ${district} ${ward}`;
@@ -120,7 +123,7 @@ export default function Paypal() {
           },
         };
       });
-      const res = {
+      const data = {
         customer: {
           firstName: firstName,
           lastName: lastName,
@@ -130,7 +133,20 @@ export default function Paypal() {
         payment: payment,
         item: customCart,
       };
-      console.log(res);
+      let res = await axios({
+        method: "POST",
+        url: "http://localhost:8085/api/v1/bill/insert",
+        data: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res && res.data && res.data.data) {
+        if (res.data.status === 200) {
+          navigation("/");
+        }
+      }
 
       toast.success("Create account success");
     },
@@ -209,8 +225,9 @@ export default function Paypal() {
           {/* block 1 */}
           <div className="w-[40%] hidden lg:block">
             <img
-              src="https://www.pngall.com/wp-content/uploads/5/Online-Payment-PNG-HD-Image.png"
+              src={logo}
               className="rounded-l-lg transform scale-90"
+              alt="payment"
             />
           </div>
           {/* block 1 */}

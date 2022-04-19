@@ -4,7 +4,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { Link, useParams } from "react-router-dom";
 import CardProduct from "../common/CardProduct";
 import { isTrueMenu } from "../../redux/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 const Collections = () => {
@@ -22,6 +22,7 @@ const Collections = () => {
   // console.log("check data dynamic", listDynamic);
 
   // console.log("check list collections", filter);
+  const token = useSelector((state) => state.token.tokenDefault);
 
   useEffect(async () => {
     try {
@@ -32,7 +33,14 @@ const Collections = () => {
         },
       };
       const res = await axios.get(
-        `http://localhost:8085/api/v1/category/${id}`
+        `http://localhost:8085/api/v1/category/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
         // {
         //   headers: {
         //     "Access-Control-Allow-Origin": true,

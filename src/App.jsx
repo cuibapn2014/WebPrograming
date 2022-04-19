@@ -12,12 +12,19 @@ import Menu from "./components/common/Menu";
 import Banner from "./components/Banner";
 import { Outlet } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+
+// axios.defaults.headers.common[
+//   "Authorization"
+// ] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGluaGFuMzk2NiIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNjUwMzExNDExfQ.2sTIfzrTTQJMpUMY6M_Tx7w_oNA5LBo3zn30QKGEOpM`;
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
   const [isTop, setIsTop] = useState(0);
+
   // console.log("check isTop", isTop);
   // console.log(width);
+
   useEffect(() => {
     const handleResize = (e) => {
       setWidth(window.innerWidth);

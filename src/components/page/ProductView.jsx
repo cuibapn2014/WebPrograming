@@ -18,7 +18,7 @@ import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../../redux/actions";
 import { toast } from "react-toastify";
 const ProductView = () => {
@@ -83,8 +83,16 @@ const ProductView = () => {
     "https://product.hstatic.net/1000026716/product/1_340d4299b5fe46b29c19f3c97274a946_grande.jpg",
   ];
 
+  const token = useSelector((state) => state.token.tokenDefault);
+
   useEffect(async () => {
-    let res = await axios.get(`http://localhost:8085/api/v1/product/${id}`);
+    let res = await axios.get(`http://localhost:8085/api/v1/product/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    });
     if (res && res.data && res.data.data) {
       setData(res.data.data);
       // setListImg(res.data.data.image);

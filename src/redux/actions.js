@@ -42,3 +42,18 @@ export const changeQty = (value) => {
   };
 };
 // cart
+
+//token
+export const toogleRemember = () => {
+  return {
+    type: "toogle-remember",
+  };
+};
+
+export const reRenderUser = (number) => {
+  return {
+    type: "re-render",
+    payload: number,
+  };
+};
+//token

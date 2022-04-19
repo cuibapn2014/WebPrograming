@@ -11,6 +11,7 @@ import { GiComputerFan, GiApolloCapsule } from "react-icons/gi";
 import { AiOutlineHdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 export const list = [
   {
     id: 1,
@@ -96,8 +97,29 @@ const Menu = ({ handleIsMenu }) => {
   // };
 
   // console.log("check menu", listMenu);
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGluaGFuMzk2NiIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNjUwMzA3OTA1fQ.U3tRmXJ4S11dk5-EKOS0AKZV_4b75Mc0xGt3pKwf2bE`,
+  //     "Access-Control-Allow-Origin": "*",
+  //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+  //   },
+  // };
+
+  // const token =
+  //   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGluaGFuMzk2NiIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNjUwMzExNDExfQ.2sTIfzrTTQJMpUMY6M_Tx7w_oNA5LBo3zn30QKGEOpM";
+
+  const token = useSelector((state) => state.token.tokenDefault);
+  // console.log("check token", token);
   useEffect(async () => {
-    let res = await axios.get("http://localhost:8085/api/v1/category/get-all");
+    let res = await axios.get("http://localhost:8085/api/v1/category/get-all", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    });
+
+    // console.log("check icon", res);
     if (res && res.data && res.data.data) {
       setListMenu(res.data.data);
     }
@@ -130,7 +152,7 @@ const Menu = ({ handleIsMenu }) => {
                   {/* <Icon className="min-w-[22px] h-[22px]" />
                    */}
                   <img
-                    src={item.icon}
+                    src={item.iconUrl}
                     width="25px"
                     className="min-w-[25px] h-[22px]"
                   />

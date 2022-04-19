@@ -3,16 +3,24 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import { BiHide } from "react-icons/bi";
 import { GrFormViewHide } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../common/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toogleRemember } from "../../redux/actions";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [ispassword, setIsPassword] = useState(true);
-
+  const token = useSelector((state) => state.token.tokenDefault);
+  const navigation = useNavigate();
+  const dispatch = useDispatch();
+  // const isChecked = JSON.parse(localStorage.getItem("isChecked"));
+  const isChecked = useSelector((state) => state.token.rememberMe);
+  // console.log("check isChecked", isChecked);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -26,6 +34,9 @@ const Login = () => {
       email: Yup.string()
         .required("Required")
         .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please Enter Email"),
+      // email: Yup.string()
+      //   .required("Required")
+      //   .min(4, "Must be 4 characters or more"),
       passWord: Yup.string()
         .required("Required")
         .matches(
@@ -37,8 +48,42 @@ const Login = () => {
       //   .oneOf([Yup.ref("password"), null], "Password must match"),
     }),
 
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      const { email, passWord } = values;
+      // const data = {
+      //   username: email,
+      //   password: passWord,
+      // };
+      const data = new FormData();
+      data.append("username", email);
+      data.append("password", passWord);
+      let res = await axios({
+        method: "POST",
+        url: "http://localhost:8085/api/v1/user/login",
+        data: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res && res.data && res.data.data) {
+        console.log("check login", res.data);
+        let tokenJWT = res.data.data.token;
+        sessionStorage.setItem("informationUser", JSON.stringify(res.data));
+        if (isChecked) {
+          Cookies.set("token", tokenJWT, { expires: 30 });
+        }
+        if (res.data.status === 200) {
+          navigation("/");
+          toast.success("Sign up success");
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+        }
+      }
+
       // window.alert("Success Form");
       toast.success("Login success");
     },
@@ -86,7 +131,7 @@ const Login = () => {
                     name="email"
                     onChange={formik.handleChange}
                     value={formik.values.email}
-                    type="email"
+                    type="text"
                     placeholder=" "
                     className="form-input"
                   />
@@ -130,10 +175,11 @@ const Login = () => {
                 <input
                   id="remember"
                   type="checkbox"
-                  checked={isCheck}
-                  onClick={() => setIsCheck(!isCheck)}
-                  onChange={(e) => e.target.value}
+                  checked={isChecked}
+                  // onClick={() => setIsCheck(!isCheck)}
+                  onChange={(e) => setIsCheck(!isChecked)}
                   className="cursor-pointer"
+                  onClick={() => dispatch(toogleRemember())}
                 />
                 <label
                   className="capitalize ml-2 cursor-pointer"

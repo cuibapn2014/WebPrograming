@@ -12,6 +12,7 @@ import { Scrollbar } from "swiper";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import CardProduct from "./common/CardProduct";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const listCollectionPC = [
   {
@@ -89,7 +90,7 @@ const listCollectionPC = [
 
 const ListPc = () => {
   const [list, setList] = useState([]);
-
+  const token = useSelector((state) => state.token.tokenDefault);
   useEffect(async () => {
     try {
       const config = {
@@ -99,7 +100,14 @@ const ListPc = () => {
         },
       };
       const res = await axios.get(
-        "http://localhost:8085/api/v1/category/2"
+        "http://localhost:8085/api/v1/category/2",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
         // {
         //   headers: {
         //     "Access-Control-Allow-Origin": true,

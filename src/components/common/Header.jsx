@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import logo from "../../assets/logo.png";
 import logo1 from "../../assets/G4PC.png";
 import logo2 from "../../assets/g4.png";
 
-import { BiBuildingHouse, BiRightArrowCircle } from "react-icons/bi";
+import {
+  BiBuildingHouse,
+  BiRightArrowCircle,
+  BiLogInCircle,
+} from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { HiOutlineDesktopComputer } from "react-icons/hi";
 import { BsSearch, BsTags, BsBell } from "react-icons/bs";
@@ -19,10 +24,24 @@ import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
 const Header = () => {
   const stateMenu = useSelector((state) => state.stateMenu.isMenu);
   const qtyCart = useSelector((state) => state.cart);
+  const render = useSelector((state) => state.token.reRenderUser);
+  const [showUser, setShowUser] = useState(false);
+  const [getUser, setGetUser] = useState(1);
+  // console.log("check show", showUser);
   // console.log("qtyCart", qtyCart);
   const dispatch = useDispatch();
   // console.log("Header", stateMenu);
   // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
+  const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+  const lastName = informationUser
+    ? informationUser.data.userProfile.lastName
+    : "";
+  console.log("check lastname", lastName);
+  // console.log("information User", informationUser);
+
+  useEffect(() => {
+    setGetUser(render + 1);
+  }, [render]);
 
   const handleOntop = (e) => {
     window.scrollTo({
@@ -31,6 +50,12 @@ const Header = () => {
       behavior: "smooth",
     });
     dispatch(isFalseMenu());
+  };
+
+  const removeItemSesstion = () => {
+    sessionStorage.removeItem("informationUser");
+    Cookies.remove("token");
+    setShowUser(false);
   };
   return (
     <div>
@@ -91,12 +116,19 @@ const Header = () => {
             Khuyến mãi
           </div>
         </Link>
-        <Link to="/sign-in" onClick={handleOntop}>
-          <div className="icon--header">
-            <RiAccountCircleLine size={"27px"} className="mb-2" />
-            Đăng nhập
+        {/* {informationUser ? (
+          <div className="w-[50px] h-[50px] flex items-center justify-center bg-[orange] text-white text-medium rounded-full text-lg">
+            {lastName.charAt(0).toUpperCase()}
           </div>
-        </Link>
+        ) : (
+          <Link to="/sign-in" onClick={handleOntop}>
+            <div className="icon--header">
+              <RiAccountCircleLine size={"27px"} className="mb-2" />
+              Đăng nhập
+            </div>
+          </Link>
+        )} */}
+
         <div className="icon--header">
           <BsBell size={"27px"} className="mb-2" />
           Thông báo
@@ -110,6 +142,36 @@ const Header = () => {
             </div>
           </div>
         </Link>
+        {informationUser ? (
+          <div className="relative">
+            <div
+              className="w-[40px] h-[40px] flex items-center justify-center bg-[orange] text-white text-medium rounded-full text-lg cursor-pointer hover:opacity-90 "
+              onClick={() => setShowUser(!showUser)}
+            >
+              {lastName.charAt(0).toUpperCase()}
+            </div>
+
+            <div
+              className={`${
+                showUser ? "clip-path-top100" : "clip-path-top0"
+              } absolute -bottom-11 right-0 rounded-md bg-slate-50 shadow-lg w-[200px] px-3 py-1 text-black`}
+            >
+              <div className="flex justify-between items-center hover:opacity-80">
+                <span className="cursor-pointer" onClick={removeItemSesstion}>
+                  Đăng xuất
+                </span>
+                <BiLogInCircle />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Link to="/sign-in" onClick={handleOntop}>
+            <div className="icon--header">
+              <RiAccountCircleLine size={"27px"} className="mb-2" />
+              Đăng nhập
+            </div>
+          </Link>
+        )}
       </div>
       {/* header2 */}
       {/* header3 */}

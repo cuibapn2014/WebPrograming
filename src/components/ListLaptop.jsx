@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { MdOutlineNavigateNext } from "react-icons/md";
+import { useSelector } from "react-redux";
 import CardProduct from "./common/CardProduct";
 const listCollectionLaptop = [
   {
@@ -114,6 +115,7 @@ const listCollectionLaptop = [
 const ListLaptop = () => {
   const [list, setList] = useState([]);
   // console.log("check list laptop", list);
+  const token = useSelector((state) => state.token.tokenDefault);
   useEffect(async () => {
     try {
       const config = {
@@ -123,7 +125,14 @@ const ListLaptop = () => {
         },
       };
       const res = await axios.get(
-        "http://localhost:8085/api/v1/category/1"
+        "http://localhost:8085/api/v1/category/1",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // "Access-Control-Allow-Origin": "*",
+            // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
         // {
         //   headers: {
         //     "Access-Control-Allow-Origin": true,

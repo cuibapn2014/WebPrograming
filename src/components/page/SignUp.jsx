@@ -9,16 +9,19 @@ import { BiHide } from "react-icons/bi";
 import { GrFormViewHide } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../common/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [ispassword, setIsPassword] = useState(true);
-
+  const navigation = useNavigate();
   const formik = useFormik({
     initialValues: {
+      firstName: "",
+      lastName: "",
       userName: "",
       email: "",
       passWord: "",
@@ -26,6 +29,12 @@ const SignUp = () => {
     },
 
     validationSchema: Yup.object({
+      firstName: Yup.string()
+        .required("Required")
+        .min(3, "Must be 3 characters or more"),
+      lastName: Yup.string()
+        .required("Required")
+        .min(3, "Must be 3 characters or more"),
       userName: Yup.string()
         .required("Required")
         .min(4, "Must be 4 characters or more"),
@@ -43,14 +52,38 @@ const SignUp = () => {
         .oneOf([Yup.ref("passWord"), null], "Password must match"),
     }),
 
-    onSubmit: (values) => {
-      const res = {
-        value: values,
-        id: 1,
+    onSubmit: async (values) => {
+      const { firstName, lastName, userName, email, passWord } = values;
+      const data = {
+        username: userName,
+        password: passWord,
+        email: email,
+        userProfile: {
+          firstName: firstName,
+          lastName: lastName,
+        },
+        role: {
+          name: "USER",
+        },
       };
-      console.log(res);
-      //   window.alert("success ");
-      toast.success("Create account success");
+
+      let res = await axios.post(
+        "http://localhost:8085/api/v1/user/signup",
+        data
+      );
+      if (res && res.data && res.data.data) {
+        console.log("check sign-up", res.data);
+        sessionStorage.setItem("informationUser", JSON.stringify(res.data));
+        if (res.data.status === 200) {
+          navigation("/");
+          toast.success("Sign up success");
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+        }
+      }
     },
   });
 
@@ -76,8 +109,8 @@ const SignUp = () => {
 
         {/* block 2 */}
         <div className="lg:w-[40%] w-full  rounded-r-lg">
-          <div className="px-10">
-            <div className="text-base">
+          <div className="px-10 py-2`">
+            <div className="text-base mb-5">
               <h4>Sign up with your email</h4>
               <h5>
                 Already have an account?
@@ -95,6 +128,46 @@ const SignUp = () => {
               {/* <h2 className="text-center font-medium text-lg my-5">
                 Login your account
               </h2> */}
+              <div className="mb-10 flex items-center justify-between">
+                <div className="w-[49%]">
+                  <div className="form-field">
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      onChange={formik.handleChange}
+                      value={formik.values.firstName || ""}
+                      type="text"
+                      placeholder=" "
+                      className="form-input"
+                    />
+                    <label className="form-label" htmlFor="firstName">
+                      FirstName
+                    </label>
+                  </div>
+                  <span className="block mt-1 text-[red] line-clamp-1">
+                    {formik.errors.firstName}
+                  </span>
+                </div>
+                <div className="w-[49%]">
+                  <div className="form-field">
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      onChange={formik.handleChange}
+                      value={formik.values.lastName || ""}
+                      type="text"
+                      placeholder=" "
+                      className="form-input"
+                    />
+                    <label className="form-label" htmlFor="lastName">
+                      Lastname
+                    </label>
+                  </div>
+                  <span className="block mt-1 text-[red] line-clamp-1">
+                    {formik.errors.lastName}
+                  </span>
+                </div>
+              </div>
               <div className="mb-10">
                 <div className="form-field">
                   <input
