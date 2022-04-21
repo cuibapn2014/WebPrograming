@@ -29,16 +29,9 @@ public class Application implements WebMvcConfigurer {
 				.setCachePeriod(3600)
 				.resourceChain(true);
 	}
-
+	
 	@Bean
 	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
-	}
-
-	CommandLineRunner run(UserRoleRepository roleRepository){
-		return args -> {
-			roleRepository.save(new UserRole("USER"));
-			roleRepository.save(new UserRole("ADMIN"));
-		};
 	}
 }

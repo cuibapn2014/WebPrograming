@@ -18,8 +18,8 @@ public class DiscountController {
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAll(){
-        return ResponseEntity.ok().body(
-                new ResponseObject("Successfully", 200, repository.findAll())
+        return new ResponseEntity<>(
+                new ResponseObject("Successfully", 200, repository.findAll()), HttpStatus.OK
         );
     }
 
@@ -27,20 +27,20 @@ public class DiscountController {
     public ResponseEntity<ResponseObject> getByCode(@PathVariable String code){
         Optional<DiscountCode> discountCode = repository.findByCode(code);
         if(discountCode.isPresent()){
-            return ResponseEntity.ok().body(
-                    new ResponseObject("Successfully", 200, discountCode.get())
+            return new ResponseEntity<>(
+                    new ResponseObject("Successfully", 200, discountCode.get()),HttpStatus.OK
             );
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("Not found code", 404, discountCode.get())
+        return new ResponseEntity<>(
+                new ResponseObject("Not found code", 404, discountCode.get()), HttpStatus.NOT_FOUND
         );
     }
 
     @PostMapping("/insert")
     public ResponseEntity<ResponseObject> insertCode(@RequestBody DiscountCode discountCode){
-        return ResponseEntity.ok().body(
-                new ResponseObject("Insert successfully", 200, repository.save(discountCode))
+        return new ResponseEntity<>(
+                new ResponseObject("Insert successfully", 200, repository.save(discountCode)), HttpStatus.OK
         );
     }
 
@@ -51,8 +51,8 @@ public class DiscountController {
         if(foundCode.isPresent()){
             repository.save(foundCode.get());
         }
-        return ResponseEntity.ok().body(
-                new ResponseObject("Update successfully", 200, foundCode.get())
+        return new ResponseEntity<>(
+                new ResponseObject("Update successfully", 200, foundCode.get()), HttpStatus.OK
         );
     }
 
@@ -63,8 +63,8 @@ public class DiscountController {
             repository.deleteById(id);
         }
 
-        return ResponseEntity.ok().body(
-                new ResponseObject("Delete successfully", 200, null)
+        return new ResponseEntity<>(
+                new ResponseObject("Delete successfully", 200, null), HttpStatus.OK
         );
     }
 }

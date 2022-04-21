@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -29,10 +28,10 @@ public class ProductController {
     @Autowired private CategoryRepository categoryRepo;
 
     @GetMapping("/get-all")
-    public ResponseEntity<ResponseObjectPage> getAllProducts(@RequestParam(required = true,name = "page",defaultValue = "1") int page,
+    public ResponseEntity<ResponseObjectPage> getAllProducts(@RequestParam(required = true, value = "page",defaultValue = "1") int page,
                                                          HttpServletRequest request) {
-        page = page > 0 ? --page : 0;
-        Pageable paging = PageRequest.of(page, 10);
+        page = page > 0 ? page : 0;
+        Pageable paging = PageRequest.of(page - 1 , 10);
         Page<Product> getAllProduct = productRepo.findAll(paging);
         ResponseObjectPage response = new ResponseObjectPage();
         int totalPage = (int) Math.ceil(response.getTotal() / 10);
@@ -49,19 +48,19 @@ public class ProductController {
         response.setLastPage(totalPage);
         response.setPrevPageUrl(prevURL);
         response.setNextPageUrl(nextUrl);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     ResponseEntity<ResponseObject> findById(@PathVariable Integer id){
         Optional<Product> foundProduct = productRepo.findById(id);
         if(foundProduct.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("success",200,foundProduct)
+            return new ResponseEntity<>(
+                    new ResponseObject("success",200,foundProduct), HttpStatus.OK
             );
         }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed",500,foundProduct)
+            return new ResponseEntity<>(
+                    new ResponseObject("Not found",404,foundProduct), HttpStatus.NOT_FOUND
             );
         }
     }
@@ -73,8 +72,8 @@ public class ProductController {
         newProduct.setSlug(newProduct.getTitle());
         newProduct.setCategory(category);
         newProduct.setBrand(brand);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Add successfully",200,productRepo.save(newProduct))
+        return new ResponseEntity<>(
+                new ResponseObject("Add successfully",200,productRepo.save(newProduct)), HttpStatus.OK
         );
     }
 
@@ -95,8 +94,8 @@ public class ProductController {
         product.setBrand(brand);
         product.setCategory(category);
         productRepo.save(product);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("Update successfully",200, product)
+        return new ResponseEntity<>(
+                new ResponseObject("Update successfully",200, product), HttpStatus.OK
         );
     }
 
@@ -105,12 +104,12 @@ public class ProductController {
         boolean exists = productRepo.existsById(id);
         if(exists){
             productRepo.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("Delete successfully",200,null)
+            return new ResponseEntity<>(
+                    new ResponseObject("Delete successfully",200,null), HttpStatus.OK
             );
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("Not found product",400,"")
+        return new ResponseEntity<>(
+                new ResponseObject("Not found product",400,""), HttpStatus.NOT_FOUND
         );
     }
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 
@@ -20,7 +21,7 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping(path = "/product/{id}/{slug}")
+    @GetMapping(path = "/product/{slug}/{id}")
     public String product(@PathVariable Integer id, @PathVariable String slug) {
         Optional<Product> product = productRepo.findById(id);
         if(product.isPresent() && product.get().getSlug().equals(slug))

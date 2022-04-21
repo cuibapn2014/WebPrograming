@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "/api/v1/upload-image")
+@RequestMapping("/api/v1/upload-image")
 public class FileUploadController {
 
     @Autowired

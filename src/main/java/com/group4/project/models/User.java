@@ -1,13 +1,8 @@
 package com.group4.project.models;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.persistence.*;
 
 import com.group4.project.helper.Encryption;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
 
 @Entity
 @Table(name = "user")
@@ -15,7 +10,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
 
     @Column(unique = false,nullable = false)
     private String username;
@@ -39,8 +33,7 @@ public class User {
 
     public User(){}
 
-    public User(String name, String username, String email, String password, String token, UserRole role, UserProfile userProfile) {
-        this.name = name;
+    public User(String username, String email, String password, String token, UserRole role, UserProfile userProfile) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -55,14 +48,6 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {
@@ -94,7 +79,7 @@ public class User {
     }
 
     public void setToken() {
-        this.token = Encryption.generateToken(this.username);
+        this.token = Encryption.generateToken(this);
     }
 
     public UserProfile getUserProfile() {
@@ -117,7 +102,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

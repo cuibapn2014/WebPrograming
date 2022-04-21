@@ -1,5 +1,10 @@
 package com.group4.project.api;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.group4.project.helper.Encryption;
 import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
 import com.group4.project.models.UserRole;
@@ -34,29 +39,59 @@ public class UserController {
                     , HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseObject> insertUser(@RequestBody User newUser){
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        UserRole foundRole = roleRepository.findByName(newUser.getRole().getName());
-        newUser.setToken();
-        if(foundRole != null) newUser.setRole(foundRole);
+    @GetMapping("/{username}")
+    public ResponseEntity<ResponseObject> findByUsername(@PathVariable String username){
+        Optional<User> foundUser = userRepo.findByUsername(username);
+        if(foundUser.isPresent()) {
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("successfully", ResponseCode.HTTP_OK, foundUser.get())
+                    , HttpStatus.OK);
+        }
         return new ResponseEntity<ResponseObject>(
-                new ResponseObject("Insert successfully", 200, userRepo.save(newUser)),
-                HttpStatus.OK
+                new ResponseObject("Not found", ResponseCode.HTTP_NOT_FOUND, null)
+                , HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<ResponseObject> insertUser(@RequestBody User newUser) {
+        Optional<User> user = userRepo.findByUsername(newUser.getUsername());
+        if (!user.isPresent()){
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            UserRole foundRole = roleRepository.findByName("USER");
+            if (foundRole != null) newUser.setRole(foundRole);
+            newUser.setToken();
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("Insert successfully", 200, userRepo.save(newUser)),
+                    HttpStatus.OK
+            );
+        }
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null),
+                HttpStatus.BAD_REQUEST
         );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObject> login(@RequestBody User user){
-        User matchUser = userRepo.findByUsername(user.getUsername())
-                .orElseGet(() -> {
-                    return null;
-                });
+    public ResponseEntity<ResponseObject> login(@RequestParam("username") String username,
+                                                @RequestParam("password") String password){
+        User matchUser = null;
+        if(!isEmail(username)) {
+            matchUser = userRepo.findByUsername(username)
+                    .orElseGet(() -> {
+                        return null;
+                    });
+        }else{
+            matchUser = userRepo.findByEmail(username)
+                    .orElseGet(() -> {
+                        return null;
+                    });
+        }
 
-        boolean isLogin = matchUser != null ? BCrypt.checkpw(user.getPassword(),matchUser.getPassword()) : false;
+        boolean isLogin = matchUser != null ? BCrypt.checkpw(password,matchUser.getPassword()) : false;
+
         if(!isLogin){
             return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("Bad request", 400, null),
+                    new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -70,12 +105,35 @@ public class UserController {
     @PutMapping("/update-role/{id}")
     public ResponseEntity<ResponseObject> updateRole(@RequestParam("role") String userRole ,@PathVariable Integer id){
         Optional<User> foundUser = userRepo.findById(id);
-        if(foundUser.isPresent() && userRole != null){
+        UserRole foundRole = roleRepository.findByName(userRole);
+        if(foundUser.isPresent() && foundRole != null){
+            foundUser.get().setRole(foundRole);
             userRepo.save(foundUser.get());
         }
         return new ResponseEntity<ResponseObject>(
                 new ResponseObject("Updated successfully", 200, foundUser.get()),
                 HttpStatus.OK
         );
+    }
+
+    @PostMapping("/matches")
+    public ResponseEntity<ResponseObject> matchesUser(@RequestParam("token") String token){
+        String username = new Encryption().decodeJWTToken(token).getSubject();
+        Optional<User> foundUser = userRepo.findByUsername(username);
+        if(foundUser.isPresent()) {
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("Matches successfully", ResponseCode.HTTP_OK, foundUser.get()),
+                    HttpStatus.OK
+            );
+        }
+
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Forbidden! Provided token invalid", ResponseCode.HTTP_FORBIDDEN, null),
+                HttpStatus.OK
+        );
+    }
+
+    private boolean isEmail(String input){
+        return input.contains("@");
     }
 }
