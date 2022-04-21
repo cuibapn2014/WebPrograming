@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { toogleRemember } from "../../redux/actions";
+import { reRenderUser, toogleRemember } from "../../redux/actions";
 import Cookies from "js-cookie";
 
 const Login = () => {
@@ -67,15 +67,17 @@ const Login = () => {
       });
 
       if (res && res.data && res.data.data) {
-        console.log("check login", res.data);
+        // console.log("check login", res.data);
+
         let tokenJWT = res.data.data.token;
         sessionStorage.setItem("informationUser", JSON.stringify(res.data));
         if (isChecked) {
           Cookies.set("token", tokenJWT, { expires: 30 });
         }
         if (res.data.status === 200) {
+          // toast.success("Login in success");
           navigation("/");
-          toast.success("Sign up success");
+
           window.scrollTo({
             top: 0,
             left: 0,
@@ -85,7 +87,6 @@ const Login = () => {
       }
 
       // window.alert("Success Form");
-      toast.success("Login success");
     },
   });
 

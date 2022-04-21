@@ -21,9 +21,8 @@ import axios from "axios";
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
   const [isTop, setIsTop] = useState(0);
-
-  // console.log("check isTop", isTop);
-  // console.log(width);
+  const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+  // console.log(informationUser);
 
   useEffect(() => {
     const handleResize = (e) => {
@@ -53,35 +52,35 @@ function App() {
   return (
     <>
       {/* {console.log("check top", isTop)} */}
-      <Provider store={store}>
-        <div>
-          {width > 1280 ? <Header /> : <HeaderMobile />}
-          <Outlet />
-          <Footer />
-          {isTop > 1000 ? (
-            <div
-              className="fixed bottom-5 right-2 py-3 px-4 bg-black text-white z-10 cursor-pointer rounded-full hover:bg-[#1435c3]  transition-all flex flex-col items-center"
-              onClick={handleOntop}
-            >
-              <BiArrowToTop size={"20px"} />
-              <span>TOP</span>
-            </div>
-          ) : (
-            ""
-          )}
-          <ToastContainer
-            position="top-right"
-            autoClose={1000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </div>
-      </Provider>
+      {/* <Provider store={store}> */}
+      <div>
+        {width > 1280 ? <Header /> : <HeaderMobile />}
+        <Outlet />
+        <Footer />
+        {isTop > 1000 ? (
+          <div
+            className="fixed bottom-5 right-2 py-3 px-4 bg-black text-white z-10 cursor-pointer rounded-full hover:bg-[#1435c3]  transition-all flex flex-col items-center"
+            onClick={handleOntop}
+          >
+            <BiArrowToTop size={"20px"} />
+            <span>TOP</span>
+          </div>
+        ) : (
+          ""
+        )}
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </div>
+      {/* </Provider> */}
     </>
   );
 }

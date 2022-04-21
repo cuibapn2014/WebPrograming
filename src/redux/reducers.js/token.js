@@ -1,6 +1,6 @@
 const initialState = {
   tokenDefault:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aG9tYXMiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTY1MDQ2MzgzNX0.ofUBQ6IpcK8jm74eArRf1K_zKxZopAdcGv0bTS5hE4o",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aG9tYXMiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTY1MDU1MDMxNH0.5bR9B8bYRGcT9-KVQbRfjlhS0-3vnhbUrUAxvlrpdYo",
   rememberMe: JSON.parse(localStorage.getItem("isChecked")),
   reRenderUser: 0,
 };

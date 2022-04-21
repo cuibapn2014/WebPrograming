@@ -17,11 +17,14 @@ import SignUp from "./components/page/SignUp";
 import Cart from "./components/page/Cart";
 import Collections from "./components/page/Collections";
 import AnimatedRoute from "./components/AnimatedRoute";
+import store from "./redux/store";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      {/* <Routes>
+    <Provider store={store}>
+      <BrowserRouter>
+        {/* <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="contact" element={<ShowRoom />} />
@@ -37,8 +40,9 @@ ReactDOM.render(
           <Route path="paypal" element={<Paypal />} />
         </Route>
       </Routes> */}
-      <AnimatedRoute />
-    </BrowserRouter>
+        <AnimatedRoute />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

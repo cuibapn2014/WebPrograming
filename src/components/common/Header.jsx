@@ -36,7 +36,7 @@ const Header = () => {
   const lastName = informationUser
     ? informationUser.data.userProfile.lastName
     : "";
-  console.log("check lastname", lastName);
+  // console.log("check lastname", lastName);
   // console.log("information User", informationUser);
 
   useEffect(() => {

@@ -31,10 +31,10 @@ const SignUp = () => {
     validationSchema: Yup.object({
       firstName: Yup.string()
         .required("Required")
-        .min(3, "Must be 3 characters or more"),
+        .min(2, "Must be 2 characters or more"),
       lastName: Yup.string()
         .required("Required")
-        .min(3, "Must be 3 characters or more"),
+        .min(2, "Must be 2 characters or more"),
       userName: Yup.string()
         .required("Required")
         .min(4, "Must be 4 characters or more"),

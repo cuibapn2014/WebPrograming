@@ -13,7 +13,7 @@ const Home = () => {
   const cookiesToken = Cookies.get("token");
   const token = useSelector((state) => state.token.tokenDefault);
   const dispatch = useDispatch();
-  console.log(remember, cookiesToken);
+  // console.log(remember, cookiesToken);
 
   useEffect(async () => {
     if (remember && cookiesToken) {
