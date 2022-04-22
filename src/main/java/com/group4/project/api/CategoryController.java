@@ -44,7 +44,7 @@ public class CategoryController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateCategory(@RequestBody Category newCategory,
                                                          @PathVariable Integer id){
-        Category foundCategory = categoryRepository.findById(newCategory.getId()).orElseGet(() -> {return null;});
+        Category foundCategory = categoryRepository.findById(id).orElseGet(() -> {return null;});
         if(newCategory != null && foundCategory != null){
             foundCategory.setName(newCategory.getName());
             categoryRepository.save(foundCategory);

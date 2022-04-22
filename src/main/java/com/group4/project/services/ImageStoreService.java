@@ -9,10 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -79,6 +76,23 @@ public class ImageStoreService implements IStoreServices{
     @Override
     public void deleteAllImage() {
 
+    }
+
+    @Override
+    public void deleteImage(String fileName) {
+        Path imgPath = this.storageFolder.resolve(
+                        Paths.get(fileName))
+                .normalize().toAbsolutePath();
+        try {
+            Files.delete(imgPath);
+            throw new RuntimeException("File or directory deleted successfully");
+        } catch (NoSuchFileException ex) {
+            throw new RuntimeException("No such file or directory:" + imgPath);
+        } catch (DirectoryNotEmptyException ex) {
+            throw new RuntimeException("Directory %s is not empty:" + imgPath);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
     @Override

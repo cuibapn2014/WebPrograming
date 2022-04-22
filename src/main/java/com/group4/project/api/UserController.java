@@ -1,10 +1,7 @@
 package com.group4.project.api;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group4.project.helper.Encryption;
+import com.group4.project.helper.Validate;
 import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
 import com.group4.project.models.UserRole;
@@ -12,6 +9,7 @@ import com.group4.project.repositories.user.UserRepository;
 import com.group4.project.models.User;
 import com.group4.project.repositories.user.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/v1/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     @Autowired private UserRepository userRepo;
@@ -55,7 +54,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<ResponseObject> insertUser(@RequestBody User newUser) {
         Optional<User> user = userRepo.findByUsername(newUser.getUsername());
-        if (!user.isPresent()){
+        if (!user.isPresent() && Validate.validEmail(newUser.getEmail())){
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             UserRole foundRole = roleRepository.findByName("USER");
             if (foundRole != null) newUser.setRole(foundRole);
@@ -102,12 +101,28 @@ public class UserController {
         );
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updateRole(@RequestBody User newUser ,@PathVariable Integer id){
+        Optional<User> foundUser = userRepo.findById(id);
+        if(foundUser.isPresent()){
+            UserRole foundRole = roleRepository.findByName(foundUser.get().getRole().getName());
+            foundUser.get().setRole(foundRole);
+            foundUser.get().setToken();
+            userRepo.save(foundUser.get());
+        }
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Updated successfully", 200, foundUser.get()),
+                HttpStatus.OK
+        );
+    }
+
     @PutMapping("/update-role/{id}")
     public ResponseEntity<ResponseObject> updateRole(@RequestParam("role") String userRole ,@PathVariable Integer id){
         Optional<User> foundUser = userRepo.findById(id);
         UserRole foundRole = roleRepository.findByName(userRole);
         if(foundUser.isPresent() && foundRole != null){
             foundUser.get().setRole(foundRole);
+            foundUser.get().setToken();
             userRepo.save(foundUser.get());
         }
         return new ResponseEntity<ResponseObject>(
@@ -132,6 +147,24 @@ public class UserController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteById(@PathVariable Integer id){
+        boolean exist = userRepo.existsById(id);
+        if(exist) {
+            userRepo.deleteById(id);
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("Delete successfully", ResponseCode.HTTP_OK, null),
+                    HttpStatus.OK
+            );
+        }
+
+        return new ResponseEntity<ResponseObject>(
+                new ResponseObject("Not found", ResponseCode.HTTP_NOT_FOUND, null),
+                HttpStatus.OK
+        );
+    }
+
 
     private boolean isEmail(String input){
         return input.contains("@");

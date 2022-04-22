@@ -1,11 +1,10 @@
 package com.group4.project.api;
 
 import com.group4.project.models.*;
-import com.group4.project.repositories.attribute.AttributeRepository;
 import com.group4.project.repositories.brand.BrandRepository;
 import com.group4.project.repositories.category.CategoryRepository;
-import com.group4.project.repositories.image.ImageRepository;
 import com.group4.project.repositories.product.ProductRepository;
+import com.group4.project.services.IStoreServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
@@ -23,9 +24,8 @@ public class ProductController {
 
     @Autowired private ProductRepository productRepo;
     @Autowired private BrandRepository brandRepo;
-    @Autowired private AttributeRepository attrRepo;
-    @Autowired private ImageRepository imgRepo;
     @Autowired private CategoryRepository categoryRepo;
+    @Autowired private IStoreServices iStoreServices;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObjectPage> getAllProducts(@RequestParam(required = true, value = "page",defaultValue = "1") int page,
@@ -66,33 +66,73 @@ public class ProductController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<ResponseObject> insertProduct(@RequestBody Product newProduct){
-        Category category = categoryRepo.findById(newProduct.getCategory().getId()).orElseGet(() -> {return null;});
-        Brand brand = brandRepo.findById(newProduct.getBrand().getId()).orElseGet(() -> {return null;});
-        newProduct.setSlug(newProduct.getTitle());
-        newProduct.setCategory(category);
-        newProduct.setBrand(brand);
+    public ResponseEntity<ResponseObject> insertProduct(@RequestParam("title") String title,
+                                                        @RequestParam("description") String description,
+                                                        @RequestParam("quantity") Integer quantity,
+                                                        @RequestParam("brandID") Integer brandID,
+                                                        @RequestParam("categoryID") Integer categoryID,
+                                                        @RequestParam("attribute") String[] attributes,
+                                                        @RequestParam("image")MultipartFile[] images){
+        Product product = new Product();
+        Category category = categoryRepo.findById(categoryID).orElseGet(() -> {return null;});
+        Brand brand = brandRepo.findById(brandID).orElseGet(() -> {return null;});
+        product.setTitle(title);
+        product.setDescription(description);
+        product.setQuantity(quantity);
+        product.setBrand(brand);
+        product.setCategory(category);
+        Arrays.asList(attributes).stream().forEach(s -> {
+            String strAttr[] = s.split(":");
+            Attribute attr = new Attribute(strAttr[0], strAttr[1]);
+            product.getAttribute().add(attr);
+        });
+        try {
+            Arrays.asList(images).stream().forEach(multipartFile -> {
+                Image img = new Image(iStoreServices.storeImage(multipartFile));
+                product.getImage().add(img);
+            });
+        }catch(Exception e){
+            throw new RuntimeException("Coulnd't upload image: " + e.getMessage());
+        }
         return new ResponseEntity<>(
-                new ResponseObject("Add successfully",200,productRepo.save(newProduct)), HttpStatus.OK
+                new ResponseObject("Add successfully",200,productRepo.save(product)), HttpStatus.OK
         );
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateProduct(@RequestBody Product newProduct,
+    public ResponseEntity<ResponseObject> updateProduct(@RequestParam("title") String title,
+                                                        @RequestParam("description") String description,
+                                                        @RequestParam("quantity") Integer quantity,
+                                                        @RequestParam("brandID") Integer brandID,
+                                                        @RequestParam("categoryID") Integer categoryID,
+                                                        @RequestParam("attribute") String[] attributes,
+                                                        @RequestParam("image")MultipartFile[] images,
                                                         @PathVariable Integer id){
         Product product = productRepo.findById(id).orElseGet(() ->{ return null;});
-        Category category = categoryRepo.findById(newProduct.getCategory().getId()).orElseGet(() ->{ return null;});
-        Brand brand = brandRepo.findById(newProduct.getBrand().getId()).orElseGet(() ->{ return null;});
-        product.setTitle(newProduct.getTitle());
-        product.setPrice(newProduct.getPrice());
-        product.setDiscount(newProduct.getDiscount());
-        product.setDescription(newProduct.getDescription());
-        product.setSlug(newProduct.getTitle());
-        product.setQuantity(newProduct.getQuantity());
-        product.setImage(newProduct.getImage());
-        product.setAttribute(newProduct.getAttribute());
+        Category category = categoryRepo.findById(categoryID).orElseGet(() -> {return null;});
+        Brand brand = brandRepo.findById(brandID).orElseGet(() -> {return null;});
+        product.setTitle(title);
+        product.setDescription(description);
+        product.setQuantity(quantity);
         product.setBrand(brand);
         product.setCategory(category);
+        product.setBrand(brand);
+        product.setCategory(category);
+        Arrays.asList(attributes).stream().forEach(s -> {
+            product.getAttribute().clear();
+            String strAttr[] = s.split(":");
+            Attribute attr = new Attribute(strAttr[0], strAttr[1]);
+            product.getAttribute().add(attr);
+        });
+        try {
+            product.getImage().clear();
+            Arrays.asList(images).stream().forEach(multipartFile -> {
+                Image img = new Image(iStoreServices.storeImage(multipartFile));
+                product.getImage().add(img);
+            });
+        }catch(Exception e){
+            throw new RuntimeException("Coulnd't upload image: " + e.getMessage());
+        }
         productRepo.save(product);
         return new ResponseEntity<>(
                 new ResponseObject("Update successfully",200, product), HttpStatus.OK
@@ -103,11 +143,15 @@ public class ProductController {
     public ResponseEntity<ResponseObject> deleteProduct(@PathVariable Integer id){
         boolean exists = productRepo.existsById(id);
         if(exists){
+            productRepo.findById(id).get().getImage().stream().forEach(image -> {
+                iStoreServices.deleteImage(image.getUrlImage());
+            });
             productRepo.deleteById(id);
             return new ResponseEntity<>(
                     new ResponseObject("Delete successfully",200,null), HttpStatus.OK
             );
         }
+
         return new ResponseEntity<>(
                 new ResponseObject("Not found product",400,""), HttpStatus.NOT_FOUND
         );

@@ -12,5 +12,6 @@ public interface IStoreServices {
     public Stream<Path> loadAll();
     public byte[] readFileContent(String fileName);
     public void deleteAllImage();
+    public void deleteImage(String fileName);
     public Resource loadImage(String fileName);
 }
