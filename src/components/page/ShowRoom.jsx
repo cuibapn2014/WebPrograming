@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CKEditor } from "ckeditor4-react";
+import jwt_decode from "jwt-decode";
+import Helmet from "../common/Helmet";
 const listShowRoom = [
   {
     name: "Showroom Phong Vũ Nguyễn Thị Minh Khai, Quận 3",
@@ -39,65 +41,72 @@ const ShowRoom = () => {
     setData(e.editor.getData());
     console.log(e.editor.getData());
   };
-  return (
-    <motion.div
-      className="bg-slate-50 px-14"
-      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
-      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
-      exit={{
-        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
-        transition: { duration: 0.1 },
-      }}
-    >
-      <div className="">
-        <h1 className="uppercase text-center py-8 text-xl font-medium">
-          hệ thống showroom
-        </h1>
-        <div className=" shadow-xl ">
-          {listShowRoom.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="flex lg:p-5 p-1 flex-col lg:flex-row bg-white text-center "
-              >
-                <div className="lg:w-3/6 md:w-full  relative group transition-all]">
-                  <a href={item.link} target="_blank">
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="rounded-lg mx-auto"
-                    />
+  var token =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJVU0VSIiwibmFtZSI6IkJhIFRyYWMifQ.G5n5xcFpwnB9c7bsgrcTniwwYBI715MEumad-kTxjec";
+  var decoded = jwt_decode(token);
 
-                    <div className=" text-[white] rounded-lg absolute  inset-0  bg-[#0e0d0d] cursor-pointer opacity-70 invisible w-0 group-hover:visible group-hover:w-full  transition-all">
-                      <span className="absolute top-[50%] transform translate-x-[-50%]">
-                        Click để xem chi tiết bản đồ
-                      </span>
-                    </div>
-                  </a>
+  console.log(decoded);
+  return (
+    <Helmet title="ShowRoom">
+      <motion.div
+        className="bg-slate-50 px-14"
+        initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+        animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+        exit={{
+          clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+          transition: { duration: 0.1 },
+        }}
+      >
+        <div className="">
+          <h1 className="uppercase text-center py-8 text-xl font-medium">
+            hệ thống showroom
+          </h1>
+          <div className=" shadow-xl ">
+            {listShowRoom.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex lg:p-5 p-1 flex-col lg:flex-row bg-white text-center "
+                >
+                  <div className="lg:w-3/6 md:w-full  relative group transition-all]">
+                    <a href={item.link} target="_blank">
+                      <img
+                        src={item.img}
+                        alt={item.name}
+                        className="rounded-lg mx-auto"
+                      />
+
+                      <div className=" text-[white] rounded-lg absolute  inset-0  bg-[#0e0d0d] cursor-pointer opacity-70 invisible w-0 group-hover:visible group-hover:w-full  transition-all">
+                        <span className="absolute top-[50%] transform translate-x-[-50%]">
+                          Click để xem chi tiết bản đồ
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="lg:w-3/6 md:w-full text-left pl-3 mt-5">
+                    <h2 className="font-medium pb-2">{item.name}</h2>
+                    <p>Địa chỉ : {item.address}</p>
+                    <p>
+                      Tư vấn mua hàng miễn phí : 18006867 - Điện thoại :{" "}
+                      {item.hotline}
+                    </p>
+                    <span>Thời gian làm việc : 08h00 - 21h30</span>
+                  </div>
                 </div>
-                <div className="lg:w-3/6 md:w-full text-left pl-3 mt-5">
-                  <h2 className="font-medium pb-2">{item.name}</h2>
-                  <p>Địa chỉ : {item.address}</p>
-                  <p>
-                    Tư vấn mua hàng miễn phí : 18006867 - Điện thoại :{" "}
-                    {item.hotline}
-                  </p>
-                  <span>Thời gian làm việc : 08h00 - 21h30</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <CKEditor
+              );
+            })}
+          </div>
+          {/* <CKEditor
           initData={<p>Please fill in descrition of product view </p>}
           onChange={(e) => {
             handleChange(e);
           }}
           value={data}
         />
-        <div>{data}</div>
-      </div>
-    </motion.div>
+        <div>{data}</div> */}
+        </div>
+      </motion.div>
+    </Helmet>
   );
 };
 

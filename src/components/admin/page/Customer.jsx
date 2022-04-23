@@ -102,7 +102,7 @@ const Customer = () => {
                 listCustomer.length > 0 &&
                 listCustomer.map((item, index) => {
                   return (
-                    <tr>
+                    <tr key={index}>
                       <td className="w-[10%] text-left py-3 px-4 text-center">
                         {item.firstName}
                       </td>

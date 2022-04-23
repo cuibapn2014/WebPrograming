@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Input from "../common/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Helmet from "../common/Helmet";
 
 // import { toast } from "react-toastify";
 
@@ -73,7 +74,10 @@ const SignUp = () => {
       );
       if (res && res.data && res.data.data) {
         console.log("check sign-up", res.data);
-        sessionStorage.setItem("informationUser", JSON.stringify(res.data));
+        sessionStorage.setItem(
+          "informationUser",
+          JSON.stringify(res.data.data.token)
+        );
         if (res.data.status === 200) {
           navigation("/");
           toast.success("Sign up success");
@@ -88,178 +92,179 @@ const SignUp = () => {
   });
 
   return (
-    <motion.div
-      className="bg-slate-50  lg:p-10 p-5 "
-      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
-      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
-      exit={{
-        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
-        transition: { duration: 0.1 },
-      }}
-    >
-      <div className="flex items-center bg-white">
-        {/* block 1 */}
-        <div className="w-[60%] hidden lg:block">
-          <img
-            src="https://cdn.dribbble.com/users/9741/screenshots/17082373/media/6ace78ce32fcb1254079fad72b5255ce.png?compress=1&resize=1000x750&vertical=top"
-            className="rounded-l-lg"
-          />
-        </div>
-        {/* block 1 */}
+    <Helmet title="Đăng Kí">
+      <motion.div
+        className="bg-slate-50  lg:p-10 p-5 "
+        initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+        animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+        exit={{
+          clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+          transition: { duration: 0.1 },
+        }}
+      >
+        <div className="flex items-center bg-white">
+          {/* block 1 */}
+          <div className="w-[60%] hidden lg:block">
+            <img
+              src="https://cdn.dribbble.com/users/9741/screenshots/17082373/media/6ace78ce32fcb1254079fad72b5255ce.png?compress=1&resize=1000x750&vertical=top"
+              className="rounded-l-lg"
+            />
+          </div>
+          {/* block 1 */}
 
-        {/* block 2 */}
-        <div className="lg:w-[40%] w-full  rounded-r-lg">
-          <div className="px-10 py-2`">
-            <div className="text-base mb-5">
-              <h4>Sign up with your email</h4>
-              <h5>
-                Already have an account?
-                <Link to="/sign-in" className="text-[#1435c3]">
-                  {" "}
-                  Sign in
-                </Link>
-              </h5>
-            </div>
+          {/* block 2 */}
+          <div className="lg:w-[40%] w-full  rounded-r-lg">
+            <div className="px-10 py-2`">
+              <div className="text-base mb-5">
+                <h4>Sign up with your email</h4>
+                <h5>
+                  Already have an account?
+                  <Link to="/sign-in" className="text-[#1435c3]">
+                    {" "}
+                    Sign in
+                  </Link>
+                </h5>
+              </div>
 
-            <form
-              className="px-1 py-5 pb-9 lg:w-full  w-[100%] sm:w-4/5 mx-auto"
-              onSubmit={formik.handleSubmit}
-            >
-              {/* <h2 className="text-center font-medium text-lg my-5">
+              <form
+                className="px-1 py-5 pb-9 lg:w-full  w-[100%] sm:w-4/5 mx-auto"
+                onSubmit={formik.handleSubmit}
+              >
+                {/* <h2 className="text-center font-medium text-lg my-5">
                 Login your account
               </h2> */}
-              <div className="mb-10 flex items-center justify-between">
-                <div className="w-[49%]">
-                  <div className="form-field">
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      onChange={formik.handleChange}
-                      value={formik.values.firstName || ""}
-                      type="text"
-                      placeholder=" "
-                      className="form-input"
-                    />
-                    <label className="form-label" htmlFor="firstName">
-                      FirstName
-                    </label>
+                <div className="mb-10 flex items-center justify-between">
+                  <div className="w-[49%]">
+                    <div className="form-field">
+                      <input
+                        id="firstName"
+                        name="firstName"
+                        onChange={formik.handleChange}
+                        value={formik.values.firstName || ""}
+                        type="text"
+                        placeholder=" "
+                        className="form-input"
+                      />
+                      <label className="form-label" htmlFor="firstName">
+                        FirstName
+                      </label>
+                    </div>
+                    <span className="block mt-1 text-[red] line-clamp-1">
+                      {formik.errors.firstName}
+                    </span>
                   </div>
-                  <span className="block mt-1 text-[red] line-clamp-1">
-                    {formik.errors.firstName}
-                  </span>
-                </div>
-                <div className="w-[49%]">
-                  <div className="form-field">
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      onChange={formik.handleChange}
-                      value={formik.values.lastName || ""}
-                      type="text"
-                      placeholder=" "
-                      className="form-input"
-                    />
-                    <label className="form-label" htmlFor="lastName">
-                      Lastname
-                    </label>
+                  <div className="w-[49%]">
+                    <div className="form-field">
+                      <input
+                        id="lastName"
+                        name="lastName"
+                        onChange={formik.handleChange}
+                        value={formik.values.lastName || ""}
+                        type="text"
+                        placeholder=" "
+                        className="form-input"
+                      />
+                      <label className="form-label" htmlFor="lastName">
+                        Lastname
+                      </label>
+                    </div>
+                    <span className="block mt-1 text-[red] line-clamp-1">
+                      {formik.errors.lastName}
+                    </span>
                   </div>
-                  <span className="block mt-1 text-[red] line-clamp-1">
-                    {formik.errors.lastName}
-                  </span>
                 </div>
-              </div>
-              <div className="mb-10">
-                <div className="form-field">
-                  <input
-                    id="userName"
-                    name="userName"
-                    onChange={formik.handleChange}
-                    value={formik.values.userName}
-                    type="text"
-                    placeholder=" "
-                    className="form-input"
-                  />
-                  <label className="form-label" htmlFor="userName">
-                    Username
-                  </label>
-                </div>
-                <span className="block mt-1 text-[red]">
-                  {formik.errors.userName}
-                </span>
-              </div>
-              <div className="mb-10">
-                <div className="form-field">
-                  <input
-                    id="email"
-                    name="email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                    type="email"
-                    placeholder=" "
-                    className="form-input"
-                  />
-                  <label className="form-label" htmlFor="email">
-                    Email
-                  </label>
-                </div>
-                <span className="block mt-1 text-[red]">
-                  {formik.errors.email}
-                </span>
-              </div>
-              <div>
                 <div className="mb-10">
                   <div className="form-field">
                     <input
-                      id="passWord"
-                      name="passWord"
+                      id="userName"
+                      name="userName"
                       onChange={formik.handleChange}
-                      value={formik.values.passWord}
-                      type={ispassword ? "password" : "text"}
+                      value={formik.values.userName}
+                      type="text"
                       placeholder=" "
                       className="form-input"
                     />
-                    <label className="form-label" htmlFor="passWord">
-                      Password
+                    <label className="form-label" htmlFor="userName">
+                      Username
                     </label>
-                    <div
-                      className="absolute top-[50%] right-5 transform translate-y-[-50%] cursor-pointer"
-                      onClick={() => setIsPassword(!ispassword)}
-                    >
-                      {ispassword ? <GrFormViewHide /> : <BiHide />}
-                    </div>
                   </div>
                   <span className="block mt-1 text-[red]">
-                    {formik.errors.passWord}
+                    {formik.errors.userName}
                   </span>
                 </div>
-                <div className="mb-5">
+                <div className="mb-10">
                   <div className="form-field">
                     <input
-                      id="confirmPassword"
-                      name="confirmPassword"
+                      id="email"
+                      name="email"
                       onChange={formik.handleChange}
-                      value={formik.values.confirmPassword}
-                      type={ispassword ? "password" : "text"}
+                      value={formik.values.email}
+                      type="email"
                       placeholder=" "
                       className="form-input"
                     />
-                    <label className="form-label" htmlFor="confirmPassword">
-                      Password
+                    <label className="form-label" htmlFor="email">
+                      Email
                     </label>
-                    <div
-                      className="absolute top-[50%] right-5 transform translate-y-[-50%] cursor-pointer"
-                      onClick={() => setIsPassword(!ispassword)}
-                    >
-                      {ispassword ? <GrFormViewHide /> : <BiHide />}
-                    </div>
                   </div>
                   <span className="block mt-1 text-[red]">
-                    {formik.errors.confirmPassword}
+                    {formik.errors.email}
                   </span>
                 </div>
-              </div>
+                <div>
+                  <div className="mb-10">
+                    <div className="form-field">
+                      <input
+                        id="passWord"
+                        name="passWord"
+                        onChange={formik.handleChange}
+                        value={formik.values.passWord}
+                        type={ispassword ? "password" : "text"}
+                        placeholder=" "
+                        className="form-input"
+                      />
+                      <label className="form-label" htmlFor="passWord">
+                        Password
+                      </label>
+                      <div
+                        className="absolute top-[50%] right-5 transform translate-y-[-50%] cursor-pointer"
+                        onClick={() => setIsPassword(!ispassword)}
+                      >
+                        {ispassword ? <GrFormViewHide /> : <BiHide />}
+                      </div>
+                    </div>
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.passWord}
+                    </span>
+                  </div>
+                  <div className="mb-5">
+                    <div className="form-field">
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        onChange={formik.handleChange}
+                        value={formik.values.confirmPassword}
+                        type={ispassword ? "password" : "text"}
+                        placeholder=" "
+                        className="form-input"
+                      />
+                      <label className="form-label" htmlFor="confirmPassword">
+                        Password
+                      </label>
+                      <div
+                        className="absolute top-[50%] right-5 transform translate-y-[-50%] cursor-pointer"
+                        onClick={() => setIsPassword(!ispassword)}
+                      >
+                        {ispassword ? <GrFormViewHide /> : <BiHide />}
+                      </div>
+                    </div>
+                    <span className="block mt-1 text-[red]">
+                      {formik.errors.confirmPassword}
+                    </span>
+                  </div>
+                </div>
 
-              {/* <div className="flex items-center my-4">
+                {/* <div className="flex items-center my-4">
                 <input
                   id="remember"
                   type="checkbox"
@@ -275,17 +280,18 @@ const SignUp = () => {
                   remember me
                 </label>
               </div> */}
-              <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
-                <button type="submit" className="block w-full">
-                  Create Account
-                </button>
-              </div>
-            </form>
+                <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
+                  <button type="submit" className="block w-full">
+                    Create Account
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
+          {/* block 2 */}
         </div>
-        {/* block 2 */}
-      </div>
-    </motion.div>
+      </motion.div>
+    </Helmet>
   );
 };
 

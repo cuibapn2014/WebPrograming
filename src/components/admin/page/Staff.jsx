@@ -103,7 +103,7 @@ const Staff = () => {
                 listUser.length > 0 &&
                 listUser.map((item, index) => {
                   return (
-                    <tr>
+                    <tr key={index}>
                       <td className="w-[18%] text-left py-3 px-4 text-center capitalize  ">
                         {item.userProfile.firstName}
                       </td>

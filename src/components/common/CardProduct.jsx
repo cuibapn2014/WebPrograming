@@ -50,7 +50,10 @@ const CardProduct = ({
         onClick={() => dispatch(isFalseMenu())}
       >
         <div className="bg-white aspect-square">
-          <img src={img} alt={name} />
+          <img
+            src={`http://localhost:8085/api/v1/image/files/${img}`}
+            alt={name}
+          />
         </div>
         <div className="text-left bg-white">
           <h4 className="line-clamp-2">{name}</h4>

@@ -5,6 +5,8 @@ import { FaShippingFast } from "react-icons/fa";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiExchangeLine } from "react-icons/ri";
 import { motion } from "framer-motion";
+import { Markup } from "interweave";
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -27,6 +29,7 @@ const ProductView = () => {
   // console.log("id :", id);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [data, setData] = useState({});
+  console.log("check data product view", data);
   const dispatch = useDispatch();
   const listImg = data.image;
 
@@ -192,7 +195,10 @@ const ProductView = () => {
                 listImg.map((item, index) => {
                   return (
                     <SwiperSlide key={index}>
-                      <img src={item.urlImage} />
+                      {/* <img src={item.urlImage} /> */}
+                      <img
+                        src={`http://localhost:8085/api/v1/image/files/${item.urlImage}`}
+                      />
                     </SwiperSlide>
                   );
                 })}
@@ -218,7 +224,11 @@ const ProductView = () => {
                       className={activeState(index + 1)}
                       onClick={() => handleClickItem(index + 1)}
                     >
-                      <img src={item.urlImage} className="cursor-pointer" />
+                      {/* <img src={item.urlImage} className="cursor-pointer" /> */}
+                      <img
+                        src={`http://localhost:8085/api/v1/image/files/${item.urlImage}`}
+                        className="cursor-pointer"
+                      />
                     </SwiperSlide>
                   );
                 })}
@@ -359,6 +369,10 @@ const ProductView = () => {
       <div className="flex justify-between  flex-wrap p-4">
         {/* descrition */}
         <div className="w-[69%] bg-white p-4 rounded-md">
+          {/* {data && data.description} */}
+          {data && <Markup content={data.description} />}
+        </div>
+        {/* <div className="w-[69%] bg-white p-4 rounded-md">
           <h3 className="text-lg font-semibold">Mô tả sản phẩm</h3>
           <div className="mb-3">
             <h4 className="text-base font-medium">
@@ -448,7 +462,7 @@ const ProductView = () => {
               chuyên dụng, tốc độ xử lý thông tin cũng tương đối nhanh và mượt.
             </p>
           </div>
-        </div>
+        </div> */}
         {/* descrition */}
 
         {/* information product */}

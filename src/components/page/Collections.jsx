@@ -6,6 +6,7 @@ import CardProduct from "../common/CardProduct";
 import { isTrueMenu } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import Helmet from "../common/Helmet";
 
 const Collections = () => {
   const { id } = useParams();
@@ -13,9 +14,11 @@ const Collections = () => {
   const dispatch = useDispatch();
 
   const [listProduct, setListProduct] = useState([]);
+  const [name, setName] = useState("");
+  // console.log("check list collection", name);
   const [listDynamic, setListDynamic] = useState([]);
   const [activeFilter, setActiveFilter] = useState(0);
-  console.log(activeFilter);
+  // console.log(activeFilter);
   const [filter, setFilter] = useState({});
   // console.log(id);
   // console.log("check data collections", listProduct);
@@ -51,6 +54,7 @@ const Collections = () => {
 
       if (res && res.data && res.data.data) {
         setListProduct(res.data.data);
+        setName(res.data.data.name);
         setListDynamic(res.data.data.product);
       }
     } catch (e) {
@@ -85,78 +89,82 @@ const Collections = () => {
   };
 
   return (
-    <motion.div
-      className="w-full bg-slate-50 py-5"
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{
-        opacity: 0,
-        x: -100,
-      }}
-      transition={{ duration: 0.25 }}
-    >
-      <div className="flex items-center  mb-5 ml-5">
-        <Link to="/" onClick={() => dispatch(isTrueMenu())}>
-          <div className="p-2 rounded-full border border-[#ddd]">
-            <AiOutlineHome size={"24px"} className=" text-black" />
-          </div>
-        </Link>
-        <span className="block mx-3"> &gt;</span>
-        {listProduct && listProduct.name && (
-          <div className="text-sm px-[6px] py-2 rounded-full border border-[#ddd]">
-            {listProduct.name}
-          </div>
-        )}
-      </div>
-      <div className="bg-white container mx-auto flex items-center py-4 rounded-lg px-10">
-        <h6 className="mr-16">Thương hiệu</h6>
-        <div className="flex ">
-          {filter &&
-            filter.length > 0 &&
-            filter.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`px-4 py-1 border border-[#ddd] mr-4 rounded-lg cursor-pointer capitalize ${
-                    index + 1 === activeFilter ? "border border-[#1435c3]" : ""
-                  }`}
-                  onClick={() => handleFilter(item, index + 1)}
-                >
-                  {item}
-                </div>
-              );
-            })}
+    <Helmet title={`Collections - ${name.toUpperCase()}`}>
+      <motion.div
+        className="w-full bg-slate-50 py-5"
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{
+          opacity: 0,
+          x: -100,
+        }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="flex items-center  mb-5 ml-5">
+          <Link to="/" onClick={() => dispatch(isTrueMenu())}>
+            <div className="p-2 rounded-full border border-[#ddd]">
+              <AiOutlineHome size={"24px"} className=" text-black" />
+            </div>
+          </Link>
+          <span className="block mx-3"> &gt;</span>
+          {listProduct && listProduct.name && (
+            <div className="text-sm px-[6px] py-2 rounded-full border border-[#ddd]">
+              {listProduct.name}
+            </div>
+          )}
         </div>
-      </div>
-      <div className="container mx-auto bg-slate-50">
-        {/* item cart */}
-        <div className="flex justify-between">
-          <div className="flex flex-wrap ">
-            {listDynamic &&
-              listDynamic.length > 0 &&
-              listDynamic.map((item, index) => {
+        <div className="bg-white container mx-auto flex items-center py-4 rounded-lg px-10">
+          <h6 className="mr-16">Thương hiệu</h6>
+          <div className="flex ">
+            {filter &&
+              filter.length > 0 &&
+              filter.map((item, index) => {
                 return (
                   <div
                     key={index}
-                    className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
+                    className={`px-4 py-1 border border-[#ddd] mr-4 rounded-lg cursor-pointer capitalize ${
+                      index + 1 === activeFilter
+                        ? "border border-[#1435c3]"
+                        : ""
+                    }`}
+                    onClick={() => handleFilter(item, index + 1)}
                   >
-                    <CardProduct
-                      id={item.id}
-                      name={item.title}
-                      price={item.price}
-                      discount={item.discount}
-                      priceBeforeDiscount={"10.000.000"}
-                      img={item.image[0].urlImage}
-                      slug={item.slug}
-                    />
+                    {item}
                   </div>
                 );
               })}
           </div>
         </div>
-        {/* item cart */}
-      </div>
-    </motion.div>
+        <div className="container mx-auto bg-slate-50">
+          {/* item cart */}
+          <div className="flex justify-between">
+            <div className="flex flex-wrap ">
+              {listDynamic &&
+                listDynamic.length > 0 &&
+                listDynamic.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
+                    >
+                      <CardProduct
+                        id={item.id}
+                        name={item.title}
+                        price={item.price}
+                        discount={item.discount}
+                        priceBeforeDiscount={"10.000.000"}
+                        img={item.image[0].urlImage}
+                        slug={item.slug}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          {/* item cart */}
+        </div>
+      </motion.div>
+    </Helmet>
   );
 };
 

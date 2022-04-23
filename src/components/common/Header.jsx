@@ -20,24 +20,44 @@ import { Link } from "react-router-dom";
 import Menu from "./Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 const Header = () => {
   const stateMenu = useSelector((state) => state.stateMenu.isMenu);
+  const token = useSelector((state) => state.token.tokenDefault);
   const qtyCart = useSelector((state) => state.cart);
   const render = useSelector((state) => state.token.reRenderUser);
   const [showUser, setShowUser] = useState(false);
   const [getUser, setGetUser] = useState(1);
-  // console.log("check show", showUser);
-  // console.log("qtyCart", qtyCart);
+  const [admin, setAdmin] = useState(false);
+  const [lastName, setLastName] = useState("");
+
   const dispatch = useDispatch();
-  // console.log("Header", stateMenu);
-  // const [isMenuPc, setIsMenuPc] = useState(stateMenu);
+
   const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
-  const lastName = informationUser
-    ? informationUser.data.userProfile.lastName
-    : "";
+  // console.log("check header session", informationUser);
+  // const lastName = informationUser
+  //   ? informationUser.data.userProfile.lastName
+  //   : "";
   // console.log("check lastname", lastName);
   // console.log("information User", informationUser);
+
+  useEffect(async () => {
+    var decoded = jwt_decode(informationUser);
+    const { sub } = decoded;
+    let res = await axios({
+      method: "GET",
+      url: `http://localhost:8085/api/v1/user/${sub}`,
+
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res && res.data && res.data.data) {
+      setLastName(res.data.data.userProfile.lastName);
+    }
+  }, [informationUser]);
 
   useEffect(() => {
     setGetUser(render + 1);
@@ -143,7 +163,7 @@ const Header = () => {
           </div>
         </Link>
         {informationUser ? (
-          <div className="relative">
+          <div className="relative z-40">
             <div
               className="w-[40px] h-[40px] flex items-center justify-center bg-[orange] text-white text-medium rounded-full text-lg cursor-pointer hover:opacity-90 "
               onClick={() => setShowUser(!showUser)}
@@ -154,14 +174,29 @@ const Header = () => {
             <div
               className={`${
                 showUser ? "clip-path-top100" : "clip-path-top0"
-              } absolute -bottom-11 right-0 rounded-md bg-slate-50 shadow-lg w-[200px] px-3 py-1 text-black`}
+              } absolute ${
+                admin ? "-bottom-[110px]" : "-bottom-[85px]"
+              } right-0 rounded-md bg-slate-50 shadow-lg w-[200px] px-3 py-1 text-black`}
             >
-              <div className="flex justify-between items-center hover:opacity-80">
+              <div className="flex justify-between items-center hover:opacity-80 mb-3">
                 <span className="cursor-pointer" onClick={removeItemSesstion}>
                   Đăng xuất
                 </span>
                 <BiLogInCircle />
               </div>
+              <div className="hover:opacity-80 mb-3" onClick={handleOntop}>
+                <span className="cursor-pointer capitalize">
+                  <Link to="/information"> thông tin cá nhân</Link>
+                </span>
+                {/* <BiLogInCircle /> */}
+              </div>
+              {admin && (
+                <div className="hover:opacity-80" onClick={handleOntop}>
+                  <span className="cursor-pointer capitalize">
+                    <Link to="/admin">quản lí all</Link>
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         ) : (

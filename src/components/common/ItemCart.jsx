@@ -46,7 +46,7 @@ const ItemCart = ({ id, name, img, price, quantity }) => {
     <div className="flex md:items-center my-10 ">
       <div className="w-[80px] h-[80px] aspect-square">
         <img
-          src={img}
+          src={`http://localhost:8085/api/v1/image/files/${img}`}
           className="w-full h-full object-cover border border-[#ddd]"
         />
       </div>

@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import Helmet from "../common/Helmet";
 
 // This values are the props in the UI
 // const amount = "5";
@@ -212,239 +213,247 @@ export default function Paypal() {
   };
 
   return (
-    <motion.div
-      initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
-      animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
-      exit={{
-        clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
-        transition: { duration: 0.1 },
-      }}
-    >
-      <div className="bg-slate-50  lg:p-10 p-5 ">
-        <div className="flex items-center bg-white">
-          {/* block 1 */}
-          <div className="w-[40%] hidden lg:block">
-            <img
-              src={logo}
-              className="rounded-l-lg transform scale-90"
-              alt="payment"
-            />
-          </div>
-          {/* block 1 */}
+    <Helmet title="Thanh Toán">
+      <motion.div
+        initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
+        animate={{ clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)" }}
+        exit={{
+          clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)",
+          transition: { duration: 0.1 },
+        }}
+      >
+        <div className="bg-slate-50  lg:p-10 p-5 ">
+          <div className="flex items-center bg-white">
+            {/* block 1 */}
+            <div className="w-[40%] hidden lg:block">
+              <img
+                src={logo}
+                className="rounded-l-lg transform scale-90"
+                alt="payment"
+              />
+            </div>
+            {/* block 1 */}
 
-          {/* block 2 */}
-          <div className="lg:w-[60%] w-full  rounded-r-lg">
-            <div className="lg:px-10 px-3">
-              <div className="text-base mb-5 mt-3 flex justify-between">
-                <h4>Thông tin đặt hàng</h4>
-                <div className="flex items-center">
-                  <h5 className="text-base">Thành tiền : </h5>
-                  <span className="text-[#1435c3] text-sm ml-1 font-medium">
-                    {priceSplitter(total)}đ
-                  </span>
+            {/* block 2 */}
+            <div className="lg:w-[60%] w-full  rounded-r-lg">
+              <div className="lg:px-10 px-3">
+                <div className="text-base mb-5 mt-3 flex justify-between">
+                  <h4>Thông tin đặt hàng</h4>
+                  <div className="flex items-center">
+                    <h5 className="text-base">Thành tiền : </h5>
+                    <span className="text-[#1435c3] text-sm ml-1 font-medium">
+                      {priceSplitter(total)}đ
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <form
-                className="px-1 py-5 pb-9  w-[90%] md:w-full mx-auto"
-                onSubmit={formik.handleSubmit}
-              >
-                {/* <h2 className="text-center font-medium text-lg my-5">
+                <form
+                  className="px-1 py-5 pb-9  w-[90%] md:w-full mx-auto"
+                  onSubmit={formik.handleSubmit}
+                >
+                  {/* <h2 className="text-center font-medium text-lg my-5">
                 Login your account
               </h2> */}
-                <div className="mb-10 flex items-center justify-between">
-                  <div className="w-[49%]">
+                  <div className="mb-10 flex items-center justify-between">
+                    <div className="w-[49%]">
+                      <div className="form-field">
+                        <input
+                          id="firstName"
+                          name="firstName"
+                          onChange={formik.handleChange}
+                          value={formik.values.firstName || ""}
+                          type="text"
+                          placeholder=" "
+                          className="form-input"
+                        />
+                        <label className="form-label" htmlFor="firstName">
+                          FirstName
+                        </label>
+                      </div>
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.firstName}
+                      </span>
+                    </div>
+                    <div className="w-[49%]">
+                      <div className="form-field">
+                        <input
+                          id="lastName"
+                          name="lastName"
+                          onChange={formik.handleChange}
+                          value={formik.values.lastName || ""}
+                          type="text"
+                          placeholder=" "
+                          className="form-input"
+                        />
+                        <label className="form-label" htmlFor="lastName">
+                          Lastname
+                        </label>
+                      </div>
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.lastName}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mb-10">
                     <div className="form-field">
                       <input
-                        id="firstName"
-                        name="firstName"
+                        id="phone"
+                        name="phone"
                         onChange={formik.handleChange}
-                        value={formik.values.firstName || ""}
+                        value={formik.values.phone || ""}
                         type="text"
                         placeholder=" "
                         className="form-input"
                       />
-                      <label className="form-label" htmlFor="firstName">
-                        FirstName
+                      <label className="form-label" htmlFor="phone">
+                        Phone
                       </label>
                     </div>
                     <span className="block mt-1 text-[red]">
-                      {formik.errors.firstName}
+                      {formik.errors.phone}
                     </span>
                   </div>
-                  <div className="w-[49%]">
-                    <div className="form-field">
-                      <input
-                        id="lastName"
-                        name="lastName"
-                        onChange={formik.handleChange}
-                        value={formik.values.lastName || ""}
-                        type="text"
-                        placeholder=" "
-                        className="form-input"
-                      />
-                      <label className="form-label" htmlFor="lastName">
-                        Lastname
-                      </label>
-                    </div>
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.lastName}
-                    </span>
-                  </div>
-                </div>
-                <div className="mb-10">
-                  <div className="form-field">
-                    <input
-                      id="phone"
-                      name="phone"
-                      onChange={formik.handleChange}
-                      value={formik.values.phone || ""}
-                      type="text"
-                      placeholder=" "
-                      className="form-input"
-                    />
-                    <label className="form-label" htmlFor="phone">
-                      Phone
-                    </label>
-                  </div>
-                  <span className="block mt-1 text-[red]">
-                    {formik.errors.phone}
-                  </span>
-                </div>
 
-                {/* option address */}
-                <div>
-                  {/* options city */}
-                  <div className="mb-10">
-                    <Select
-                      options={citys || []}
-                      value={defaultValueCity(citys || [], formik.values.city)}
-                      placeholder="--Choose select city--"
-                      onChange={(e) => handleChangeCity(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.city}
-                    </span>
-                  </div>
-                  {/* options city */}
-                  {/* options district */}
-                  <div className="mb-10">
-                    <Select
-                      options={districts || []}
-                      value={defaultValueDistrict(
-                        districts || [],
-                        formik.values.district
-                      )}
-                      placeholder="--Choose select district--"
-                      onChange={(e) => handleChangeDistrict(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.district}
-                    </span>
-                  </div>
-                  {/* options district */}
-                  {/* options ward */}
-                  <div className="mb-10 z-[999]">
-                    <Select
-                      options={wards || []}
-                      value={defaultValueWard(wards || [], formik.values.ward)}
-                      placeholder="--Choose select ward--"
-                      onChange={(e) => handleChangeWard(e)}
-                    />
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.ward}
-                    </span>
-                  </div>
-                  {/* options ward */}
-                </div>
-                {/* option address */}
-                <div>
-                  <div className="mb-10">
-                    <div className="form-field">
-                      <input
-                        id="address"
-                        name="address"
-                        onChange={formik.handleChange}
-                        value={formik.values.address || ""}
-                        placeholder=" "
-                        className="form-input"
+                  {/* option address */}
+                  <div>
+                    {/* options city */}
+                    <div className="mb-10">
+                      <Select
+                        options={citys || []}
+                        value={defaultValueCity(
+                          citys || [],
+                          formik.values.city
+                        )}
+                        placeholder="--Choose select city--"
+                        onChange={(e) => handleChangeCity(e)}
                       />
-                      <label className="form-label" htmlFor="address">
-                        Address
-                      </label>
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.city}
+                      </span>
                     </div>
-                    <span className="block mt-1 text-[red]">
-                      {formik.errors.address}
-                    </span>
+                    {/* options city */}
+                    {/* options district */}
+                    <div className="mb-10">
+                      <Select
+                        options={districts || []}
+                        value={defaultValueDistrict(
+                          districts || [],
+                          formik.values.district
+                        )}
+                        placeholder="--Choose select district--"
+                        onChange={(e) => handleChangeDistrict(e)}
+                      />
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.district}
+                      </span>
+                    </div>
+                    {/* options district */}
+                    {/* options ward */}
+                    <div className="mb-10 z-[999]">
+                      <Select
+                        options={wards || []}
+                        value={defaultValueWard(
+                          wards || [],
+                          formik.values.ward
+                        )}
+                        placeholder="--Choose select ward--"
+                        onChange={(e) => handleChangeWard(e)}
+                      />
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.ward}
+                      </span>
+                    </div>
+                    {/* options ward */}
                   </div>
-                </div>
+                  {/* option address */}
+                  <div>
+                    <div className="mb-10">
+                      <div className="form-field">
+                        <input
+                          id="address"
+                          name="address"
+                          onChange={formik.handleChange}
+                          value={formik.values.address || ""}
+                          placeholder=" "
+                          className="form-input"
+                        />
+                        <label className="form-label" htmlFor="address">
+                          Address
+                        </label>
+                      </div>
+                      <span className="block mt-1 text-[red]">
+                        {formik.errors.address}
+                      </span>
+                    </div>
+                  </div>
 
-                {/* option choose paymnet */}
-                <div>
-                  <h4>Lựa chọn phương thức thanh toán</h4>
-                  <div className="flex my-3">
-                    <div
-                      className={`
+                  {/* option choose paymnet */}
+                  <div>
+                    <h4>Lựa chọn phương thức thanh toán</h4>
+                    <div className="flex my-3">
+                      <div
+                        className={`
                       flex items-center p-3 border border-[#ddd] rounded-lg cursor-pointer ${
                         payment ? "" : "border-[#1435c3]"
                       }`}
-                      onClick={handleHome}
-                    >
-                      <AiOutlineHome size={"24px"} className="mr-1" />
-                      <span>Thanh toán khi nhận hàng</span>
-                    </div>
-                    <div
-                      className={`flex items-center p-3 border border-[#ddd] rounded-lg cursor-pointer ml-3  ${
-                        payment ? "border-[#1435c3]" : ""
-                      }`}
-                      onClick={handlePayment}
-                    >
-                      <MdOutlinePayment size={"24px"} className="mr-1" />
-                      <span>Payment</span>
+                        onClick={handleHome}
+                      >
+                        <AiOutlineHome size={"24px"} className="mr-1" />
+                        <span>Thanh toán khi nhận hàng</span>
+                      </div>
+                      <div
+                        className={`flex items-center p-3 border border-[#ddd] rounded-lg cursor-pointer ml-3  ${
+                          payment ? "border-[#1435c3]" : ""
+                        }`}
+                        onClick={handlePayment}
+                      >
+                        <MdOutlinePayment size={"24px"} className="mr-1" />
+                        <span>Payment</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/* option choose paymnet */}
+                  {/* option choose paymnet */}
 
-                <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white mt-5">
-                  <button type="submit" className="block w-full">
-                    Đặt hàng
-                  </button>
-                </div>
-              </form>
-              {payment && (
-                <div
-                  style={{
-                    width: "100%",
-                    minHeight: "200px",
-                    zIndex: "100",
-                    textAlign: "center",
-                  }}
-                >
-                  <PayPalScriptProvider
-                    options={{
-                      "client-id":
-                        "AV8VmmTzbrChSpu6x-HJ_wkDuY8oA9KExgf8SKoLhv8hReZ3xGAu64vSMIHfrzE0bwItqh0C3CUq9wvc",
-                      components: "buttons",
-                      currency: "USD",
+                  <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white mt-5">
+                    <button type="submit" className="block w-full">
+                      Đặt hàng
+                    </button>
+                  </div>
+                </form>
+                {payment && (
+                  <div
+                    style={{
+                      width: "100%",
+                      minHeight: "200px",
+                      zIndex: "100",
+                      textAlign: "center",
                     }}
                   >
-                    <ButtonWrapper currency={currency} showSpinner={false} />
-                  </PayPalScriptProvider>
-                </div>
-              )}
-            </div>
-            {/* <Select
+                    <PayPalScriptProvider
+                      options={{
+                        "client-id":
+                          "AV8VmmTzbrChSpu6x-HJ_wkDuY8oA9KExgf8SKoLhv8hReZ3xGAu64vSMIHfrzE0bwItqh0C3CUq9wvc",
+                        components: "buttons",
+                        currency: "USD",
+                      }}
+                    >
+                      <ButtonWrapper currency={currency} showSpinner={false} />
+                    </PayPalScriptProvider>
+                  </div>
+                )}
+              </div>
+              {/* <Select
               options={options}
               value={defaultValue(options, formik.values.city)}
               placeholder="choose select city"
               onChange={(e) => handleChange(e)}
               // onChange={(value) => formik.setFieldValue("city", value.value)}
             /> */}
+            </div>
+            {/* block 2 */}
           </div>
-          {/* block 2 */}
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Helmet>
   );
 }

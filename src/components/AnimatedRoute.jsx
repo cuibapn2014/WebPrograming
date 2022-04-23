@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import App from "../App";
 import Cart from "./page/Cart";
@@ -22,8 +22,21 @@ import Category from "./admin/page/Category";
 import Brand from "./admin/page/Brand";
 import Bill from "./admin/page/Bill";
 import Advertisement from "./admin/page/Advertisement";
+import InformationUser from "./page/InformationUser";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
 const AnimatedRoute = () => {
   const location = useLocation();
+  const [admin, setAdmin] = useState(false);
+  const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+  useEffect(async () => {
+    var decoded = jwt_decode(informationUser);
+    const { role } = decoded;
+    console.log("check role", role);
+    if (role === "ADMIN") {
+      setAdmin(true);
+    }
+  }, [informationUser]);
   return (
     <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={location.pathname}>
@@ -40,17 +53,25 @@ const AnimatedRoute = () => {
           <Route path="collections/:slug/:id" element={<Collections />} />
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
+          <Route path="information" element={<InformationUser />} />
         </Route>
-        <Route path="/admin" element={<Admin />}>
-          <Route index element={<Product />} />
-          <Route path="product" element={<Product />} />
-          <Route path="staff" element={<Staff />} />
-          <Route path="customer" element={<Customer />} />
-          <Route path="category" element={<Category />} />
-          <Route path="brand" element={<Brand />} />
-          <Route path="bill" element={<Bill />} />
-          <Route path="advertisement" element={<Advertisement />} />
-        </Route>
+
+        {admin ? (
+          <Route path="/admin" element={<Admin />}>
+            <Route index element={<Product />} />
+            <Route path="product" element={<Product />} />
+            <Route path="staff" element={<Staff />} />
+            <Route path="customer" element={<Customer />} />
+            <Route path="category" element={<Category />} />
+            <Route path="brand" element={<Brand />} />
+            <Route path="bill" element={<Bill />} />
+            <Route path="advertisement" element={<Advertisement />} />
+          </Route>
+        ) : (
+          <Route path="/" element={<App />}>
+            <Route index element={<Home />} />
+          </Route>
+        )}
       </Routes>
     </AnimatePresence>
   );

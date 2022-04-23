@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import { CKEditor } from "ckeditor4-react";
 import { motion } from "framer-motion";
-import { AiFillFolderAdd } from "react-icons/ai";
+import { AiFillFolderAdd, AiFillPlusSquare } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { MdOutlineUpdate, MdDeleteForever } from "react-icons/md";
 import { useSelector } from "react-redux";
 import axios from "axios";
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// const options = [
+//   { value: "chocolate", label: "Chocolate" },
+//   { value: "strawberry", label: "Strawberry" },
+//   { value: "vanilla", label: "Vanilla" },
+// ];
 const Product = () => {
   const [data, setData] = useState("");
   const [page, setPage] = useState(1);
@@ -19,6 +22,31 @@ const Product = () => {
   const [listProduct, setListProduct] = useState([]);
   const [optionBrand, setOptionBrand] = useState([]);
   const [optionCategory, setOptionCategory] = useState([]);
+  const [qtyInput, setQtyInput] = useState(0);
+  const [bobbImg, setBobbImg] = useState();
+  // console.log("check bbob", bobbImg);
+  const [customArrayQtyInput, setCustomArrayQtyInput] = useState([]);
+
+  // console.log("check arr input", customArrayQtyInput);
+  const [inputImg, setInputImg] = useState([]);
+  const [inputSave, setInputSave] = useState([]);
+
+  const [nameAtrr, setNameAtrr] = useState("");
+  const [valueAtrr, setValueAtrr] = useState("");
+
+  const [saveAtrr, setSaveAtrr] = useState([]);
+  // console.log("check arr atrr", saveAtrr);
+
+  console.log("check arr imgState", inputSave);
+  // console.log("check type of arr imgs", Array.isArray(inputSave));
+
+  //data post api
+  const [nameProduct, setNameProduct] = useState("");
+  const [priceProduct, setPriceProduct] = useState("");
+  const [discountProduct, setDisCountProduct] = useState("");
+  const [brandProduct, setBrandProduct] = useState("");
+  const [categoryProduct, setCategoryProduct] = useState("");
+  //data post api
 
   // console.log(listProduct);
   const token = useSelector((state) => state.token.tokenDefault);
@@ -47,6 +75,14 @@ const Product = () => {
       setAllPage(page);
     }
   }, [listProduct]);
+
+  useEffect(() => {
+    let arrQty = [];
+    for (let i = 0; i < qtyInput; i++) {
+      arrQty.push(i);
+    }
+    setCustomArrayQtyInput(arrQty);
+  }, [qtyInput]);
 
   useEffect(async () => {
     let res = await axios.get("http://localhost:8085/api/v1/category/get-all", {
@@ -95,16 +131,153 @@ const Product = () => {
   };
 
   const handleChangeBrand = (e) => {
+    setBrandProduct(e.id);
     console.log(e);
   };
 
   const handleChangeCategory = (e) => {
+    setCategoryProduct(e.id);
     console.log(e);
   };
 
   const handleRemove = (id) => {
     console.log("check id : ", id);
   };
+
+  // const handleQtyInput = () => {
+  //   if (inputImg) {
+  //     const arrCopy = inputSave;
+  //     arrCopy.push(inputImg);
+
+  //     setInputSave(arrCopy);
+  //     setInputImg("");
+  //   }
+  // };
+
+  const handleQtyAtrr = () => {
+    if (nameAtrr && valueAtrr) {
+      const arrCopy = saveAtrr;
+      arrCopy.push({
+        name: nameAtrr,
+        value: valueAtrr,
+      });
+      setSaveAtrr(arrCopy);
+      setNameAtrr("");
+      setValueAtrr("");
+    }
+  };
+
+  const submitAddProduct = async () => {
+    // let customArr;
+    // if (inputSave && inputSave.length > 0) {
+    //   customArr = inputSave.map((item, index) => {
+    //     return {
+    //       urlImage: item,
+    //     };
+    //   });
+    // }
+    // const dataCustom = {
+    //   title: nameProduct,
+    //   descrition: data,
+    //   quantity: 50,
+    //   price: priceProduct,
+    //   discount: discountProduct,
+    //   brand: {
+    //     id: brandProduct,
+    //   },
+    //   category: {
+    //     id: categoryProduct,
+    //   },
+    //   attribute: saveAtrr,
+    //   image: customArr,
+    // };
+
+    const dataAppen = new FormData();
+
+    dataAppen.append("title", nameProduct);
+    dataAppen.append("price", priceProduct);
+    dataAppen.append("discount", discountProduct);
+    dataAppen.append("description", data);
+    dataAppen.append("quantity", 50);
+    dataAppen.append("brandID", brandProduct);
+    dataAppen.append("categoryID", categoryProduct);
+    // if (inputSave && inputSave.length > 0) {
+    //   inputSave.forEach((item) => {
+    //     console.log("check qty img", item);
+    //     dataAppen.append("image", item);
+    //   });
+    // }
+    if (inputSave && inputSave.length > 0) {
+      console.log("check type of arr imgs", Array.isArray(inputSave));
+
+      inputSave.forEach((item) => {
+        console.log("check qty img", item);
+        dataAppen.append("image", item);
+      });
+    }
+
+    if (saveAtrr && saveAtrr.length > 0) {
+      saveAtrr.forEach((item) => {
+        let customValue = `${item.name}:${item.value}`;
+        // console.log("check value custom attr", customValue);
+        dataAppen.append("attribute", customValue);
+      });
+    }
+
+    // console.log("check name", nameProduct);
+    // console.log("check price", priceProduct);
+    // console.log("check discount", discountProduct);
+    // console.log("check brand", brandProduct);
+    // console.log("check category", categoryProduct);
+    // console.log("check image", inputSave);
+    // console.log("check attribute", saveAtrr);
+    // console.log("check description", data);
+
+    // console.log("check custom data", dataCustom);
+    let res = await axios({
+      method: "POST",
+      url: "http://localhost:8085/api/v1/product/insert",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: dataAppen,
+    });
+    console.log("check addproduct res", res);
+    if (res && res.data && res.data.data) {
+      toast.success("Add product success");
+      setNameProduct("");
+      setPriceProduct("");
+      setDisCountProduct("");
+    }
+  };
+
+  // useEffect(() => {
+  //   // create the preview
+  //   const objectUrl = URL.createObjectURL(bobbImg);
+  //   console.log("check bobb", objectUrl);
+  //   setPreview(objectUrl);
+
+  //   // free memory when ever this component is unmounted
+  //   return () => URL.revokeObjectURL(objectUrl);
+  // }, [bobbImg]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     bobbImg && URL.revokeObjectURL(bobbImg.preview);
+  //   };
+  // }, [bobbImg]);
+
+  const handlePreviewBobb = (e) => {
+    // const file = e.target.files[0];
+    // file.preview = URL.createObjectURL(file);
+    const fileList = e.target.files;
+    const customFileList = [...fileList];
+    // console.log("check custom fileList", customFileList);
+    setInputSave([...inputSave, ...customFileList]);
+  };
+
+  const increaseQtyImg = () => {};
+
   return (
     <motion.div
       className="pr-10"
@@ -160,6 +333,8 @@ const Product = () => {
               placeholder="Fill name product input..."
               type="text"
               name="search"
+              value={nameProduct}
+              onChange={(e) => setNameProduct(e.target.value)}
             />
             <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
               tên sản phẩm
@@ -171,9 +346,24 @@ const Product = () => {
               placeholder="Fill price product input..."
               type="text"
               name="search"
+              value={priceProduct}
+              onChange={(e) => setPriceProduct(e.target.value)}
             />
             <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
               giá
+            </h4>
+          </div>
+          <div className="flex items-center mb-5">
+            <input
+              className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[830px]"
+              placeholder="Fill price product input..."
+              type="text"
+              name="search"
+              value={discountProduct}
+              onChange={(e) => setDisCountProduct(e.target.value)}
+            />
+            <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
+              giảm giá
             </h4>
           </div>
           <div className="flex items-center mb-5">
@@ -206,6 +396,111 @@ const Product = () => {
               danh mục
             </h4>
           </div>
+
+          {/* hình ảnh */}
+          <div className="flex items-center  mb-5">
+            <input
+              className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[830px]"
+              placeholder="Fill link image product input..."
+              type="file"
+              // name="search"
+              // value={inputImg}
+              onChange={handlePreviewBobb}
+              multiple={true}
+            />
+
+            <AiFillPlusSquare
+              size="30px"
+              className="hover:opacity-75 cursor-pointer ml-5"
+              onClick={increaseQtyImg}
+            />
+          </div>
+
+          {/* <div className="mb-5"> */}
+          {/* {inputSave &&
+              inputSave.length > 0 &&
+              inputSave.map((item, index) => {
+                return (
+                  <div className="w-[830px] mb-5" key={index}>
+                    <input
+                      className=" block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[830px]"
+                      placeholder="Fill link image product input..."
+                      type="text"
+                      // name="search"
+                      value={item}
+                      readOnly
+                    />
+                  </div>
+                );
+              })} */}
+
+          {/* {inputSave &&
+              inputSave.length > 0 &&
+              inputSave.map((item, index) => {
+                return (
+                  <div className="w-[830px] mb-5" key={index}>
+                    <img src={item} />
+                  </div>
+                );
+              })} */}
+          {/* </div> */}
+          <div className="flex items-center  mb-5">
+            <div className="flex w-[830px] justify-between">
+              <input
+                className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                placeholder="Fill name attribute product input..."
+                type="text"
+                // name="search"
+                value={nameAtrr}
+                onChange={(e) => setNameAtrr(e.target.value)}
+              />
+              <input
+                className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                placeholder="Fill value attribute product input..."
+                type="text"
+                // name="search"
+                value={valueAtrr}
+                onChange={(e) => setValueAtrr(e.target.value)}
+              />
+            </div>
+
+            <AiFillPlusSquare
+              size="30px"
+              className="hover:opacity-75 cursor-pointer ml-5"
+              onClick={handleQtyAtrr}
+            />
+          </div>
+          <div className="mb-5">
+            {saveAtrr &&
+              saveAtrr.length > 0 &&
+              saveAtrr.map((item, index) => {
+                return (
+                  <div
+                    className="flex w-[830px] justify-between mb-5"
+                    key={index}
+                  >
+                    <input
+                      className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                      placeholder="Fill name attribute product input..."
+                      type="text"
+                      // name="search"
+                      value={item.name}
+                      readOnly
+                      // onChange={(e) => setNameAtrr(e.target.value)}
+                    />
+                    <input
+                      className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                      placeholder="Fill value attribute product input..."
+                      type="text"
+                      // name="search"
+                      value={item.value}
+                      readOnly
+                      // onChange={(e) => setValueAtrr(e.target.value)}
+                    />
+                  </div>
+                );
+              })}
+          </div>
           <div>
             <h4 className="mb-5 uppercase">Mô tả</h4>
             <CKEditor
@@ -216,7 +511,10 @@ const Product = () => {
               //   value={data}
             />
           </div>
-          <button className="flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md hover:bg-slate-300 hover:text-[#1435c3] transition-all">
+          <button
+            className="flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md hover:bg-slate-300 hover:text-[#1435c3] transition-all"
+            onClick={submitAddProduct}
+          >
             <AiFillFolderAdd size={"30px"} />
             <div className="ml-2">Thêm</div>
           </button>
@@ -233,14 +531,12 @@ const Product = () => {
             <thead className="bg-gray-800 text-white ">
               <tr>
                 <th className="w-24 text-left py-3 px-4 uppercase font-semibold text-sm text-center ">
-                  ID
+                  Hình Ảnh
                 </th>
                 <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
                   Tên
                 </th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
-                  Mô Tả
-                </th>
+
                 <th className="text-left py-3 px-4 uppercase font-semibold text-sm text-center">
                   Thương Hiệu
                 </th>
@@ -249,6 +545,9 @@ const Product = () => {
                 </th>
                 <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
                   Danh Mục
+                </th>
+                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                  Xem
                 </th>
                 <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
                 <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
@@ -261,15 +560,18 @@ const Product = () => {
                 listProduct.data.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
-                        {item.id}
+                      <td className="w-1/6 py-3 px-4 ">
+                        {/* {item.image[4].urlImage} */}
+                        <img
+                          src={`http://localhost:8085/api/v1/image/files/${item.image[4].urlImage}`}
+                          className="w-[70px] h-[70px] object-cover mx-auto"
+                          // alt={name}
+                        />
                       </td>
                       <td className="w-1/6 text-left py-3 px-4 text-center">
                         {item.title}
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
-                        {item.description}
-                      </td>
+
                       <td className="w-1/6 text-left py-3 px-4 text-center">
                         {item.brand.brandName}
                       </td>
@@ -278,6 +580,14 @@ const Product = () => {
                       </td>
                       <td className="w-1/6 text-left py-3 px-4 text-center">
                         {item.category.name}
+                      </td>
+                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                        <Link
+                          to={`/product/${item.slug}/${item.id}`}
+                          className="text-[#1435c3] hover:text-[#8095f5] transition-all"
+                        >
+                          Chi tiết
+                        </Link>
                       </td>
                       <td className="w-1/6 text-left py-3 px-4 text-center">
                         <MdDeleteForever
