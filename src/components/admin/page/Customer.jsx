@@ -74,7 +74,7 @@ const Customer = () => {
       {/* table product */}
       <div className="my-10 bg-slate-50 rounded-md py-5">
         <p className="text-xl pb-3 flex items-center uppercase font-medium ">
-          <i className="fas fa-list mr-3"></i> Danh Sách Nhân Viên
+          <i className="fas fa-list mr-3"></i> Danh Sách Khách Hàng
         </p>
         <div>
           <table>
@@ -103,10 +103,10 @@ const Customer = () => {
                 listCustomer.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td className="w-[10%] text-left py-3 px-4 text-center">
+                      <td className="w-[10%] text-left py-3 px-4 text-center capitalize">
                         {item.firstName}
                       </td>
-                      <td className="w-[10%] text-left py-3 px-4 text-center">
+                      <td className="w-[10%] text-left py-3 px-4 text-center capitalize">
                         {item.lastName}
                       </td>
                       <td className="w-[15%] text-left py-3 px-4 text-center">

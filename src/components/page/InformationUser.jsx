@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdUpdate } from "react-icons/md";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Helmet from "../common/Helmet";
+import jwt_decode from "jwt-decode";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
 const InformationUser = () => {
+  const token = useSelector((state) => state.token.tokenDefault);
+
   const [readOnly, setReadOnly] = useState(true);
   const [email, setEmail] = useState("chinhan3966");
   const [firstName, setFirstName] = useState("Nhan");
@@ -11,6 +17,30 @@ const InformationUser = () => {
   const handleEmail = () => {
     setReadOnly(!readOnly);
   };
+
+  const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+
+  console.log("check infomation", informationUser);
+  useEffect(async () => {
+    var decoded = jwt_decode(informationUser);
+    const { sub } = decoded;
+    let res = await axios({
+      method: "GET",
+      url: `http://localhost:8085/api/v1/user/${sub}`,
+
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res && res.data && res.data.data) {
+      console.log("check data", res.data.data);
+      setEmail(res.data.data.email);
+      setFirstName(res.data.data.userProfile.firstName);
+      setLastName(res.data.data.userProfile.lastName);
+    }
+  }, [informationUser]);
+
   return (
     <Helmet title="Thông Tin Cá Nhân">
       <div className="container mx-auto bg-slate-50">

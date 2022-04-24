@@ -66,32 +66,34 @@ const Login = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log("check login", res);
       if (res && res.data && res.data.data) {
-        // console.log("check login", res.data);
-
         let tokenJWT = res.data.data.token;
         sessionStorage.setItem("informationUser", JSON.stringify(tokenJWT));
         if (isChecked) {
           Cookies.set("token", tokenJWT, { expires: 30 });
         }
-        if (res.data.status === 200) {
+        if (res.data.data.role.name === "ADMIN") {
           // toast.success("Login in success");
-          navigation("/");
-
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
+          navigation("/admin");
         }
+        if (res.data.data.role.name === "USER") {
+          navigation("/");
+        }
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       }
 
-      // if (res.status === 400) {
-      //   toast.warn("Login Fail");
+      // if (res === undefined) {
+      //   toast.warning("Login Fail");
       // }
 
-      console.log("check login", res);
+      if (res.status === 401) {
+        toast.warn("Login Fail");
+      }
     },
   });
 

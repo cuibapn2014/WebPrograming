@@ -89,7 +89,7 @@ const Bill = () => {
         </p>
         <div>
           {/* flex container */}
-          <div className="flex  flex-wrap justify-evenly  px-6 gap-6">
+          <div className="flex  flex-wrap justify-center  px-6 gap-6">
             {/* item */}
             {listBill &&
               listBill.length > 0 &&

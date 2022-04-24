@@ -25,6 +25,7 @@ import Advertisement from "./admin/page/Advertisement";
 import InformationUser from "./page/InformationUser";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
+import NotFound from "./common/NotFound";
 const AnimatedRoute = () => {
   const location = useLocation();
   const [admin, setAdmin] = useState(false);
@@ -54,6 +55,7 @@ const AnimatedRoute = () => {
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
           <Route path="information" element={<InformationUser />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {admin ? (

@@ -54,8 +54,12 @@ const Header = () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    // console.log("check data admin", res.data.data);
     if (res && res.data && res.data.data) {
       setLastName(res.data.data.userProfile.lastName);
+      if (res.data.data.role.name === "ADMIN") {
+        setAdmin(true);
+      }
     }
   }, [informationUser]);
 
@@ -65,7 +69,7 @@ const Header = () => {
 
   const handleOntop = (e) => {
     window.scrollTo({
-      top: 242,
+      top: 230,
       left: 0,
       behavior: "smooth",
     });
@@ -191,7 +195,16 @@ const Header = () => {
                 {/* <BiLogInCircle /> */}
               </div>
               {admin && (
-                <div className="hover:opacity-80" onClick={handleOntop}>
+                <div
+                  className="hover:opacity-80"
+                  onClick={() => {
+                    window.scrollTo({
+                      top: 0,
+                      left: 0,
+                      behavior: "smooth",
+                    });
+                  }}
+                >
                   <span className="cursor-pointer capitalize">
                     <Link to="/admin">quản lí all</Link>
                   </span>

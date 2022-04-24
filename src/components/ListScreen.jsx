@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { MdOutlineNavigateNext } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { isFalseMenu } from "../redux/actions";
 import CardProduct from "./common/CardProduct";
 const listCollectionScreen = [
   {
@@ -77,17 +80,24 @@ const listCollectionScreen = [
 ];
 const ListScreen = () => {
   const [list, setList] = useState([]);
-  // console.log("check data vie", list);
+  const token = useSelector((state) => state.token.tokenDefault);
+  const dispatch = useDispatch();
+  console.log("check data vie", list);
   useEffect(async () => {
     try {
-      const config = {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     "Access-Control-Allow-Origin": "*",
+      //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      //   },
+      // };
       const res = await axios.get(
-        "http://localhost:8085/api/v1/category/12"
+        "http://localhost:8085/api/v1/category/11",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
         // {
         //   headers: {
         //     "Access-Control-Allow-Origin": true,
@@ -97,7 +107,7 @@ const ListScreen = () => {
       );
 
       if (res && res.data && res.data.data) {
-        setList(res.data.data.product);
+        setList(res.data.data);
       }
     } catch (e) {
       console.log("fail error : >>", e.message);
@@ -111,7 +121,20 @@ const ListScreen = () => {
           MÀN HÌNH KHUYẾN MÃI HOT - GIAO HÀNG MIỄN PHÍ
         </div>
         <div className="flex items-center  cursor-pointer hover:text-[#8196f3] ">
-          <span className="mr-1">Xem thêm</span>
+          <Link
+            to={`/collections/${list.name}/${list.id}`}
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+              });
+              dispatch(isFalseMenu());
+            }}
+            className="mr-1"
+          >
+            Xem thêm
+          </Link>
           <div>
             <MdOutlineNavigateNext size="24px" />
           </div>
@@ -120,8 +143,9 @@ const ListScreen = () => {
       {/* map data */}
       <div className="flex flex-wrap ">
         {list &&
-          list.length > 0 &&
-          list.map((item, index) => {
+          list.product &&
+          list.product.length > 0 &&
+          list.product.map((item, index) => {
             return (
               <div
                 key={index}

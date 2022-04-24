@@ -200,3 +200,13 @@ input::-webkit-inner-spin-button {
 }
 
 
+//even odd product view
+.box:nth-of-type(odd) {
+  background-color: white;
+}
+.box:nth-of-type(even) {
+  background-color: #f6f6f6;
+}
+//even odd product view
+
+

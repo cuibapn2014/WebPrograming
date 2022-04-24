@@ -4,11 +4,14 @@ import { CKEditor } from "ckeditor4-react";
 import { motion } from "framer-motion";
 import { AiFillFolderAdd, AiFillPlusSquare } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { FiDelete } from "react-icons/fi";
+import { TiDelete } from "react-icons/ti";
 import { MdOutlineUpdate, MdDeleteForever } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isFalseMenu } from "../../../redux/actions";
 
 // const options = [
 //   { value: "chocolate", label: "Chocolate" },
@@ -16,16 +19,16 @@ import { toast } from "react-toastify";
 //   { value: "vanilla", label: "Vanilla" },
 // ];
 const Product = () => {
+  const dispatch = useDispatch();
   const [data, setData] = useState("");
   const [page, setPage] = useState(1);
   const [allPage, setAllPage] = useState([]);
   const [listProduct, setListProduct] = useState([]);
-  const [optionBrand, setOptionBrand] = useState([]);
-  const [optionCategory, setOptionCategory] = useState([]);
+
   const [qtyInput, setQtyInput] = useState(0);
-  const [bobbImg, setBobbImg] = useState();
+  // const [bobbImg, setBobbImg] = useState();
   // console.log("check bbob", bobbImg);
-  const [customArrayQtyInput, setCustomArrayQtyInput] = useState([]);
+  // const [customArrayQtyInput, setCustomArrayQtyInput] = useState([]);
 
   // console.log("check arr input", customArrayQtyInput);
   const [inputImg, setInputImg] = useState([]);
@@ -33,11 +36,12 @@ const Product = () => {
 
   const [nameAtrr, setNameAtrr] = useState("");
   const [valueAtrr, setValueAtrr] = useState("");
+  const [idUpdateAtrr, setIdUpdateAtrr] = useState(null);
 
   const [saveAtrr, setSaveAtrr] = useState([]);
-  // console.log("check arr atrr", saveAtrr);
+  console.log("check arr atrr", saveAtrr);
 
-  console.log("check arr imgState", inputSave);
+  // console.log("check arr imgState", inputSave);
   // console.log("check type of arr imgs", Array.isArray(inputSave));
 
   //data post api
@@ -46,11 +50,24 @@ const Product = () => {
   const [discountProduct, setDisCountProduct] = useState("");
   const [brandProduct, setBrandProduct] = useState("");
   const [categoryProduct, setCategoryProduct] = useState("");
+  const [optionBrand, setOptionBrand] = useState([]);
+  const [optionCategory, setOptionCategory] = useState([]);
+  const [arrImages, setArrImages] = useState([]);
+  const [idUpdateProduct, setIdUpdateProduct] = useState(null);
   //data post api
 
   // console.log(listProduct);
   const token = useSelector((state) => state.token.tokenDefault);
   // console.log("check allpage", allPage);
+
+  const handleOntop = (e) => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+    dispatch(isFalseMenu());
+  };
   useEffect(async () => {
     let res = await axios.get(
       `http://localhost:8085/api/v1/product/get-all/?page=${page}`,
@@ -76,13 +93,13 @@ const Product = () => {
     }
   }, [listProduct]);
 
-  useEffect(() => {
-    let arrQty = [];
-    for (let i = 0; i < qtyInput; i++) {
-      arrQty.push(i);
-    }
-    setCustomArrayQtyInput(arrQty);
-  }, [qtyInput]);
+  // useEffect(() => {
+  //   let arrQty = [];
+  //   for (let i = 0; i < qtyInput; i++) {
+  //     arrQty.push(i);
+  //   }
+  //   setCustomArrayQtyInput(arrQty);
+  // }, [qtyInput]);
 
   useEffect(async () => {
     let res = await axios.get("http://localhost:8085/api/v1/category/get-all", {
@@ -144,6 +161,35 @@ const Product = () => {
     console.log("check id : ", id);
   };
 
+  const handleUpdateState = (item) => {
+    const {
+      title,
+      price,
+      discount,
+      brand,
+      category,
+      image,
+      attribute,
+      description,
+      id,
+    } = item;
+    setNameProduct(title);
+    setPriceProduct(price);
+    setDisCountProduct(discount);
+    setBrandProduct(brand.id);
+    setCategoryProduct(category.id);
+    setSaveAtrr(attribute);
+    setData(description);
+    setArrImages(image);
+    setIdUpdateProduct(id);
+    console.log("check state update", item);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
   // const handleQtyInput = () => {
   //   if (inputImg) {
   //     const arrCopy = inputSave;
@@ -201,17 +247,9 @@ const Product = () => {
     dataAppen.append("quantity", 50);
     dataAppen.append("brandID", brandProduct);
     dataAppen.append("categoryID", categoryProduct);
-    // if (inputSave && inputSave.length > 0) {
-    //   inputSave.forEach((item) => {
-    //     console.log("check qty img", item);
-    //     dataAppen.append("image", item);
-    //   });
-    // }
-    if (inputSave && inputSave.length > 0) {
-      console.log("check type of arr imgs", Array.isArray(inputSave));
 
+    if (inputSave && inputSave.length > 0) {
       inputSave.forEach((item) => {
-        console.log("check qty img", item);
         dataAppen.append("image", item);
       });
     }
@@ -219,21 +257,11 @@ const Product = () => {
     if (saveAtrr && saveAtrr.length > 0) {
       saveAtrr.forEach((item) => {
         let customValue = `${item.name}:${item.value}`;
-        // console.log("check value custom attr", customValue);
+
         dataAppen.append("attribute", customValue);
       });
     }
 
-    // console.log("check name", nameProduct);
-    // console.log("check price", priceProduct);
-    // console.log("check discount", discountProduct);
-    // console.log("check brand", brandProduct);
-    // console.log("check category", categoryProduct);
-    // console.log("check image", inputSave);
-    // console.log("check attribute", saveAtrr);
-    // console.log("check description", data);
-
-    // console.log("check custom data", dataCustom);
     let res = await axios({
       method: "POST",
       url: "http://localhost:8085/api/v1/product/insert",
@@ -251,6 +279,51 @@ const Product = () => {
     }
   };
 
+  const submitUpdateProduct = async () => {
+    const dataAppen = new FormData();
+    dataAppen.append("title", nameProduct);
+    dataAppen.append("price", priceProduct);
+    dataAppen.append("discount", discountProduct);
+    dataAppen.append("description", data);
+    dataAppen.append("quantity", 50);
+    dataAppen.append("brandID", brandProduct);
+    dataAppen.append("categoryID", categoryProduct);
+
+    if (inputSave && inputSave.length > 0) {
+      inputSave.forEach((item) => {
+        dataAppen.append("image", item);
+      });
+    }
+
+    if (saveAtrr && saveAtrr.length > 0) {
+      saveAtrr.forEach((item) => {
+        let customValue = `${item.name}:${item.value}`;
+        dataAppen.append("attribute", customValue);
+      });
+    }
+
+    console.log("check name", nameProduct);
+    console.log("check price", priceProduct);
+    console.log("check discount", discountProduct);
+    console.log("check discrition", data);
+    console.log("check brandID", brandProduct);
+    console.log("check categoryID", categoryProduct);
+    console.log("check img", inputSave);
+    console.log("check saveAtrr", saveAtrr);
+
+    let res = await axios({
+      method: "PUT",
+      url: `http://localhost:8085/api/v1/product/update/${idUpdateProduct}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: dataAppen,
+    });
+    console.log("check update product res", res);
+    if (res && res.data && res.data.data) {
+      toast.success("Add product success");
+    }
+  };
   // useEffect(() => {
   //   // create the preview
   //   const objectUrl = URL.createObjectURL(bobbImg);
@@ -276,8 +349,42 @@ const Product = () => {
     setInputSave([...inputSave, ...customFileList]);
   };
 
-  const increaseQtyImg = () => {};
+  const updateValueAttribute = (item) => {
+    // console.log("check update input", item);
+    setNameAtrr(item.name);
+    setValueAtrr(item.value);
+    setIdUpdateAtrr(item.id);
+  };
 
+  const updateAtrr = () => {
+    const copyArr = saveAtrr.map((item, index) =>
+      item.id === idUpdateAtrr
+        ? { ...item, name: nameAtrr, value: valueAtrr }
+        : item
+    );
+    setSaveAtrr(copyArr);
+    setNameAtrr("");
+    setValueAtrr("");
+  };
+
+  const handleDeleteImage = async (id) => {
+    const copyArrImgs = arrImages.filter((item, index) => item.id !== id);
+    setArrImages(copyArrImgs);
+
+    let res = await axios.delete(
+      `http://localhost:8085/api/v1/image/delete/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res && res.data && res.data.status === 200) {
+      toast.success("Delete image success");
+    }
+    console.log("check delete", res);
+    console.log("check id", id);
+  };
   return (
     <motion.div
       className="pr-10"
@@ -375,6 +482,9 @@ const Product = () => {
                 onChange={(e) => {
                   handleChangeBrand(e);
                 }}
+                value={optionBrand.filter(
+                  (option) => option.id === brandProduct
+                )}
               />
             </div>
             <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
@@ -390,6 +500,9 @@ const Product = () => {
                 onChange={(e) => {
                   handleChangeCategory(e);
                 }}
+                value={optionCategory.filter(
+                  (option) => option.id === categoryProduct
+                )}
               />
             </div>
             <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
@@ -409,11 +522,30 @@ const Product = () => {
               multiple={true}
             />
 
-            <AiFillPlusSquare
+            {/* <AiFillPlusSquare
               size="30px"
               className="hover:opacity-75 cursor-pointer ml-5"
-              onClick={increaseQtyImg}
-            />
+              // onClick={increaseQtyImg}
+            /> */}
+          </div>
+          <div className="flex flex-wrap">
+            {arrImages &&
+              arrImages.length > 0 &&
+              arrImages.map((item, index) => {
+                return (
+                  <div key={index} className="w-[19%] relative mb-2">
+                    <img
+                      src={`http://localhost:8085/api/v1/image/files/${item.urlImage}`}
+                      className="w-[70%] object-cover"
+                    />
+                    <TiDelete
+                      size="24px"
+                      className="absolute top-0 right-10 cursor-pointer"
+                      onClick={() => handleDeleteImage(item.id)}
+                    />
+                  </div>
+                );
+              })}
           </div>
 
           {/* <div className="mb-5"> */}
@@ -464,6 +596,12 @@ const Product = () => {
               />
             </div>
 
+            <MdOutlineUpdate
+              size="30px"
+              className="hover:opacity-75 cursor-pointer ml-5"
+              onClick={updateAtrr}
+            />
+
             <AiFillPlusSquare
               size="30px"
               className="hover:opacity-75 cursor-pointer ml-5"
@@ -475,28 +613,34 @@ const Product = () => {
               saveAtrr.length > 0 &&
               saveAtrr.map((item, index) => {
                 return (
-                  <div
-                    className="flex w-[830px] justify-between mb-5"
-                    key={index}
-                  >
-                    <input
-                      className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
-                      placeholder="Fill name attribute product input..."
-                      type="text"
-                      // name="search"
-                      value={item.name}
-                      readOnly
-                      // onChange={(e) => setNameAtrr(e.target.value)}
-                    />
-                    <input
-                      className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
-                      placeholder="Fill value attribute product input..."
-                      type="text"
-                      // name="search"
-                      value={item.value}
-                      readOnly
-                      // onChange={(e) => setValueAtrr(e.target.value)}
-                    />
+                  <div className="flex items-center mb-5" key={index}>
+                    <div className="flex w-[830px] justify-between ">
+                      <input
+                        className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                        placeholder="Fill name attribute product input..."
+                        type="text"
+                        // name="search"
+                        value={item.name}
+                        readOnly
+                        // onChange={(e) => setNameAtrr(e.target.value)}
+                      />
+                      <input
+                        className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[49%]"
+                        placeholder="Fill value attribute product input..."
+                        type="text"
+                        // name="search"
+                        value={item.value}
+                        readOnly
+                        // onChange={(e) => setValueAtrr(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <MdOutlineUpdate
+                        size="25px"
+                        className="ml-6 cursor-pointer"
+                        onClick={() => updateValueAttribute(item)}
+                      />
+                    </div>
                   </div>
                 );
               })}
@@ -504,20 +648,29 @@ const Product = () => {
           <div>
             <h4 className="mb-5 uppercase">Mô tả</h4>
             <CKEditor
-              initData={<p>Please fill in descrition of product view </p>}
+              // initData={<>Please fill in descrition of product view </>}
               onChange={(e) => {
                 handleChange(e);
               }}
-              //   value={data}
+              data={data}
             />
           </div>
-          <button
-            className="flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md hover:bg-slate-300 hover:text-[#1435c3] transition-all"
-            onClick={submitAddProduct}
-          >
-            <AiFillFolderAdd size={"30px"} />
-            <div className="ml-2">Thêm</div>
-          </button>
+          <div className="flex">
+            <button
+              className="flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md hover:bg-slate-300 hover:text-[#1435c3] transition-all"
+              onClick={submitAddProduct}
+            >
+              <AiFillFolderAdd size={"30px"} />
+              <div className="ml-2">Thêm</div>
+            </button>
+            <button
+              className="flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md hover:bg-slate-300 hover:text-[#1435c3] transition-all ml-3"
+              onClick={submitUpdateProduct}
+            >
+              <AiFillFolderAdd size={"30px"} />
+              <div className="ml-2">Cập nhật</div>
+            </button>
+          </div>
         </div>
       </div>
       {/* add product */}
@@ -526,31 +679,31 @@ const Product = () => {
         <p className="text-xl pb-3 flex items-center uppercase font-medium ">
           <i className="fas fa-list mr-3"></i> Danh Sách Sản Phẩm
         </p>
-        <div>
-          <table>
+        <div className="w-full">
+          <table className="overflow-hidden">
             <thead className="bg-gray-800 text-white ">
               <tr>
-                <th className="w-24 text-left py-3 px-4 uppercase font-semibold text-sm text-center ">
+                <th className="w-[15%]  py-3  uppercase font-semibold text-sm text-center ">
                   Hình Ảnh
                 </th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                <th className="w-[20%]  py-3  uppercase font-semibold text-sm text-center">
                   Tên
                 </th>
 
-                <th className="text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                <th className="w-[10%] py-3  uppercase font-semibold text-sm text-center">
                   Thương Hiệu
                 </th>
-                <th className="text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                <th className="w-[15%] py-3  uppercase font-semibold text-sm text-center">
                   Giá
                 </th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                <th className="w-[15%] py-3  uppercase font-semibold text-sm text-center">
                   Danh Mục
                 </th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                <th className="w-[8%]  py-3  uppercase font-semibold text-sm text-center">
                   Xem
                 </th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
-                <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
+                <th className="w-[8%]  py-3  text-sm text-center"></th>
+                <th className="w-[8%]  py-3 text-sm text-center"></th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -559,47 +712,51 @@ const Product = () => {
                 listProduct.data.length > 0 &&
                 listProduct.data.map((item, index) => {
                   return (
-                    <tr key={index}>
-                      <td className="w-1/6 py-3 px-4 ">
-                        {/* {item.image[4].urlImage} */}
+                    <tr className="text-[13px]" key={index}>
+                      <td className="w-[15%] py-3  ">
                         <img
-                          src={`http://localhost:8085/api/v1/image/files/${item.image[4].urlImage}`}
-                          className="w-[70px] h-[70px] object-cover mx-auto"
+                          src={`http://localhost:8085/api/v1/image/files/${item.image[0].urlImage}`}
+                          className="w-full h-full object-cover mx-auto"
                           // alt={name}
                         />
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[20%] py-3  text-center ">
                         {item.title}
                       </td>
 
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[10%] py-3  text-center">
                         {item.brand.brandName}
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[15%]  py-3  text-center">
                         {priceSplitter(item.price)}đ
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[15%]  py-3  text-center capitalize">
                         {item.category.name}
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[8%] py-3  text-center">
                         <Link
                           to={`/product/${item.slug}/${item.id}`}
                           className="text-[#1435c3] hover:text-[#8095f5] transition-all"
+                          onClick={handleOntop}
                         >
                           Chi tiết
                         </Link>
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
+                      <td className="w-[8%] py-3 relative">
                         <MdDeleteForever
-                          className="cursor-pointer"
+                          className="cursor-pointer absolute top-1/2 left-1/2 transform translate-x-[-50%] translate-y-[-50%] "
                           size="25px"
                           onClick={() => {
                             handleRemove(item.id);
                           }}
                         />
                       </td>
-                      <td className="w-1/6 text-left py-3 px-4 text-center">
-                        <MdOutlineUpdate size="25px" />
+                      <td className="w-[8%] py-3 relative">
+                        <MdOutlineUpdate
+                          size="25px"
+                          className="cursor-pointer absolute top-1/2 left-1/2 transform translate-x-[-50%] translate-y-[-50%] "
+                          onClick={() => handleUpdateState(item)}
+                        />
                       </td>
                     </tr>
                   );
@@ -607,17 +764,6 @@ const Product = () => {
             </tbody>
           </table>
         </div>
-        {/* <div className="mt-5 mx-auto">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mr-3">
-            1
-          </button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mr-3">
-            2
-          </button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-            3
-          </button>
-        </div> */}
       </div>
       <div className="my-5 text-center">
         {allPage &&

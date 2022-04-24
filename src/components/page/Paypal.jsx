@@ -13,6 +13,7 @@ import Select from "react-select";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Helmet from "../common/Helmet";
+import jwt_decode from "jwt-decode";
 
 // This values are the props in the UI
 // const amount = "5";
@@ -25,6 +26,10 @@ export default function Paypal() {
   const [citys, setCitys] = useState([]);
   const listCart = useSelector((state) => state.cart);
   const token = useSelector((state) => state.token.tokenDefault);
+  const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const navigation = useNavigate();
   // console.log("check cart", listCart);
   // console.log("check data: >>", data);
@@ -35,6 +40,24 @@ export default function Paypal() {
   const [wards, setWards] = useState([]);
 
   // console.log("payment", payment);
+
+  // useEffect(async () => {
+  //   var decoded = jwt_decode(informationUser);
+  //   const { sub } = decoded;
+  //   let res = await axios({
+  //     method: "GET",
+  //     url: `http://localhost:8085/api/v1/user/${sub}`,
+
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+  //   if (res && res.data && res.data.data) {
+  //     console.log("check res", res.data.data);
+  //     setFirstName(res.data.data.userProfile.firstName);
+  //     setLastName(res.data.data.userProfile.lastName);
+  //   }
+  // }, [informationUser]);
 
   useEffect(() => {
     let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -92,10 +115,10 @@ export default function Paypal() {
     validationSchema: Yup.object({
       firstName: Yup.string()
         .required("Required")
-        .min(4, "Must be 4 characters or more"),
+        .min(2, "Must be 2 characters or more"),
       lastName: Yup.string()
         .required("Required")
-        .min(4, "Must be 4 characters or more"),
+        .min(2, "Must be 2 characters or more"),
       phone: Yup.string()
         .required("required")
         .matches(
@@ -112,9 +135,16 @@ export default function Paypal() {
       ward: Yup.string().required("Required"),
     }),
 
+    // onSubmit: (values) => {
+    //   console.log(values);
+    // },
+
     onSubmit: async (values) => {
       const { firstName, lastName, phone, city, district, ward, address } =
         values;
+      console.log("value", values);
+      toast.success("Create account success");
+
       const customAddress = `${address} ${city} ${district} ${ward}`;
       const customCart = listCart.map((item) => {
         return {
@@ -149,7 +179,7 @@ export default function Paypal() {
         }
       }
 
-      toast.success("Create account success");
+      // toast.success("Create account success");
     },
   });
 
@@ -262,6 +292,7 @@ export default function Paypal() {
                           name="firstName"
                           onChange={formik.handleChange}
                           value={formik.values.firstName || ""}
+                          // value={firstName || formik.values.firstName}
                           type="text"
                           placeholder=" "
                           className="form-input"
@@ -281,6 +312,7 @@ export default function Paypal() {
                           name="lastName"
                           onChange={formik.handleChange}
                           value={formik.values.lastName || ""}
+                          // value={lastName || formik.values.lastName}
                           type="text"
                           placeholder=" "
                           className="form-input"

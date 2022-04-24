@@ -41,7 +41,7 @@ const ProductView = () => {
 
   const buyNow = (e) => {
     window.scrollTo({
-      top: 262,
+      top: 230,
       left: 0,
       behavior: "smooth",
     });
@@ -466,12 +466,33 @@ const ProductView = () => {
         {/* descrition */}
 
         {/* information product */}
-        <div className="w-[30%] bg-white h-fit rounded-md">
-          - CPU: Intel Core i5-11300H - Màn hình: 15.6" IPS (1920 x 1080), 144Hz
-          - RAM: 1 x 8GB DDR4 3200MHz - Đồ họa: NVIDIA GeForce GTX 1650 4GB
-          GDDR6 / Intel Iris Xe Graphics - Lưu trữ: 512GB SSD M.2 NVMe / - Hệ
-          điều hành: Windows 10 Home 64-bit - 57 Wh Pin liền - Khối lượng: 2.2
-          kg
+        <div className="w-[30%] bg-white h-fit rounded-lg ">
+          <h3 className=" py-5 text-center text-lg font-medium">
+            Thông tin chi tiết
+          </h3>
+          {data &&
+            data.attribute &&
+            data.attribute.length > 0 &&
+            data.attribute.map((item, index) => {
+              return (
+                <div className="flex px-5 py-3 box text-[13px]">
+                  <div className="w-[100px]">{item.name}</div>
+                  <div className="grow">{item.value}</div>
+                </div>
+              );
+            })}
+          {/* <div className="flex justify-between items-center px-5 py-2">
+            <div>CPU</div>
+            <div>Intel Core i5 ( 2.3 GHz</div>
+          </div>
+          <div className="flex justify-between items-center px-5 py-2">
+            <div>Chip đồ họa</div>
+            <div>Intel Iris Plus Graphics 650</div>
+          </div>{" "}
+          <div className="flex justify-between items-center px-5 py-2">
+            <div>RAM</div>
+            <div>8GB LPDDR3 2133MHz</div>
+          </div> */}
         </div>
         {/* information product */}
       </div>

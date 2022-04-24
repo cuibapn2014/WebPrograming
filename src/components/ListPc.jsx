@@ -12,7 +12,9 @@ import { Scrollbar } from "swiper";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import CardProduct from "./common/CardProduct";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { isFalseMenu } from "../redux/actions";
 
 const listCollectionPC = [
   {
@@ -91,6 +93,7 @@ const listCollectionPC = [
 const ListPc = () => {
   const [list, setList] = useState([]);
   const token = useSelector((state) => state.token.tokenDefault);
+  const dispatch = useDispatch();
   useEffect(async () => {
     try {
       const config = {
@@ -117,7 +120,7 @@ const ListPc = () => {
       );
 
       if (res && res.data && res.data.data) {
-        setList(res.data.data.product);
+        setList(res.data.data);
       }
     } catch (e) {
       console.log("fail error : >>", e.message);
@@ -131,7 +134,20 @@ const ListPc = () => {
           PC GEARVN - MIỄN PHÍ GIAO HÀNG TOÀN QUỐC
         </div>
         <div className="flex items-center  cursor-pointer hover:text-[#8196f3] ">
-          <span className="mr-1">Xem thêm</span>
+          <Link
+            to={`/collections/${list.name}/${list.id}`}
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+              });
+              dispatch(isFalseMenu());
+            }}
+            className="mr-1"
+          >
+            Xem thêm
+          </Link>
           <div>
             <MdOutlineNavigateNext size="24px" />
           </div>
@@ -173,8 +189,9 @@ const ListPc = () => {
           className="mySwiper"
         >
           {list &&
-            list.length > 0 &&
-            list.map((item, index) => {
+            list.product &&
+            list.product.length > 0 &&
+            list.product.map((item, index) => {
               return (
                 <SwiperSlide key={index}>
                   <CardProduct
