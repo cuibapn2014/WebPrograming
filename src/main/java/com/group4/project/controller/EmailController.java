@@ -21,51 +21,30 @@ public class EmailController {
     @ResponseBody
     @RequestMapping("/khuyen-mai")
     public String sendAdsEmail(HttpServletRequest request) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
 
-        boolean multipart = true;
+            boolean multipart = true;
 
-        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
 
-        message.setContent(request.getParameter("mail-content"), "text/html; charset=UTF-8");
+            message.setContent(request.getParameter("mail-content"), "text/html; charset=UTF-8");
 
-        helper.setSubject(request.getParameter("title"));
+            helper.setSubject(request.getParameter("title"));
+            helper.setFrom("nmtworks.7250@gmail.com", "G4PC");
 
-        userRepository.findAll().stream().forEach(user -> {
-            try {
-                helper.setTo(user.getEmail());
-                this.mailSender.send(message);
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-        });
-        return "Email sent";
+            userRepository.findAll().stream().forEach(user -> {
+                try {
+                    helper.setTo(user.getEmail());
+                    this.mailSender.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            });
+            return "Email sent";
+        }catch (Exception e){
+            return "Error! An error occurred. Please try again later";
+        }
     }
 
-    //    @ResponseBody
-//    @RequestMapping("/forgot")
-//    public String sendEmailForgotPwd(HttpServletRequest request) throws MessagingException {
-//        MimeMessage message = mailSender.createMimeMessage();
-//
-//        boolean multipart = true;
-//        String title = "Quên mật khẩu - G4PC";
-//
-//        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
-//
-//        message.setContent(this.randomStr() , "text/plain");
-//
-//        helper.setSubject(title);
-//
-//        Optional<User> user = userRepository.findByEmail(request.getParameter("email"));
-//        if(user.isPresent()) {
-//            helper.setTo(user.get().getEmail());
-//            this.mailSender.send(message);
-//        }
-//
-//        return "Email sent";
-//    }
-//
-//    private String randomStr(){
-//        return "Mã bảo mật: " + RandomStringUtils.randomAlphanumeric(10);
-//    }
 }

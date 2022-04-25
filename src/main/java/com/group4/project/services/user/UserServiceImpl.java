@@ -60,8 +60,11 @@ public class UserServiceImpl implements UserService{
     public User updateUser(User user, Integer id) {
         Optional<User> foundUser = repository.findById(id);
         if(foundUser.isPresent()){
-            UserRole foundRole = roleRepository.findByName(foundUser.get().getRole().getName());
-            foundUser.get().setRole(foundRole);
+            foundUser.get().setEmail(user.getEmail());
+            foundUser.get().getUserProfile().setFirstName(user.getUserProfile().getFirstName());
+            foundUser.get().getUserProfile().setLastName(user.getUserProfile().getLastName());
+            foundUser.get().getUserProfile().setPhoneNumber(user.getUserProfile().getPhoneNumber());
+            foundUser.get().getUserProfile().setAddress(user.getUserProfile().getAddress());
             foundUser.get().setToken();
             return repository.save(foundUser.get());
         }
