@@ -1,49 +1,38 @@
 package com.group4.project.api;
 
-import com.group4.project.helper.Encryption;
-import com.group4.project.helper.Validate;
 import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
-import com.group4.project.models.UserRole;
-import com.group4.project.repositories.user.UserRepository;
 import com.group4.project.models.User;
-import com.group4.project.repositories.user.UserRoleRepository;
+import com.group4.project.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/user")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-
-    @Autowired private UserRepository userRepo;
-    @Autowired private UserRoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired private UserService service;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAllUser(){
-        List<User> foundUser = userRepo.findAll();
             return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("successfully", ResponseCode.HTTP_OK, foundUser)
+                    new ResponseObject("successfully", ResponseCode.HTTP_OK, service.findAllUser())
                     , HttpStatus.OK);
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<ResponseObject> findByUsername(@PathVariable String username){
-        Optional<User> foundUser = userRepo.findByUsername(username);
-        if(foundUser.isPresent()) {
+        User user = service.findUserByUsername(username);
+        if(user != null) {
             return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("successfully", ResponseCode.HTTP_OK, foundUser.get())
+                    new ResponseObject("successfully", ResponseCode.HTTP_OK, user)
                     , HttpStatus.OK);
         }
         return new ResponseEntity<ResponseObject>(
@@ -53,14 +42,10 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<ResponseObject> insertUser(@RequestBody User newUser) {
-        Optional<User> user = userRepo.findByUsername(newUser.getUsername());
-        if (!user.isPresent() && Validate.validEmail(newUser.getEmail())){
-            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            UserRole foundRole = roleRepository.findByName("USER");
-            if (foundRole != null) newUser.setRole(foundRole);
-            newUser.setToken();
+        User user = service.saveUser(newUser);
+        if (user != null){
             return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("Insert successfully", 200, userRepo.save(newUser)),
+                    new ResponseObject("Insert successfully", 200, user),
                     HttpStatus.OK
             );
         }
@@ -75,15 +60,9 @@ public class UserController {
                                                 @RequestParam("password") String password){
         User matchUser = null;
         if(!isEmail(username)) {
-            matchUser = userRepo.findByUsername(username)
-                    .orElseGet(() -> {
-                        return null;
-                    });
+            matchUser = service.findUserByUsername(username);
         }else{
-            matchUser = userRepo.findByEmail(username)
-                    .orElseGet(() -> {
-                        return null;
-                    });
+            matchUser = service.findUserByEmail(username);
         }
 
         boolean isLogin = matchUser != null ? BCrypt.checkpw(password,matchUser.getPassword()) : false;
@@ -103,56 +82,40 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateRole(@RequestBody User newUser ,@PathVariable Integer id){
-        Optional<User> foundUser = userRepo.findById(id);
-        if(foundUser.isPresent()){
-            UserRole foundRole = roleRepository.findByName(foundUser.get().getRole().getName());
-            foundUser.get().setRole(foundRole);
-            foundUser.get().setToken();
-            userRepo.save(foundUser.get());
+        User user = service.updateUser(newUser, id);
+        if(user != null) {
+            return new ResponseEntity<ResponseObject>(
+                    new ResponseObject("Updated successfully", 200, user),
+                    HttpStatus.OK
+            );
         }
+
         return new ResponseEntity<ResponseObject>(
-                new ResponseObject("Updated successfully", 200, foundUser.get()),
+                new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null),
                 HttpStatus.OK
         );
     }
 
     @PutMapping("/update-role/{id}")
     public ResponseEntity<ResponseObject> updateRole(@RequestParam("role") String userRole ,@PathVariable Integer id){
-        Optional<User> foundUser = userRepo.findById(id);
-        UserRole foundRole = roleRepository.findByName(userRole);
-        if(foundUser.isPresent() && foundRole != null){
-            foundUser.get().setRole(foundRole);
-            foundUser.get().setToken();
-            userRepo.save(foundUser.get());
-        }
-        return new ResponseEntity<ResponseObject>(
-                new ResponseObject("Updated successfully", 200, foundUser.get()),
-                HttpStatus.OK
-        );
-    }
-
-    @PostMapping("/matches")
-    public ResponseEntity<ResponseObject> matchesUser(@RequestParam("token") String token){
-        String username = new Encryption().decodeJWTToken(token).getSubject();
-        Optional<User> foundUser = userRepo.findByUsername(username);
-        if(foundUser.isPresent()) {
+        User user = service.updateUserRole(userRole, id);
+        if(user != null) {
             return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("Matches successfully", ResponseCode.HTTP_OK, foundUser.get()),
+                    new ResponseObject("Updated successfully", 200, user),
                     HttpStatus.OK
             );
         }
-
         return new ResponseEntity<ResponseObject>(
-                new ResponseObject("Forbidden! Provided token invalid", ResponseCode.HTTP_FORBIDDEN, null),
+                new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteById(@PathVariable Integer id){
-        boolean exist = userRepo.existsById(id);
+        boolean exist = service.findUserById(id) != null ? true : false;
         if(exist) {
-            userRepo.deleteById(id);
+            service.deleteUserById(id);
             return new ResponseEntity<ResponseObject>(
                     new ResponseObject("Delete successfully", ResponseCode.HTTP_OK, null),
                     HttpStatus.OK

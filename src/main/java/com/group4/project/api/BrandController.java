@@ -1,33 +1,36 @@
 package com.group4.project.api;
 
 import com.group4.project.models.Brand;
-import com.group4.project.models.Category;
+import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
-import com.group4.project.repositories.brand.BrandRepository;
+import com.group4.project.services.brand.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/brand")
 public class BrandController {
-    @Autowired private BrandRepository brandRepository;
+    @Autowired private BrandService service;
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAllBrand(){
         return ResponseEntity.ok().body(
-                new ResponseObject("successfully", 200, brandRepository.findAll())
+                new ResponseObject("successfully", 200, service.findAllBrand())
         );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getBrand(@PathVariable Integer id){
-        Brand brand = brandRepository.findById(id).orElseGet(() -> {return null;});
-        return ResponseEntity.ok().body(
-                new ResponseObject("Successfully", 200, brand)
+        Brand brand = service.findBrandById(id);
+        if(brand != null) {
+            return ResponseEntity.ok().body(
+                    new ResponseObject("Successfully", 200, brand)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("Not found", 404, null)
         );
     }
 
@@ -35,7 +38,7 @@ public class BrandController {
     public ResponseEntity<ResponseObject> insertBrand(@RequestBody Brand brand){
         if(brand != null){
             return ResponseEntity.ok().body(
-                    new ResponseObject("Insert successfully", 200, brandRepository.save(brand))
+                    new ResponseObject("Insert successfully", 200, service.saveBrand(brand))
             );
         }
         return ResponseEntity.badRequest().body(
@@ -47,26 +50,23 @@ public class BrandController {
     public ResponseEntity<ResponseObject> updateBrand(@RequestBody Brand brand,
                                                       @PathVariable Integer id)
     {
-        Brand foundBand = brandRepository.findById(id).orElseGet(() -> {return null;});
+        Brand foundBand = service.updateBrandById(brand, id);
         if(foundBand != null && brand != null){
-            foundBand.setBrandName(brand.getBrandName());
-            foundBand.setUrlLogo(brand.getUrlLogo());
-            brandRepository.save(foundBand);
             return ResponseEntity.ok().body(
                     new ResponseObject("Update successfully", 200, foundBand)
             );
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("Not found brand", 404, null)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("Not found brand", ResponseCode.HTTP_BAD_REQUEST, null)
         );
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<ResponseObject> deleteBrand(@PathVariable Integer id){
-        Brand brand = brandRepository.findById(id).orElseGet(() -> {return null;});
+        Brand brand = service.findBrandById(id);
         if(brand != null){
-            brandRepository.deleteById(id);
+            service.deleteBrandById(id);
             return ResponseEntity.ok().body(
                     new ResponseObject("Delete successfully", 200, null)
             );
@@ -74,11 +74,5 @@ public class BrandController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("Not found brand", 404, null)
         );
-    }
-
-    @GetMapping("/delete-all")
-    public String deleteAll(){
-        brandRepository.deleteAll();
-        return "deleted";
     }
 }

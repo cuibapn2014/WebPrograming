@@ -1,7 +1,7 @@
 package com.group4.project.services;
 
 import com.group4.project.models.User;
-import com.group4.project.repositories.user.UserRepository;
+import com.group4.project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

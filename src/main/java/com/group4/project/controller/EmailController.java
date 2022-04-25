@@ -1,6 +1,6 @@
 package com.group4.project.controller;
 
-import com.group4.project.repositories.user.UserRepository;
+import com.group4.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

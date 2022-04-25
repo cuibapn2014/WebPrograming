@@ -1,11 +1,13 @@
 package com.group4.project.api;
 
+import com.group4.project.models.Image;
+import com.group4.project.models.ResponseCode;
 import com.group4.project.models.ResponseObject;
-import com.group4.project.services.IStoreServices;
+import com.group4.project.repositories.ImageRepository;
+import com.group4.project.services.image.IStoreServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/v1/upload-image")
+@RequestMapping("/api/v1/image")
 public class FileUploadController {
 
     @Autowired
     private IStoreServices iStoreServices;
 
-    @PostMapping("")
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @PostMapping("/upload")
     public ResponseEntity<ResponseObject> uploadImage(@RequestParam("image")MultipartFile[] images){
         try {
             List<String> fileNames = new ArrayList<>();
@@ -40,9 +46,25 @@ public class FileUploadController {
     }
 
     @GetMapping("/files/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        Resource file = iStoreServices.loadImage(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    public ResponseEntity<byte[]> getFile(@PathVariable String filename) {
+        try{
+            byte[] bytes = iStoreServices.readFileContent(filename);
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(bytes);
+        }catch(Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteImg(@PathVariable Integer id){
+        Optional<Image> img = imageRepository.findById(id);
+        iStoreServices.deleteImage(img.get().getUrlImage());
+        imageRepository.deleteById(id);
+        return ResponseEntity.ok().body(
+                new ResponseObject("delete successfully", ResponseCode.HTTP_OK, null)
+        );
     }
 }

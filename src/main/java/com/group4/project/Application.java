@@ -1,7 +1,8 @@
 package com.group4.project;
 
 import com.group4.project.models.UserRole;
-import com.group4.project.repositories.user.UserRoleRepository;
+import com.group4.project.repositories.UserRoleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @Configuration
 @EnableWebMvc
+@Slf4j
 public class Application implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
@@ -33,5 +35,19 @@ public class Application implements WebMvcConfigurer {
 	@Bean
 	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public CommandLineRunner initData(UserRoleRepository roleRepository){
+		return args -> {
+			UserRole admin = new UserRole("ADMIN");
+			UserRole user = new UserRole("USER");
+			if(roleRepository.findAll().isEmpty()){
+				roleRepository.save(admin);
+				roleRepository.save(user);
+			}else{
+				log.info("Role table is exist!");
+			}
+		};
 	}
 }

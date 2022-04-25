@@ -1,7 +1,7 @@
 package com.group4.project.controller;
 
 import com.group4.project.models.Product;
-import com.group4.project.repositories.product.ProductRepository;
+import com.group4.project.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

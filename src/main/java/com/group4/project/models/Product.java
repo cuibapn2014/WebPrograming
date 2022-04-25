@@ -28,7 +28,8 @@ public class Product implements Serializable {
     @JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
     private Category category;
 
-    @Column
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -128,7 +129,7 @@ public class Product implements Serializable {
     }
 
     public void setDiscount(float discount) {
-        this.discount = discount;
+        this.discount = discount < 0 ? discount/-1 : discount;
     }
 
     public int getQuantity() {
