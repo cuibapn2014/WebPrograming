@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -38,10 +37,10 @@ public class PasswordResetServiceImpl implements PasswordResetService{
     }
 
     @Override
-    public User updatePassword(String email, String code, String newPassword) {
+    public User updatePassword(String email, String newPassword) {
         Optional<User> user = userRepository.findByEmail(email);
         PasswordReset passwordReset = this.findByEmail(email);
-        if(user.isPresent() && passwordReset != null && passwordReset.getCode().equals(code) && checkExpired(passwordReset.getCreated_at())){
+        if(user.isPresent() && passwordReset != null && this.validCode(passwordReset.getCode(), email)){
             user.get().setPassword(BCrypt.hashpw(newPassword,BCrypt.gensalt(12)));
             repository.delete(passwordReset);
             return user.get();
@@ -52,6 +51,12 @@ public class PasswordResetServiceImpl implements PasswordResetService{
     @Override
     public PasswordReset findByEmail(String email) {
         return repository.findById(email).get();
+    }
+
+    @Override
+    public boolean validCode(String code, String email) {
+        PasswordReset passwordReset = this.findByEmail(email);
+        return passwordReset.getCode().equals(code) && checkExpired(passwordReset.getCreated_at());
     }
 
     private boolean checkExpired(Date expire){

@@ -5,7 +5,6 @@ import com.group4.project.models.ResponseObject;
 import com.group4.project.models.User;
 import com.group4.project.repositories.PasswordResetRepository;
 import com.group4.project.repositories.UserRepository;
-import com.group4.project.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

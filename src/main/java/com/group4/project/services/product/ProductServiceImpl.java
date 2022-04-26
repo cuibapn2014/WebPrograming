@@ -106,8 +106,8 @@ public class ProductServiceImpl implements ProductService{
         product.setCategory(category);
         product.setBrand(brand);
         product.setCategory(category);
+		product.getAttribute().clear();
         Arrays.asList(attributes).stream().forEach(s -> {
-            product.getAttribute().clear();
             String strAttr[] = s.split(":");
             Attribute attr = new Attribute(strAttr[0], strAttr[1]);
             product.getAttribute().add(attr);

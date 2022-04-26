@@ -89,9 +89,8 @@ public class ProductController {
                                                         @RequestParam("brandID") Integer brandID,
                                                         @RequestParam("categoryID") Integer categoryID,
                                                         @RequestParam("attribute") String[] attributes,
-                                                        @RequestParam(value = "image")MultipartFile[] images,
+                                                        @RequestParam(value = "image", required = false)MultipartFile[] images,
                                                         @PathVariable Integer id){
-        MultipartFile[] arrFile = images.length > 0 ? images : null;
         Product product = service.updateProduct(title, description, price,
                 discount, quantity, brandID, categoryID, attributes, images, id);
         if(product != null) {

@@ -6,7 +6,6 @@ import com.group4.project.models.ResponseObject;
 import com.group4.project.models.User;
 import com.group4.project.services.email.EmailService;
 import com.group4.project.services.user.PasswordResetService;
-import com.group4.project.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +40,24 @@ public class PasswordResetController {
         );
     }
 
+    @PostMapping("/check")
+    public ResponseEntity<ResponseObject> checkCode(@RequestParam("email") String email,
+                                                     @RequestParam("code") String code){
+        if(service.validCode(code, email)){
+            return ResponseEntity.ok().body(
+                    new ResponseObject("Valid code", ResponseCode.HTTP_OK, code)
+            );
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("Invalid code", ResponseCode.HTTP_BAD_REQUEST, null)
+        );
+    }
+
     @PostMapping("/change")
     public ResponseEntity<ResponseObject> changePass(@RequestParam("email") String email,
-                                                     @RequestParam("code") String code,
                                                      @RequestParam("password") String newPassowrd){
-        User user = service.updatePassword(email, code, newPassowrd);
+        User user = service.updatePassword(email, newPassowrd);
         if(user != null){
             return ResponseEntity.ok().body(
                     new ResponseObject("Update successfully", ResponseCode.HTTP_OK, user)

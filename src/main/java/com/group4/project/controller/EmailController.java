@@ -1,6 +1,6 @@
 package com.group4.project.controller;
 
-import com.group4.project.repositories.UserRepository;
+import com.group4.project.repositories.ClientEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/send-mail")
 public class EmailController {
     @Autowired private JavaMailSender mailSender;
-    @Autowired private UserRepository userRepository;
+    @Autowired private ClientEmailRepository repository;
 
     @ResponseBody
     @RequestMapping("/khuyen-mai")
@@ -33,14 +33,15 @@ public class EmailController {
             helper.setSubject(request.getParameter("title"));
             helper.setFrom("nmtworks.7250@gmail.com", "G4PC");
 
-            userRepository.findAll().stream().forEach(user -> {
+            repository.findAll().stream().forEach(email -> {
                 try {
-                    helper.setTo(user.getEmail());
+                    helper.setTo(email.getEmail());
                     this.mailSender.send(message);
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
             });
+
             return "Email sent";
         }catch (Exception e){
             return "Error! An error occurred. Please try again later";
