@@ -26,6 +26,11 @@ import InformationUser from "./page/InformationUser";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import NotFound from "./common/NotFound";
+import TestTiny from "./admin/page/TestTiny";
+import Search from "./page/Search";
+import ForgotPassword from "./page/ForgotPassword";
+import InputCode from "./page/InputCode";
+import ResetPassword from "./page/ResetPassword";
 const AnimatedRoute = () => {
   const location = useLocation();
   const [admin, setAdmin] = useState(false);
@@ -52,9 +57,19 @@ const AnimatedRoute = () => {
           <Route path="sign-up" element={<SignUp />} />
           <Route path="product/:slug/:id" element={<ProductView />} />
           <Route path="collections/:slug/:id" element={<Collections />} />
+          <Route path="collections/:search" element={<Search />} />
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
           <Route path="information" element={<InformationUser />} />
+          <Route path="/sign-in/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/sign-in/forgot-password/input-secret-code"
+            element={<InputCode />}
+          />
+          <Route
+            path="/sign-in/forgot-password/input-secret-code/reset-password"
+            element={<ResetPassword />}
+          />
           <Route path="*" element={<NotFound />} />
         </Route>
 
@@ -68,6 +83,7 @@ const AnimatedRoute = () => {
             <Route path="brand" element={<Brand />} />
             <Route path="bill" element={<Bill />} />
             <Route path="advertisement" element={<Advertisement />} />
+            <Route path="tiny" element={<TestTiny />} />
           </Route>
         ) : (
           <Route path="/" element={<App />}>

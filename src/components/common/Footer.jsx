@@ -1,19 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 // import { IoMailOpenOutline } from "react-icons/io";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { BsFillTelephoneFill, BsFacebook } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isFalseMenu } from "../../redux/actions";
+import axios from "axios";
+import { toast } from "react-toastify";
 const Footer = () => {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.token.tokenDefault);
+  const [email, setEmail] = useState("");
   const handleOntop = (e) => {
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
+  };
+
+  const handleSentMail = async () => {
+    let dataEmail = new FormData();
+    dataEmail.append("email", email);
+    // console.log("check email", email);
+
+    try {
+      let res = await axios({
+        method: "POST",
+        url: "http://localhost:8085/api/v1/client/insert",
+        data: dataEmail,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("check res email", res);
+      if (res && res.data && res.data.status === 200) {
+        toast.success("Đăng kí nhận khuyến mãi thành công");
+        setEmail("");
+      }
+    } catch (e) {
+      console.log("email fail", e.message);
+      toast.warn("Email không hợp lệ");
+    }
   };
   return (
     <div className="mt-5">
@@ -31,8 +60,15 @@ const Footer = () => {
           </div>
         </div>
         <div className="lg:w-[595px] w-full relative lg:mr-10 mt-2 lg:mt-0">
-          <input className="px-1 pl-2 py-2 border-none outline-none rounded-md w-full" />
-          <div className="text-[#1435c3] absolute top-[50%] right-4 translate-y-[-50%] cursor-pointer hover:text-[#8598f0]">
+          <input
+            className="px-1 pl-2 py-2 border-none outline-none rounded-md w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div
+            className="text-[#1435c3] absolute top-[50%] right-4 translate-y-[-50%] cursor-pointer hover:text-[#8598f0]"
+            onClick={handleSentMail}
+          >
             <RiSendPlaneFill size={"20px"} />
           </div>
         </div>

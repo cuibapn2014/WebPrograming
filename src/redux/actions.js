@@ -56,4 +56,11 @@ export const reRenderUser = (number) => {
     payload: number,
   };
 };
+
+export const setEmailUser = (email) => {
+  return {
+    type: "add-email",
+    payload: email,
+  };
+};
 //token

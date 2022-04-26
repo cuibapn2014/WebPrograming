@@ -32,6 +32,7 @@ const Header = () => {
   const [getUser, setGetUser] = useState(1);
   const [admin, setAdmin] = useState(false);
   const [lastName, setLastName] = useState("");
+  const [search, setSearch] = useState("");
 
   const dispatch = useDispatch();
 
@@ -45,6 +46,7 @@ const Header = () => {
 
   useEffect(async () => {
     var decoded = jwt_decode(informationUser);
+    console.log("check jwt decode", decoded);
     const { sub } = decoded;
     let res = await axios({
       method: "GET",
@@ -129,10 +131,18 @@ const Header = () => {
             type="text"
             placeholder="Nhập từ khóa cần tìm ..."
             className="bg-[#f5f5f5] min-w-[460px] py-[6px] px-3 outline-none rounded-l-lg  placeholder:text-[gray]"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="px-3 py-[8px] bg-[#1435c3] text-[#fff] rounded-r-lg">
+          <Link
+            to={search && `/collections/${search}`}
+            className="px-3 py-[8px] bg-[#1435c3] text-[#fff] rounded-r-lg"
+            onClick={() => {
+              dispatch(isFalseMenu());
+            }}
+          >
             <BsSearch size={"18px"} />
-          </button>
+          </Link>
         </div>
         <Link to="/khuyen-mai">
           <div className="icon--header">

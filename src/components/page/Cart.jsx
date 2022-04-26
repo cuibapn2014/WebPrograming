@@ -113,8 +113,12 @@ const Cart = () => {
               </div>
               <div className=" text-base bg-[#1435c3] py-2 text-white rounded-md text-center mt-10 ">
                 <button
-                  className="uppercase block mx-auto w-full"
-                  disabled={listCart.length > 0 ? false : true}
+                  className={`uppercase block mx-auto w-full ${
+                    listCart && listCart.length < 0
+                      ? "opacity-10 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                  disabled={listCart && listCart.length > 0 ? false : true}
                   onClick={() => navigation("/paypal")}
                 >
                   thanh toán

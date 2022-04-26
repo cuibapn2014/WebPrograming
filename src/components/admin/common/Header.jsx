@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-
+import { FcHome } from "react-icons/fc";
 const Header = () => {
   const navLinkStyle = ({ isActive }) => ({
     color: isActive ? "#fff" : "",
@@ -8,11 +8,14 @@ const Header = () => {
   });
   return (
     <>
-      <div className="fixed top-0 left-0 bg-sidebar h-screen  shadow-xl bg-[#1435c3]">
-        <div className="p-6">
+      <div className="fixed top-0 left-0 w-[20%] h-screen  shadow-xl bg-[#1435c3]">
+        <div className="px-2 py-6 flex items-center">
+          <Link to="/">
+            <FcHome size="25px" className="hover:opacity-60" />
+          </Link>
           <NavLink
             to="/admin"
-            className="text-center text-white text-2xl font-medium uppercase hover:text-gray-300"
+            className="text-center text-white text-xl ml-2 font-medium uppercase hover:text-gray-300"
           >
             Trang Quản Lí
           </NavLink>
@@ -24,7 +27,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-table mr-3"></i>
-            QL Sản Phẩm
+            Sản Phẩm
           </NavLink>
           <NavLink
             to="/admin/staff"
@@ -32,7 +35,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-sticky-note mr-3"></i>
-            QL Nhân Viên
+            Nhân Viên
           </NavLink>
           <NavLink
             to="/admin/customer"
@@ -40,7 +43,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-tachometer-alt mr-3"></i>
-            QL Khách Hàng
+            Khách Hàng
           </NavLink>
           <NavLink
             to="/admin/category"
@@ -48,7 +51,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-align-left mr-3"></i>
-            QL Danh Mục
+            Danh Mục
           </NavLink>
           <NavLink
             to="/admin/brand"
@@ -56,7 +59,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-tablet-alt mr-3"></i>
-            QL Thương Hiệu
+            Thương Hiệu
           </NavLink>
           <NavLink
             to="/admin/bill"
@@ -64,7 +67,7 @@ const Header = () => {
             style={navLinkStyle}
           >
             <i className="fas fa-sticky-note mr-3"></i>
-            QL Hóa Đơn
+            Hóa Đơn
           </NavLink>
           <NavLink
             to="/admin/advertisement"

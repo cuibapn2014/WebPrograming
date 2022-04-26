@@ -1,8 +1,9 @@
 const initialState = {
   tokenDefault:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY1MTMyOTQ3MX0.SA0ocVCOK7pXmlUi5ZeAj2Vz4gpL4t1IYoVGeFMVb64",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY1MTUwNjk4Nn0.5qZD-Ht_kae0hznTEv7ILq49bEdk0iVPu2D2LGTlPrc",
   rememberMe: JSON.parse(localStorage.getItem("isChecked")),
   reRenderUser: 0,
+  emailForgot: "",
 };
 
 const token = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const token = (state = initialState, action) => {
       return {
         ...state,
         reRenderUser: action.payload,
+      };
+    case "add-email":
+      return {
+        ...state,
+        emailForgot: action.payload,
       };
 
     default:

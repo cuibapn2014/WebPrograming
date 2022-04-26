@@ -51,48 +51,42 @@ const Login = () => {
 
     onSubmit: async (values) => {
       const { email, passWord } = values;
-      // const data = {
-      //   username: email,
-      //   password: passWord,
-      // };
+
       const data = new FormData();
       data.append("username", email);
       data.append("password", passWord);
-      let res = await axios({
-        method: "POST",
-        url: "http://localhost:8085/api/v1/user/login",
-        data: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("check login", res);
-      if (res && res.data && res.data.data) {
-        let tokenJWT = res.data.data.token;
-        sessionStorage.setItem("informationUser", JSON.stringify(tokenJWT));
-        if (isChecked) {
-          Cookies.set("token", tokenJWT, { expires: 30 });
-        }
-        if (res.data.data.role.name === "ADMIN") {
-          // toast.success("Login in success");
-          navigation("/admin");
-        }
-        if (res.data.data.role.name === "USER") {
-          navigation("/");
-        }
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
+
+      try {
+        let res = await axios({
+          method: "POST",
+          url: "http://localhost:8085/api/v1/user/login",
+          data: data,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-      }
-
-      // if (res === undefined) {
-      //   toast.warning("Login Fail");
-      // }
-
-      if (res.status === 401) {
-        toast.warn("Login Fail");
+        if (res && res.data && res.data.data) {
+          let tokenJWT = res.data.data.token;
+          sessionStorage.setItem("informationUser", JSON.stringify(tokenJWT));
+          if (isChecked) {
+            Cookies.set("token", tokenJWT, { expires: 30 });
+          }
+          if (res.data.data.role.name === "ADMIN") {
+            // toast.success("Login in success");
+            navigation("/admin");
+          }
+          if (res.data.data.role.name === "USER") {
+            navigation("/");
+          }
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+        }
+      } catch (e) {
+        console.log("fail login server", e.message);
+        toast.warn("Login fail");
       }
     },
   });
@@ -180,29 +174,34 @@ const Login = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center my-4">
-                  <input
-                    id="remember"
-                    type="checkbox"
-                    checked={isChecked}
-                    // onClick={() => setIsCheck(!isCheck)}
-                    onChange={(e) => setIsCheck(!isChecked)}
-                    className="cursor-pointer"
-                    onClick={() => dispatch(toogleRemember())}
-                  />
-                  <label
-                    className="capitalize ml-2 cursor-pointer"
-                    htmlFor="remember"
-                  >
-                    remember me
-                  </label>
+                <div className="flex items-center justify-between my-4">
+                  <div className="flex items-center">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      checked={isChecked}
+                      // onClick={() => setIsCheck(!isCheck)}
+                      onChange={(e) => setIsCheck(!isChecked)}
+                      className="cursor-pointer"
+                      onClick={() => dispatch(toogleRemember())}
+                    />
+                    <label
+                      className="capitalize ml-2 cursor-pointer"
+                      htmlFor="remember"
+                    >
+                      remember me
+                    </label>
+                  </div>
+                  <div className="hover:text-[#1435c3] cursor-pointer transition-all">
+                    <Link to="./forgot-password"> Forget password</Link>
+                  </div>
                 </div>
                 <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">
                   <button type="submit" className="block w-full">
                     Sign in
                   </button>
                 </div>
-                <div className="mt-4 text-center">
+                <div className="mt-4 text-center ">
                   Don't have an account ?{" "}
                   <span className="text-[#1435c3] cursor-pointer">
                     <Link to="/sign-up">Sign up</Link>

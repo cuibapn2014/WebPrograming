@@ -475,8 +475,8 @@ const ProductView = () => {
             data.attribute.length > 0 &&
             data.attribute.map((item, index) => {
               return (
-                <div className="flex px-5 py-3 box text-[13px]">
-                  <div className="w-[100px]">{item.name}</div>
+                <div className="flex px-5 py-3 box text-[13px]" key={index}>
+                  <div className="w-[100px] capitalize">{item.name}</div>
                   <div className="grow">{item.value}</div>
                 </div>
               );

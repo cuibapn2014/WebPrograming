@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Helmet from "../common/Helmet";
 
-const Collections = () => {
-  const { id, search } = useParams();
+const Search = () => {
+  const { search } = useParams();
 
   console.log("check search user ", search);
   const dispatch = useDispatch();
@@ -32,11 +32,7 @@ const Collections = () => {
     try {
       const res = await axios.get(
         `http://localhost:8085/api/v1/product/search?keyword=${search}`,
-        // {
-        //   params: {
-        //     keyword: search,
-        //   },
-        // },
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -56,32 +52,9 @@ const Collections = () => {
     }
   }, [search]);
 
-  useEffect(async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8085/api/v1/category/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log("check data category", res);
-
-      if (res && res.data && res.data.data) {
-        setListProduct(res.data.data);
-        setName(res.data.data.name);
-        setListDynamic(res.data.data.product);
-      }
-    } catch (e) {
-      console.log("fail error : >>", e.message);
-    }
-  }, [id]);
-
   useEffect(() => {
     const listFilter = [];
-    const arr = listProduct.product || listProduct.data || [];
+    const arr = listProduct.data || [];
     if (arr.length > 0) {
       arr.forEach((element) => {
         const include = listFilter.includes(element.brand.brandName);
@@ -91,20 +64,11 @@ const Collections = () => {
       });
     }
     setFilter(listFilter);
-    // console.log("check listFilter: ", listFilter);
-    // console.log("check temp", arr);
   }, [listProduct]);
 
   const handleFilter = (filter, index) => {
-    let listProductTemp;
+    let listProductTemp = [...listProduct.data];
 
-    if (listProduct.product) {
-      listProductTemp = [...listProduct.product] || [];
-    }
-
-    if (listProduct.data) {
-      listProductTemp = [...listProduct.data] || [];
-    }
     console.log("check listproduct copy", listProductTemp);
     const listFilter = listProductTemp.filter(
       (item) => item.brand.brandName === filter
@@ -115,8 +79,8 @@ const Collections = () => {
   };
 
   return (
-    // <Helmet title={`Collections - ${name.toUpperCase()}`}>
-    <Helmet title={name && `Collections - ${name.toUpperCase()}`}>
+    // <Helmet title={`Collections - ${name.toUpperCase()}` || "Found"}>
+    <Helmet title="Collections">
       <motion.div
         className="w-full bg-slate-50 py-5"
         initial={{ opacity: 0, x: 100 }}
@@ -140,56 +104,75 @@ const Collections = () => {
             </div>
           )}
         </div>
-
-        <div className="bg-white container mx-auto flex items-center py-4 rounded-lg px-10">
-          <h6 className="mr-16">Thương hiệu</h6>
-          <div className="flex ">
-            {filter &&
-              filter.length > 0 &&
-              filter.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`px-4 py-1 border border-[#ddd] mr-4 rounded-lg cursor-pointer capitalize ${
-                      index + 1 === activeFilter
-                        ? "border border-[#1435c3]"
-                        : ""
-                    }`}
-                    onClick={() => handleFilter(item, index + 1)}
-                  >
-                    {item}
-                  </div>
-                );
-              })}
-          </div>
+        <div className="container mx-auto flex items-center py-4 rounded-lg px-10">
+          {listProduct && listProduct.data && listProduct.data.length > 0 && (
+            <>
+              <h6 className="mr-16">Thương hiệu</h6>
+              <div className="flex ">
+                {filter &&
+                  filter.length > 0 &&
+                  filter.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`px-4 py-1 border border-[#ddd] mr-4 rounded-lg cursor-pointer capitalize ${
+                          index + 1 === activeFilter
+                            ? "border border-[#1435c3]"
+                            : ""
+                        }`}
+                        onClick={() => handleFilter(item, index + 1)}
+                      >
+                        {item}
+                      </div>
+                    );
+                  })}
+              </div>
+            </>
+          )}
         </div>
-
         <div className="container mx-auto bg-slate-50">
           {/* item cart */}
-          <div className="flex justify-between">
-            <div className="flex flex-wrap ">
-              {listDynamic &&
-                listDynamic.length > 0 &&
-                listDynamic.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
-                    >
-                      <CardProduct
-                        id={item.id}
-                        name={item.title}
-                        price={item.price}
-                        discount={item.discount}
-                        priceBeforeDiscount={"10.000.000"}
-                        img={item.image[0].urlImage}
-                        slug={item.slug}
-                      />
-                    </div>
-                  );
-                })}
+          {listProduct && listProduct.data && listProduct.data.length > 0 ? (
+            <div className="flex justify-between">
+              <div className="flex flex-wrap ">
+                {listDynamic &&
+                  listDynamic.length > 0 &&
+                  listDynamic.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="xl:w-[19.8%] lg:w-[24.8%] md:w-[33.2%] sm:w-[49.8%] w-full"
+                      >
+                        <CardProduct
+                          id={item.id}
+                          name={item.title}
+                          price={item.price}
+                          discount={item.discount}
+                          priceBeforeDiscount={"10.000.000"}
+                          img={item.image[0].urlImage}
+                          slug={item.slug}
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="bg-slate-50 py-20">
+              <div className="flex item-center justify-center ">
+                <div className="text-center">
+                  <img
+                    src="https://lh3.googleusercontent.com/XgEwa2HvKXekl8B_ZtYa45fM17dXbHLeQpUS9DP9wLzVNuVry88JZt00ZcVTGdIXG9c-2EpW1OYG1FOTgA=rw"
+                    className="mx-auto"
+                  />
+                  <p className="my-5">
+                    Không tìm thấy kết quả nào với từ khóa{" "}
+                    <span className="text-[#1435c3] underline">{search}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           {/* item cart */}
         </div>
       </motion.div>
@@ -197,4 +180,4 @@ const Collections = () => {
   );
 };
 
-export default Collections;
+export default Search;
