@@ -19,7 +19,13 @@ import { GrHostMaintenance } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 import { useDispatch, useSelector } from "react-redux";
-import { toogleIsMenu, isFalseMenu, isTrueMenu } from "../../redux/actions";
+import {
+  toogleIsMenu,
+  isFalseMenu,
+  isTrueMenu,
+  blockLogin,
+  blockSignUp,
+} from "../../redux/actions";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 
@@ -82,6 +88,8 @@ const Header = () => {
     sessionStorage.removeItem("informationUser");
     Cookies.remove("token");
     setShowUser(false);
+    dispatch(blockLogin(true));
+    dispatch(blockSignUp(true));
   };
   return (
     <div>
@@ -144,7 +152,7 @@ const Header = () => {
             <BsSearch size={"18px"} />
           </Link>
         </div>
-        <Link to="/khuyen-mai">
+        <Link to="/khuyen-mai" onClick={() => dispatch(isFalseMenu())}>
           <div className="icon--header">
             <BsTags size={"27px"} className="mb-2" />
             Khuyến mãi

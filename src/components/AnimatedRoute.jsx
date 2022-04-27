@@ -31,10 +31,17 @@ import Search from "./page/Search";
 import ForgotPassword from "./page/ForgotPassword";
 import InputCode from "./page/InputCode";
 import ResetPassword from "./page/ResetPassword";
+import { useSelector } from "react-redux";
+import Sale from "./page/Sale";
 const AnimatedRoute = () => {
   const location = useLocation();
   const [admin, setAdmin] = useState(false);
   const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
+
+  const signUp = useSelector((state) => state.blockpage.signUp);
+  const login = useSelector((state) => state.blockpage.login);
+
+  // console.log("check redux", signUp);
   useEffect(async () => {
     var decoded = jwt_decode(informationUser);
     const { role } = decoded;
@@ -53,23 +60,19 @@ const AnimatedRoute = () => {
           <Route path="huong-dan-tra-gop" element={<Installment />} />
           <Route path="chinh-sach-bao-hanh" element={<Maintain />} />
           <Route path="chinh-sach-van-chuyen" element={<Delivery />} />
-          <Route path="sign-in" element={<Login />} />
-          <Route path="sign-up" element={<SignUp />} />
+          {login && <Route path="sign-in" element={<Login />} />}
+          {signUp && <Route path="sign-up" element={<SignUp />} />}
           <Route path="product/:slug/:id" element={<ProductView />} />
           <Route path="collections/:slug/:id" element={<Collections />} />
           <Route path="collections/:search" element={<Search />} />
           <Route path="cart" element={<Cart />} />
           <Route path="paypal" element={<Paypal />} />
           <Route path="information" element={<InformationUser />} />
-          <Route path="/sign-in/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/sign-in/forgot-password/input-secret-code"
-            element={<InputCode />}
-          />
-          <Route
-            path="/sign-in/forgot-password/input-secret-code/reset-password"
-            element={<ResetPassword />}
-          />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="input-secret-code" element={<InputCode />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="khuyen-mai" element={<Sale />} />
+
           <Route path="*" element={<NotFound />} />
         </Route>
 

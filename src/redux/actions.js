@@ -64,3 +64,19 @@ export const setEmailUser = (email) => {
   };
 };
 //token
+
+//blockpage
+export const blockLogin = (value) => {
+  return {
+    type: "block-login",
+    payload: value,
+  };
+};
+
+export const blockSignUp = (value) => {
+  return {
+    type: "block-sign-up",
+    payload: value,
+  };
+};
+//blockpage

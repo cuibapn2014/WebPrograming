@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { setEmailUser } from "../../redux/actions";
 
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -26,11 +27,17 @@ const ForgotPassword = () => {
       if (res && res.data && res.data.data) {
         dispatch(setEmailUser(res.data.data.email));
         setSuccess(true);
-        navigation("/sign-in/forgot-password/input-secret-code");
+        navigation("/input-secret-code");
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       }
       console.log("check res email", res);
     } catch (e) {
       console.log("Email của bạn không hợp lệ");
+      toast.warn("Email của bạn không hợp lệ");
     }
   };
   return (
@@ -47,13 +54,13 @@ const ForgotPassword = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <div className="mt-5 flex justify-center">
-          <Link
+          <button
             to={success && "input-secret-code"}
             className="bg-[#1435c3] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded capitalize inline-block "
             onClick={handleCreateResetPassWord}
           >
             reset password
-          </Link>
+          </button>
         </div>
       </div>
     </div>

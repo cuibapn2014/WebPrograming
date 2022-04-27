@@ -9,7 +9,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { reRenderUser, toogleRemember } from "../../redux/actions";
+import {
+  reRenderUser,
+  toogleRemember,
+  blockLogin,
+  blockSignUp,
+} from "../../redux/actions";
 import Cookies from "js-cookie";
 import Helmet from "../common/Helmet";
 
@@ -66,6 +71,8 @@ const Login = () => {
           },
         });
         if (res && res.data && res.data.data) {
+          dispatch(blockSignUp(false));
+          dispatch(blockLogin(false));
           let tokenJWT = res.data.data.token;
           sessionStorage.setItem("informationUser", JSON.stringify(tokenJWT));
           if (isChecked) {
@@ -193,7 +200,19 @@ const Login = () => {
                     </label>
                   </div>
                   <div className="hover:text-[#1435c3] cursor-pointer transition-all">
-                    <Link to="./forgot-password"> Forget password</Link>
+                    {/* <Link to="./forgot-password"> Forget password</Link> */}
+                    <button
+                      onClick={() => {
+                        navigation("/forgot-password");
+                        window.scrollTo({
+                          top: 0,
+                          left: 0,
+                          behavior: "smooth",
+                        });
+                      }}
+                    >
+                      Forgot password
+                    </button>
                   </div>
                 </div>
                 <div className="bg-[#1435c3] text-center py-3 rounded-lg text-white">

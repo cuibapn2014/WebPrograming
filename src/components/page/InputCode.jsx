@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const InputCode = () => {
   const [code, setCode] = useState("");
@@ -39,11 +40,18 @@ const InputCode = () => {
       });
 
       if (res && res.data && res.data.status === 200) {
-        navigation("/sign-in/forgot-password/input-secret-code/reset-password");
+        navigation("/reset-password");
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       }
 
-      console.log("check res email", res);
+      console.log("check res code", res);
     } catch (e) {
+      toast.warn("Bạn nhập mã code không hợp lệ");
+      navigation("/input-secret-code");
       console.log("Fail api");
     }
   };
