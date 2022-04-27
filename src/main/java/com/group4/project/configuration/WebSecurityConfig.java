@@ -14,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
 @Configuration
@@ -40,7 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/v1/image/**").permitAll();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("USER", "ADMIN");
-        http.authorizeRequests().antMatchers(DELETE, "/api/user/**").hasAnyAuthority("USER", "ADMIN");
+        http.authorizeRequests().antMatchers(DELETE, "/api/user/**").hasAnyAuthority("ADMIN");
+		http.authorizeRequests().antMatchers(PUT, "/api/user/**").hasAnyAuthority("ADMIN");
+		http.authorizeRequests().antMatchers(POST, "/api/user/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(GET, "/send-mail/**").hasAnyAuthority("USER", "ADMIN");
 //        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ADMIN");
         http.cors().and().authorizeRequests().antMatchers("/api/v1/**").authenticated();

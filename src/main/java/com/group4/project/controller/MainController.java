@@ -25,4 +25,14 @@ public class MainController {
             return "index";
         return "error";
     }
+
+    @GetMapping(path = "/collection/{slug}/{id}")
+    public String collection(@PathVariable Integer id, @PathVariable String slug) {
+        return "index";
+    }
+
+    @GetMapping(path = "/collection/{keyword}")
+    public String search(@PathVariable String keyword) {
+        return "index";
+    }
 }

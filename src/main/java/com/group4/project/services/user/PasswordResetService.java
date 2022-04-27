@@ -5,7 +5,7 @@ import com.group4.project.models.User;
 
 public interface PasswordResetService {
     public PasswordReset save(String email);
-    public User updatePassword(String email, String newPassword);
+    public User updatePassword(String email, String code, String newPassword);
     public boolean validCode(String code, String email);
-    public PasswordReset findByEmail(String email);
+    public PasswordReset findPwdRByEmail(String email);
 }

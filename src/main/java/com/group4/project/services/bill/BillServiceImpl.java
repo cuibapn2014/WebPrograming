@@ -25,6 +25,8 @@ public class BillServiceImpl implements BillService{
     public Bill saveBill(Bill bill) {
         Optional<Customer> customer = customerRepository.findByPhoneNumber(bill.getCustomer().getPhoneNumber());
         Optional<DiscountCode> code = discountCodeRepository.findByCode(bill.getCode());
+        float total = calTotal(bill.getItem());
+        boolean validCode = false;
 
         boolean isCode = code.isPresent() ? true : false;
         if(bill == null) return null;
@@ -32,18 +34,24 @@ public class BillServiceImpl implements BillService{
 
         bill.setItem(this.getListItem(bill.getItem()));
         bill.setCreatedAt();
-        if(customer.isPresent()) bill.setCustomer(customer.get());
+        bill.setTotal(total);
 
+        if(customer.isPresent()) bill.setCustomer(customer.get());
         if(isCode){
             int currentTime =(int) new Date().getTime();
             boolean invalidTime = (code.get().getExpired().getTime() - currentTime) > 0 ? true : false;
 
-            if(!invalidTime || code.get().getTimeuses() <= 0 && bill.calTotal() < code.get().getMinTotal()){
+            if(invalidTime && code.get().getTimeuses() <= 0 && bill.calTotal() > code.get().getMinTotal()){
                 bill.setCode(null);
-            }else{
+                validCode = true;
+            }
+
+            if(validCode) {
+                total -= code.get().isTypeCost() ? total / 100 * code.get().getValue() : code.get().getValue();
                 code.get().setTimeuses(code.get().getTimeuses() - 1);
                 discountCodeRepository.save(code.get());
             }
+            bill.setTotal(total);
         }
         else bill.setCode(null);
 
@@ -84,5 +92,13 @@ public class BillServiceImpl implements BillService{
                 item.setProduct(foundProduct.get());
         });
         return listItem;
+    }
+
+    private float calTotal(List<Item> item){
+        float total = 0;
+        for(Item i : item){
+            total += i.getProduct().getPrice() * (1 - i.getProduct().getDiscount() / 100);
+        }
+        return total;
     }
 }

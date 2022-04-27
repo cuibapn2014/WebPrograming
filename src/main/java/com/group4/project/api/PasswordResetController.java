@@ -56,8 +56,9 @@ public class PasswordResetController {
 
     @PostMapping("/change")
     public ResponseEntity<ResponseObject> changePass(@RequestParam("email") String email,
-                                                     @RequestParam("password") String newPassowrd){
-        User user = service.updatePassword(email, newPassowrd);
+                                                     @RequestParam("password") String newPassowrd,
+                                                     @RequestParam("code") String code){
+        User user = service.updatePassword(email, code, newPassowrd);
         if(user != null){
             return ResponseEntity.ok().body(
                     new ResponseObject("Update successfully", ResponseCode.HTTP_OK, user)

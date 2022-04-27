@@ -130,4 +130,8 @@ public class ProductServiceImpl implements ProductService{
         repository.deleteById(id);
     }
 
+    @Override
+    public List<Product> search(String keyword) {
+        return repository.searchResult(keyword);
+    }
 }

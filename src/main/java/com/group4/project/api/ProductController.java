@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -55,6 +56,14 @@ public class ProductController {
                     new ResponseObject("Not found",404, null), HttpStatus.NOT_FOUND
             );
         }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> getSearch(@RequestParam("keyword") String keyword){
+        List<Product> listProduct = service.search(keyword);
+        return new ResponseEntity<>(
+                new ResponseObject("success",200, listProduct), HttpStatus.OK
+        );
     }
 
     @PostMapping("/insert")

@@ -31,4 +31,6 @@ public interface ProductService {
                                  MultipartFile[] images,
                                  Integer id);
     public void deleteProductById(Integer id);
+
+    public List<Product> search(String keyword);
 }

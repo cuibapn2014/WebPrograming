@@ -16,7 +16,7 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public ClientEmail saveClient(ClientEmail email) {
-        if(Validate.validEmail(email.getEmail())) {
+        if(Validate.validEmail(email.getEmail()) && repository.findByEmail(email.getEmail()) == null) {
              return repository.save(email);
         }
         return null;

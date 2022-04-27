@@ -25,7 +25,7 @@ public class PasswordResetServiceImpl implements PasswordResetService{
     @Override
     public PasswordReset save(String email) {
         PasswordReset passwordReset = new PasswordReset();
-        boolean existEmail = repository.findById(email) != null ? true : false;
+        boolean existEmail = repository.findByEmail(email) != null ? true : false;
         if(Validate.validEmail(email)) {
             if(existEmail) repository.deleteById(email);
             passwordReset.setEmail(email);
@@ -37,10 +37,10 @@ public class PasswordResetServiceImpl implements PasswordResetService{
     }
 
     @Override
-    public User updatePassword(String email, String newPassword) {
+    public User updatePassword(String email, String code,String newPassword) {
         Optional<User> user = userRepository.findByEmail(email);
-        PasswordReset passwordReset = this.findByEmail(email);
-        if(user.isPresent() && passwordReset != null && this.validCode(passwordReset.getCode(), email)){
+        PasswordReset passwordReset = this.findPwdRByEmail(email);
+        if(user.isPresent() && passwordReset != null && this.validCode(passwordReset.getCode(), email) && code.equals(passwordReset.getCode())){
             user.get().setPassword(BCrypt.hashpw(newPassword,BCrypt.gensalt(12)));
             repository.delete(passwordReset);
             return user.get();
@@ -49,13 +49,13 @@ public class PasswordResetServiceImpl implements PasswordResetService{
     }
 
     @Override
-    public PasswordReset findByEmail(String email) {
-        return repository.findById(email).get();
+    public PasswordReset findPwdRByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     @Override
     public boolean validCode(String code, String email) {
-        PasswordReset passwordReset = this.findByEmail(email);
+        PasswordReset passwordReset = this.findPwdRByEmail(email);
         return passwordReset.getCode().equals(code) && checkExpired(passwordReset.getCreated_at());
     }
 

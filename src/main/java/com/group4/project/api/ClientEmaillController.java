@@ -21,9 +21,9 @@ public class ClientEmaillController {
         );
     }
 
-    @GetMapping("/insert")
+    @PostMapping("/insert")
     public ResponseEntity<ResponseObject> insertEmail(@RequestParam("email") String email){
-        ClientEmail clientEmail = service.saveClient(new ClientEmail("email"));
+        ClientEmail clientEmail = service.saveClient(new ClientEmail(email));
         if(clientEmail != null) {
             return ResponseEntity.ok().body(
                     new ResponseObject("successfully", ResponseCode.HTTP_OK, clientEmail)

@@ -68,10 +68,9 @@ public class UserController {
         boolean isLogin = matchUser != null ? BCrypt.checkpw(password,matchUser.getPassword()) : false;
 
         if(!isLogin){
-            return new ResponseEntity<ResponseObject>(
-                    new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null),
-                    HttpStatus.BAD_REQUEST
-            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("Bad request", ResponseCode.HTTP_BAD_REQUEST, null)
+        );
         }
 
         return new ResponseEntity<ResponseObject>(

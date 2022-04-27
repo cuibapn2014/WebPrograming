@@ -28,6 +28,8 @@ public class Bill implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss",timezone = "GMT+07:00")
     private Date createdAt;
 
+    private float total;
+
     private String note;
 
     /*
@@ -45,10 +47,11 @@ public class Bill implements Serializable {
     public Bill() {
     }
 
-    public Bill(Customer customer, List<Item> item, Date createdAt, String note, int status, String code, boolean payments) {
+    public Bill(Customer customer, List<Item> item, float total, String note, int status, String code, boolean payments) {
         this.customer = customer;
         this.item = item;
         this.createdAt = new java.util.Date();
+        this.total = total;
         this.note = note;
         this.status = status;
         this.code = code;
@@ -119,6 +122,22 @@ public class Bill implements Serializable {
         this.payments = payments;
     }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public float calTotal(){
         float total = 0;
         for(Item mItem : this.getItem()){
@@ -134,9 +153,10 @@ public class Bill implements Serializable {
                 ", customer=" + customer +
                 ", item=" + item +
                 ", createdAt=" + createdAt +
+                ", total=" + total +
                 ", note='" + note + '\'' +
                 ", status=" + status +
-                ", code=" + code +
+                ", code='" + code + '\'' +
                 ", payments=" + payments +
                 '}';
     }
