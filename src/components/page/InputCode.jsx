@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { setCodeForgot } from "../../redux/actions";
 
 const InputCode = () => {
   const [code, setCode] = useState("");
   const navigation = useNavigate();
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.token.tokenDefault);
   const email = useSelector((state) => state.token.emailForgot);
   //   console.log(email);
@@ -38,8 +41,10 @@ const InputCode = () => {
         },
         data: checkCode,
       });
+      console.log("check res code", res);
 
       if (res && res.data && res.data.status === 200) {
+        dispatch(setCodeForgot(code));
         navigation("/reset-password");
         window.scrollTo({
           top: 0,
@@ -56,7 +61,12 @@ const InputCode = () => {
     }
   };
   return (
-    <div className="flex justify-center items-center bg-slate-50">
+    <motion.div
+      className="flex justify-center items-center bg-slate-50"
+      initial={{ width: 0 }}
+      animate={{ width: "100%" }}
+      exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+    >
       <div>
         <h1 className="text-[#1435c3] my-5 text-center capitalize font-medium text-xl">
           Enter Code
@@ -78,7 +88,7 @@ const InputCode = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

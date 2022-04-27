@@ -33,6 +33,7 @@ import InputCode from "./page/InputCode";
 import ResetPassword from "./page/ResetPassword";
 import { useSelector } from "react-redux";
 import Sale from "./page/Sale";
+import Voucher from "./admin/page/Voucher";
 const AnimatedRoute = () => {
   const location = useLocation();
   const [admin, setAdmin] = useState(false);
@@ -72,6 +73,7 @@ const AnimatedRoute = () => {
           <Route path="input-secret-code" element={<InputCode />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="khuyen-mai" element={<Sale />} />
+          {/* <Route path="voucher" element={<Voucher />} /> */}
 
           <Route path="*" element={<NotFound />} />
         </Route>
@@ -86,6 +88,7 @@ const AnimatedRoute = () => {
             <Route path="brand" element={<Brand />} />
             <Route path="bill" element={<Bill />} />
             <Route path="advertisement" element={<Advertisement />} />
+            <Route path="voucher" element={<Voucher />} />
             <Route path="tiny" element={<TestTiny />} />
           </Route>
         ) : (

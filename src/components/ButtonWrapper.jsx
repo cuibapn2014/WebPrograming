@@ -12,14 +12,15 @@ const ButtonWrapper = ({ currency, showSpinner }) => {
   // This is the main reason to wrap the PayPalButtons in a new component
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
   const listCart = useSelector((state) => state.cart);
-  const [total, setTotal] = useState(0);
-  const amount = (total / 23000).toFixed().toString();
+  const total1 = useSelector((state) => state.token.totalCart);
+  // const [total, setTotal] = useState(0);
+  const amount = (total1 / 23000).toFixed().toString();
   // console.log("total", amount);
-  useEffect(() => {
-    let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // useEffect(() => {
+  //   let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-    setTotal(total);
-  }, [listCart]);
+  //   setTotal(total);
+  // }, [listCart]);
 
   useEffect(() => {
     dispatch({

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { AiFillFolderAdd } from "react-icons/ai";
-
+import Select from "react-select";
+import * as moment from "moment";
 import {
   MdOutlineUpdate,
   MdDeleteForever,
@@ -11,122 +12,126 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Helmet from "../../common/Helmet";
-const Brand = () => {
+const Voucher = () => {
   const [listBrand, setListBrand] = useState([]);
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
+
+  const [usage, setUsage] = useState("");
+  const [minBill, setMinBill] = useState("");
+  const [typeCost, setTypeCost] = useState("");
+  const [date, setDate] = useState(new Date());
+  const dateRef = useRef(null);
+
   const [id, setId] = useState(0);
   const [blockAdd, setBlockAdd] = useState(false);
   const [blockUpdate, setBlockUpdate] = useState(true);
   const [reRender, setReRender] = useState(0);
   const token = useSelector((state) => state.token.tokenDefault);
-
+  const options = [
+    { value: "true", label: "Phần trăm" },
+    { value: "false", label: "Giá tiền" },
+  ];
   useEffect(async () => {
-    let res = await axios.get("http://localhost:8085/api/v1/brand/get-all", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    let res = await axios.get(
+      "http://localhost:8085/api/v1/discount-code/get-all",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("check res get all data", res);
     if (res && res.data && res.data.data) {
       setListBrand(res.data.data);
     }
   }, [reRender]);
 
-  const handleAddBrand = async () => {
+  const handleChangeSelect = (e) => {
+    setTypeCost(e.value);
+  };
+
+  // console.log("check date", dateRef.current.value);
+
+  const handleChangeDate = (e) => {
+    let dateToFormat = e.target.value;
+
+    let customDate = moment(dateToFormat).format("DD-MM-YYYY");
+    setDate(customDate);
+  };
+
+  const handleAddCode = async () => {
     if (!name) {
-      alert("Bạn chưa thêm tên thương hiệu");
+      alert("Bạn chưa nhập mã voucher");
       return;
     }
 
     if (!link) {
-      alert("Bạn chưa thêm hình ảnh thương hiệu");
+      alert("Bạn chưa thêm giá trị voucher");
+      return;
+    }
+    if (!usage) {
+      alert("Bạn chưa thêm lượt sử dụng voucher");
+      return;
+    }
+
+    if (!minBill) {
+      alert("Bạn chưa thêm đơn tối thiểu để áp dụng voucher");
       return;
     }
 
     let dataState = {
-      brandName: name,
-      urlLogo: link,
+      code: name,
+      value: Number(link),
+      expired: `${date} 00:00:00`,
+      timeuses: Number(usage),
+      minTotal: Number(minBill),
+      typeCost: JSON.parse(typeCost),
     };
+
+    console.log(dataState);
 
     let res = await axios({
       method: "POST",
-      url: "http://localhost:8085/api/v1/brand/insert",
+      url: "http://localhost:8085/api/v1/discount-code/insert",
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: dataState,
     });
     if (res && res.data && res.data.status === 200) {
-      toast.success("Add brand success");
+      toast.success("Add voucher success");
       setName("");
       setLink("");
+      setUsage("");
+      setMinBill("");
+      setDate("");
+      setTypeCost(null);
       const random = Math.floor(Math.random() * 10000);
       setReRender(random);
-
-      // window.location.reload();
     }
-    // console.log(res);
+    console.log(res);
   };
 
   const handleRemove = async (id) => {
     console.log(id);
     let res = await axios({
       method: "DELETE",
-      url: `http://localhost:8085/api/v1/brand/delete/${id}`,
+      url: `http://localhost:8085/api/v1/discount-code/delete/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     if (res && res.data && res.data.status === 200) {
-      toast.success("Delete brand success");
+      toast.success("Delete voucher success");
       const random = Math.floor(Math.random() * 10000);
       setReRender(random);
     }
     // console.log(res);
   };
 
-  const handleUpdateState = async (item) => {
-    console.log(item);
-    const { brandName, urlLogo, id } = item;
-    setName(brandName);
-    setLink(urlLogo);
-    setId(id);
-    setBlockAdd(true);
-    setBlockUpdate(false);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-
-  const handleUpdateBrand = async () => {
-    let data = {
-      brandName: name,
-      urlLogo: link,
-    };
-    let res = await axios({
-      method: "PUT",
-      url: `http://localhost:8085/api/v1/brand/update/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: data,
-    });
-
-    if (res && res.data && res.data.status === 200) {
-      toast.success("Update category success");
-      setName("");
-      setLink("");
-      setBlockAdd(false);
-      setBlockUpdate(true);
-      const random = Math.floor(Math.random() * 10000);
-      setReRender(random);
-    }
-    // console.log("check update category", res);
-  };
   return (
-    <Helmet title="Thương Hiệu">
+    <Helmet title="Voucher">
       <motion.div
         className="px-10"
         initial={{ clipPath: "polygon(0 0, 0 0, 0 100%, 0% 100%)" }}
@@ -138,7 +143,7 @@ const Brand = () => {
       >
         <header className="w-full items-center bg-white py-2 px-6 hidden sm:flex">
           <div className="w-1/2 text-right text-xl font-semibold text-blue-700 uppercase">
-            QUẢN LÍ thương hiệu
+            QUẢN LÍ voucher
           </div>
           <div
             //   x-data="{ isOpen: false }"
@@ -172,7 +177,7 @@ const Brand = () => {
         {/* add product */}
         <div className="bg-slate-50 py-10 rounded-lg">
           <h3 className="ml-5 uppercase mb-5 font-medium text-xl">
-            Thêm thương hiệu
+            Thêm voucher
           </h3>
           <div className="px-10">
             <div className="flex items-center mb-5">
@@ -185,7 +190,7 @@ const Brand = () => {
                 onChange={(e) => setName(e.target.value)}
               />
               <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
-                tên thương hiệu
+                mã voucher
               </h4>
             </div>
             <div className="flex items-center mb-5">
@@ -198,7 +203,63 @@ const Brand = () => {
                 onChange={(e) => setLink(e.target.value)}
               />
               <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
-                link hình ảnh
+                giá trị voucher
+              </h4>
+            </div>
+            <div className="flex items-center mb-5">
+              <input
+                className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[760px]"
+                placeholder="Fill link image input..."
+                type="text"
+                name="search"
+                value={usage}
+                onChange={(e) => setUsage(e.target.value)}
+              />
+              <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
+                lượt sử dụng
+              </h4>
+            </div>
+            <div className="flex items-center mb-5">
+              <input
+                className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[760px]"
+                placeholder="Fill link image input..."
+                type="text"
+                name="search"
+                value={minBill}
+                onChange={(e) => setMinBill(e.target.value)}
+              />
+              <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
+                đơn tối thiểu
+              </h4>
+            </div>
+            <div className="flex items-center mb-5">
+              <div className="w-[760px]">
+                <Select
+                  options={options}
+                  onChange={(e) => {
+                    handleChangeSelect(e);
+                  }}
+                />
+              </div>
+              <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
+                kiểu giảm giá
+              </h4>
+            </div>
+            <div className="flex items-center mb-5">
+              <input
+                className="block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[760px]"
+                placeholder="Fill link image input..."
+                type="date"
+                name="search"
+                value={date.toLocaleDateString}
+                onChange={handleChangeDate}
+                min="2022-01-01"
+                max="2022-12-31"
+
+                // ref={dateRef}
+              />
+              <h4 className="whitespace-nowrap uppercase ml-5 font-normal">
+                ngày hết hạn
               </h4>
             </div>
             <div className="flex">
@@ -209,12 +270,12 @@ const Brand = () => {
                     : "hover:bg-slate-300 hover:text-[#1435c3]"
                 }`}
                 disabled={blockAdd ? true : false}
-                onClick={handleAddBrand}
+                onClick={handleAddCode}
               >
                 <AiFillFolderAdd size={"30px"} />
                 <div className="ml-2">Thêm</div>
               </button>
-              <button
+              {/* <button
                 className={`flex items-center mt-5 text-white bg-[#1435c3] px-5 py-2 rounded-md  transition-all ${
                   blockUpdate
                     ? "opacity-60 cursor-not-allowed"
@@ -225,7 +286,7 @@ const Brand = () => {
               >
                 <MdSystemUpdateAlt size={"30px"} />
                 <div className="ml-2">Cập nhật</div>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -236,21 +297,23 @@ const Brand = () => {
             <i className="fas fa-list mr-3"></i> Danh Sách thương hiệu
           </p>
           <div>
-            <table>
+            <table className="w-full">
               <thead className="bg-gray-800 text-white ">
                 <tr>
-                  <th className="w-[30%] text-left py-3 px-4 uppercase font-semibold text-sm text-center ">
-                    stt
+                  <th className="w-[23%] text-left py-3 px-4 uppercase font-semibold text-sm text-center ">
+                    Code
                   </th>
-                  <th className="w-[30%] text-left py-3 px-4 uppercase font-semibold text-sm text-center">
-                    tên
+                  <th className="w-[23%] text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                    Số lần sử dụng
                   </th>
-                  <th className="w-[30%] text-left py-3 px-4 uppercase font-semibold text-sm text-center">
-                    logo
+                  <th className="w-[23%] text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                    giá trị sử dụng
+                  </th>
+                  <th className="w-[23%] text-left py-3 px-4 uppercase font-semibold text-sm text-center">
+                    hạn sử dụng
                   </th>
 
-                  <th className="w-[5%] text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
-                  <th className="w-[5%] text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
+                  <th className="w-[8%] text-left py-3 px-4 uppercase font-semibold text-sm text-center"></th>
                 </tr>
               </thead>
               <tbody className="bg-white">
@@ -259,18 +322,17 @@ const Brand = () => {
                   listBrand.map((item, index) => {
                     return (
                       <tr key={index}>
-                        <td className="w-[30%] text-left py-3 px-4 text-center">
-                          {item.id}
+                        <td className="w-[23%] text-left py-3 px-4 text-center">
+                          {item.code}
                         </td>
-                        <td className="w-[30%] text-left py-3 px-4 text-center">
-                          {item.brandName}
+                        <td className="w-[23%] text-left py-3 px-4 text-center">
+                          {item.timeuses}
                         </td>
-
-                        <td className="w-[30%]  py-3 px-4 text-center">
-                          <img
-                            src={item.urlLogo}
-                            className="w-[50px] h-[50px] object-contain  mx-auto"
-                          />
+                        <td className="w-[23%] text-left py-3 px-4 text-center">
+                          {item.value}
+                        </td>
+                        <td className="w-[23%] text-left py-3 px-4 text-center">
+                          {item.expired}
                         </td>
 
                         <td className="w-[5%] text-left py-3 px-4 text-center">
@@ -280,36 +342,9 @@ const Brand = () => {
                             onClick={() => handleRemove(item.id)}
                           />
                         </td>
-                        <td className="w-[5%] text-left py-3 px-4 text-center">
-                          <MdOutlineUpdate
-                            size="25px"
-                            className="cursor-pointer"
-                            onClick={() => handleUpdateState(item)}
-                          />
-                        </td>
                       </tr>
                     );
                   })}
-                {/* <tr>
-                <td className="w-[30%] text-left py-3 px-4 text-center">1</td>
-                <td className="w-[30%] text-left py-3 px-4 text-center">
-                  Acer
-                </td>
-
-                <td className="w-[30%] text-center py-3 px-4 ">
-                  <img
-                    src="https://thunao.com/wp-content/uploads/logo-asus.png"
-                    className="w-[50px] h-[50px] object-contain  mx-auto"
-                  />
-                </td>
-
-                <td className="w-[5%] text-left py-3 px-4 text-center">
-                  <MdDeleteForever size="25px" />
-                </td>
-                <td className="w-[5%] text-left py-3 px-4 text-center">
-                  <MdOutlineUpdate size="25px" />
-                </td>
-              </tr> */}
               </tbody>
             </table>
           </div>
@@ -320,4 +355,4 @@ const Brand = () => {
   );
 };
 
-export default Brand;
+export default Voucher;

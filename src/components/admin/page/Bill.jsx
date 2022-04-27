@@ -129,9 +129,9 @@ const Bill = () => {
                         <p className="text-black text-2xl leading-relaxed block md:text-base ">
                           Online
                         </p>
-                        <div className="text-black text-2xl leading-relaxed block md:text-base bg-green-600  ">
+                        {/* <div className="text-black text-2xl leading-relaxed block md:text-base bg-green-600  ">
                           Đang Giao
-                        </div>
+                        </div> */}
 
                         <Link
                           to="/admin/staff"

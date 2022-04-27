@@ -10,7 +10,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Helmet from "../common/Helmet";
 import jwt_decode from "jwt-decode";
@@ -21,7 +21,7 @@ const currency = "USD";
 
 export default function Paypal() {
   const [payment, setPayment] = useState(false);
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
   const [citys, setCitys] = useState([]);
   const listCart = useSelector((state) => state.cart);
@@ -38,6 +38,9 @@ export default function Paypal() {
 
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const dispatch = useDispatch();
+  const code = useSelector((state) => state.token.codeVoucher);
+  const total1 = useSelector((state) => state.token.totalCart);
 
   // console.log("payment", payment);
 
@@ -59,11 +62,11 @@ export default function Paypal() {
   //   }
   // }, [informationUser]);
 
-  useEffect(() => {
-    let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // useEffect(() => {
+  //   let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-    setTotal(total);
-  }, [listCart]);
+  //   setTotal(total);
+  // }, [listCart]);
 
   const priceSplitter = (number) =>
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -163,6 +166,7 @@ export default function Paypal() {
         },
         payment: payment,
         item: customCart,
+        code: code,
       };
       let res = await axios({
         method: "POST",
@@ -173,6 +177,7 @@ export default function Paypal() {
         },
       });
 
+      console.log("check res paypal", res);
       if (res && res.data && res.data.data) {
         if (res.data.status === 200) {
           navigation("/");
@@ -272,7 +277,7 @@ export default function Paypal() {
                   <div className="flex items-center">
                     <h5 className="text-base">Thành tiền : </h5>
                     <span className="text-[#1435c3] text-sm ml-1 font-medium">
-                      {priceSplitter(total)}đ
+                      {priceSplitter(total1)}đ
                     </span>
                   </div>
                 </div>
@@ -464,7 +469,7 @@ export default function Paypal() {
                     <PayPalScriptProvider
                       options={{
                         "client-id":
-                          "AV8VmmTzbrChSpu6x-HJ_wkDuY8oA9KExgf8SKoLhv8hReZ3xGAu64vSMIHfrzE0bwItqh0C3CUq9wvc",
+                          "Acb4LyPCgYLfo5jeL3VioKCa33WiHIZ-Selm29Dlir5zrW-hRpeIo7SjXK0Zm2RXUPZ3-ZchIYFQSCPz",
                         components: "buttons",
                         currency: "USD",
                       }}

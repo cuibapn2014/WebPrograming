@@ -3,14 +3,22 @@ import { AiOutlineHome } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ItemCart from "../common/ItemCart";
-import { isTrueMenu } from "../../redux/actions";
+import { addCodeVoucher, addTotalCart, isTrueMenu } from "../../redux/actions";
 import { motion } from "framer-motion";
 import Helmet from "../common/Helmet";
+import { toast } from "react-toastify";
+import axios from "axios";
 const Cart = () => {
   const listCart = useSelector((state) => state.cart);
+  const token = useSelector((state) => state.token.tokenDefault);
   const [total, setTotal] = useState(0);
   const navigation = useNavigate();
   const dispatch = useDispatch();
+  const [voucher, setVoucher] = useState("");
+  const [blockAddVoucher, setBlockAddVoucher] = useState(true);
+  const [codeVoucher, setCodeVoucher] = useState("");
+  const [totalBefore, setTotalBefore] = useState(0);
+  const [refTotal, setRefTotal] = useState(0);
   // const [listCart, setListCart] = useState(listReducer || []);
   // console.log("check cart", listCart);
   // console.log(Array.isArray(listCart));
@@ -23,8 +31,17 @@ const Cart = () => {
     let total = listCart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     setTotal(total);
+    setTotalBefore(total);
+    dispatch(addTotalCart(total));
     // console.log("check total", total);
   }, [listCart]);
+
+  const cloneTotal = total;
+
+  const handleChangeVoucher = (e) => {
+    setVoucher(e.target.value);
+    dispatch(addCodeVoucher(e.target.value));
+  };
 
   const priceSplitter = (number) =>
     number && number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -36,6 +53,43 @@ const Cart = () => {
       behavior: "smooth",
     });
     dispatch(isTrueMenu());
+  };
+
+  const handleCheckVoucher = async () => {
+    try {
+      let res = await axios({
+        method: "GET",
+        url: `http://localhost:8085/api/v1/discount-code/${voucher}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("check code voucher", res.data.data);
+      if (res && res.data && res.data.data) {
+        let discount = res.data.data.value;
+        let typeCost = res.data.data.typeCost;
+        let code = res.data.data.code;
+
+        if (typeCost === true && code !== codeVoucher) {
+          let priceAfterDiscount = cloneTotal * (1 - discount / 100);
+          setBlockAddVoucher(false);
+          setTotal(priceAfterDiscount);
+          setCodeVoucher(code);
+          dispatch(addTotalCart(priceAfterDiscount));
+        }
+
+        if (typeCost === false && code !== codeVoucher) {
+          let priceAfterDiscount = cloneTotal - discount;
+          setBlockAddVoucher(false);
+          setTotal(priceAfterDiscount);
+          setCodeVoucher(code);
+          dispatch(addTotalCart(priceAfterDiscount));
+        }
+      }
+      // console.log("check res voucher", res.data.data.value);
+    } catch (e) {
+      toast.warn("Voucher không hợp lệ");
+    }
   };
 
   return (
@@ -99,7 +153,7 @@ const Cart = () => {
               <div className="flex justify-between items-center mt-2">
                 <div className="text-sm text-[#848788]">Tạm tính</div>
                 <div className="text-sm font-semibold">
-                  {priceSplitter(total)} đ
+                  {priceSplitter(totalBefore)} đ
                 </div>
               </div>
               <div className="flex justify-between items-center mt-2">
@@ -110,6 +164,24 @@ const Cart = () => {
               </div>
               <div className="text-right text-[#848788] font-normal text-xs">
                 (Đã bao gồm VAT)
+              </div>
+              <div className="flex items-center my-5">
+                <input
+                  className=" block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-[780px]"
+                  placeholder="Fill voucher input..."
+                  type="text"
+                  name="search"
+                  value={voucher}
+                  onChange={(e) => {
+                    handleChangeVoucher(e);
+                  }}
+                />
+                <button
+                  className="whitespace-nowrap capitalize ml-5 font-light px-3 py-1 bg-[#1435c3] text-white rounded-md"
+                  onClick={handleCheckVoucher}
+                >
+                  áp dụng
+                </button>
               </div>
               <div className=" text-base bg-[#1435c3] py-2 text-white rounded-md text-center mt-10 ">
                 <button

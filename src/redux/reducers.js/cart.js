@@ -1,4 +1,7 @@
-const initialState = [...JSON.parse(localStorage.getItem("cartG4"))];
+let initialState = [];
+if (localStorage.getItem("cartG4")) {
+  initialState = [...JSON.parse(localStorage.getItem("cartG4"))];
+}
 
 const cartItem = (state = initialState, action) => {
   switch (action.type) {

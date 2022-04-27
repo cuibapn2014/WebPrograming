@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import logo from "../../assets/logo.png";
 import logo1 from "../../assets/G4PC.png";
@@ -16,7 +16,7 @@ import { RiAccountCircleLine, RiSecurePaymentFill } from "react-icons/ri";
 import { AiOutlineShoppingCart, AiOutlineMenu } from "react-icons/ai";
 import { MdLocalShipping } from "react-icons/md";
 import { GrHostMaintenance } from "react-icons/gr";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -39,9 +39,13 @@ const Header = () => {
   const [admin, setAdmin] = useState(false);
   const [lastName, setLastName] = useState("");
   const [search, setSearch] = useState("");
+  const inputRef = useRef("");
+  // if (inputRef.current.value) {
+  //   console.log("check search", inputRef.current.value);
+  // }
 
   const dispatch = useDispatch();
-
+  const navigation = useNavigate();
   const informationUser = JSON.parse(sessionStorage.getItem("informationUser"));
   // console.log("check header session", informationUser);
   // const lastName = informationUser
@@ -49,6 +53,21 @@ const Header = () => {
   //   : "";
   // console.log("check lastname", lastName);
   // console.log("information User", informationUser);
+
+  const onKeyDown = (event) => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("check search", inputRef.current.value);
+      navigation(`/collections/${inputRef.current.value}`);
+    }
+  };
+
+  const handleSearch = () => {
+    navigation(`/collections/${inputRef.current.value}`);
+    dispatch(isFalseMenu());
+  };
 
   useEffect(async () => {
     var decoded = jwt_decode(informationUser);
@@ -139,18 +158,31 @@ const Header = () => {
             type="text"
             placeholder="Nhập từ khóa cần tìm ..."
             className="bg-[#f5f5f5] min-w-[460px] py-[6px] px-3 outline-none rounded-l-lg  placeholder:text-[gray]"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            // value={search}
+            // onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={onKeyDown}
+            ref={inputRef}
           />
-          <Link
-            to={search && `/collections/${search}`}
+          {/* <Link
+            to={
+              inputRef &&
+              inputRef.current &&
+              inputRef.current.value &&
+              `/collections/${inputRef.current.value}`
+            }
             className="px-3 py-[8px] bg-[#1435c3] text-[#fff] rounded-r-lg"
             onClick={() => {
               dispatch(isFalseMenu());
             }}
           >
             <BsSearch size={"18px"} />
-          </Link>
+          </Link> */}
+          <button
+            className="px-3 py-[8px] bg-[#1435c3] text-[#fff] rounded-r-lg"
+            onClick={handleSearch}
+          >
+            <BsSearch size={"18px"} />
+          </button>
         </div>
         <Link to="/khuyen-mai" onClick={() => dispatch(isFalseMenu())}>
           <div className="icon--header">

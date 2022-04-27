@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setEmailUser } from "../../redux/actions";
+import { motion } from "framer-motion";
 
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -41,7 +42,12 @@ const ForgotPassword = () => {
     }
   };
   return (
-    <div className="flex justify-center items-center bg-slate-50">
+    <motion.div
+      className="flex justify-center items-center bg-slate-50"
+      initial={{ width: 0 }}
+      animate={{ width: "100%" }}
+      exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+    >
       <div>
         <h1 className="text-[#1435c3] my-5 text-center capitalize font-medium text-xl">
           forgot password
@@ -63,7 +69,7 @@ const ForgotPassword = () => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

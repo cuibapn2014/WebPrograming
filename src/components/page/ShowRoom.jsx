@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { CKEditor } from "ckeditor4-react";
 import jwt_decode from "jwt-decode";
@@ -37,15 +37,17 @@ const listShowRoom = [
 ];
 const ShowRoom = () => {
   const [data, setData] = useState("");
-  const handleChange = (e) => {
-    setData(e.editor.getData());
-    console.log(e.editor.getData());
-  };
-  var token =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJVU0VSIiwibmFtZSI6IkJhIFRyYWMifQ.G5n5xcFpwnB9c7bsgrcTniwwYBI715MEumad-kTxjec";
-  var decoded = jwt_decode(token);
+  // const [search, setSearch] = useState("");
+  const inputRef = useRef(null);
 
-  console.log(decoded);
+  const onKeyDown = (event) => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("check search", inputRef.current.value);
+    }
+  };
   return (
     <Helmet title="ShowRoom">
       <motion.div
@@ -58,6 +60,16 @@ const ShowRoom = () => {
         }}
       >
         <div className="">
+          <div>
+            <input
+              // className="comment-input"
+              // aria-multiline="true"
+              // role="textbox"
+              // contentEditable={true}
+              onKeyDown={onKeyDown}
+              ref={inputRef}
+            />
+          </div>
           <h1 className="uppercase text-center py-8 text-xl font-medium">
             hệ thống showroom
           </h1>
@@ -96,14 +108,6 @@ const ShowRoom = () => {
               );
             })}
           </div>
-          {/* <CKEditor
-          initData={<p>Please fill in descrition of product view </p>}
-          onChange={(e) => {
-            handleChange(e);
-          }}
-          value={data}
-        />
-        <div>{data}</div> */}
         </div>
       </motion.div>
     </Helmet>

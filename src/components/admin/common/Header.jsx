@@ -70,6 +70,14 @@ const Header = () => {
             Hóa Đơn
           </NavLink>
           <NavLink
+            to="/admin/voucher"
+            className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item transition-all"
+            style={navLinkStyle}
+          >
+            <i className="fas fa-sticky-note mr-3"></i>
+            Voucher
+          </NavLink>
+          <NavLink
             to="/admin/advertisement"
             className="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item transition-all"
             style={navLinkStyle}

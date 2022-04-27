@@ -4,6 +4,9 @@ const initialState = {
   rememberMe: JSON.parse(localStorage.getItem("isChecked")),
   reRenderUser: 0,
   emailForgot: "",
+  codeForgot: "",
+  totalCart: 0,
+  codeVoucher: "",
 };
 
 const token = (state = initialState, action) => {
@@ -25,7 +28,21 @@ const token = (state = initialState, action) => {
         ...state,
         emailForgot: action.payload,
       };
-
+    case "add-code":
+      return {
+        ...state,
+        codeForgot: action.payload,
+      };
+    case "add-total-cart":
+      return {
+        ...state,
+        totalCart: action.payload,
+      };
+    case "add-code-voucher":
+      return {
+        ...state,
+        codeVoucher: action.payload,
+      };
     default:
       return state;
   }

@@ -93,7 +93,9 @@ const Sale = () => {
               <AiOutlineHome size={"24px"} className=" text-black" />
             </div>
           </Link>
+
           <span className="block mx-3"> &gt;</span>
+          <span className="p-1 border border-[#ddd] rounded-[15px]">Sale</span>
         </div>
         <div className="container mx-auto flex items-center py-4 rounded-lg px-10">
           <>

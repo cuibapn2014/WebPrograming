@@ -5,10 +5,13 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { blockLogin, blockSignUp } from "../../redux/actions";
+import { motion } from "framer-motion";
 
 const ResetPassword = () => {
   const email = useSelector((state) => state.token.emailForgot);
   const token = useSelector((state) => state.token.tokenDefault);
+  const code = useSelector((state) => state.token.codeForgot);
+
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -34,6 +37,7 @@ const ResetPassword = () => {
       const dataResetPassWord = new FormData();
       dataResetPassWord.append("email", email);
       dataResetPassWord.append("password", passWord);
+      dataResetPassWord.append("code", code);
       let res = await axios({
         method: "POST",
         url: "http://localhost:8085/api/v1/reset-password/change",
@@ -53,7 +57,12 @@ const ResetPassword = () => {
     },
   });
   return (
-    <div className="bg-slate-50">
+    <motion.div
+      className="bg-slate-50"
+      initial={{ width: 0 }}
+      animate={{ width: "100%" }}
+      exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+    >
       <div className="w-[60%] mx-auto">
         <h1 className="text-[#1435c3] my-5 text-center capitalize font-medium text-xl">
           reset password
@@ -104,7 +113,7 @@ const ResetPassword = () => {
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
