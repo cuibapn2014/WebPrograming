@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  mysql-spring-services:
+    image: mysql:latest
+    container_name: mysql-spring-container
+    ports:
+      - 3310:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=db_project
+      - MYSQL_USER=manhtuandev
+      - MYSQL_PASSWORD=123456
+    volumes:
+      - mysql-spring-data:/var/lib/mysql
+      - mysql-spring-config-deamond:/etc/mysql/conf.d
+    networks:
+      - backend
+  spring-docker-container:
+    image: manhtuandev/webpc:1.0.0
+    container_name: spring-docker-container
+    ports:
+      - 8085:8086
+    volumes:
+      - ./:/app
+    networks:
+      - backend
+networks:
+  backend:
+    name: spring-app-network
+volumes:
+    mysql-spring-data:
+    mysql-spring-config-deamond:
